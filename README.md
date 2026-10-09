@@ -11,3 +11,7 @@ GitHub Pages: `main` branch, `/(root)`. `.nojekyll` is included.
 The six diagrams in `assets/` are original schematic illustrations created for the migration. They are *not* photographs of actual built devices or experimental test results. The original Floot image assets have **not** been recovered and the original Floot project should be retained until recovered.
 
 VEIL Research Project LLC is proposed, not yet formed. NSF pitch submission is not a grant award or endorsement.
+
+
+### Restored Floot visuals (October 9, 2026)
+The nine original user-supplied PNG files from TEMPERATURE CURTAIN.zip are now bundled locally under assets/*-original.png. Original imagery is concept artwork, not research results or a photograph of a built lab.
