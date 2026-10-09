@@ -8,7 +8,7 @@ This is the static, portable independent version of the VEIL Research Project pu
 GitHub Pages: `main` branch, `/(root)`. `.nojekyll` is included.
 
 ## Important
-The six diagrams in `assets/` are original schematic illustrations created for the migration. They are *not* photographs of actual built devices or experimental test results. The original Floot image assets have **not** been recovered and the original Floot project should be retained until recovered.
+The site contains six supplementary SVG schematic illustrations and nine user-supplied PNG concept visuals in `assets/`. These are concept images—not photographs of built devices or experimental data. The full original Floot website/source has not been independently verified as recovered, so preserve the Floot project until the visual and content migration is approved.
 
 VEIL Research Project LLC is proposed, not yet formed. NSF pitch submission is not a grant award or endorsement.
 
