@@ -20,3 +20,6 @@
 
 /* Preserve all embedded caption text in the founder hero artwork. */
 .hero-visual .founder-portrait img{height:auto!important;max-height:none!important;object-fit:contain!important;object-position:center bottom!important}
+
+/* VEIL ECHO editorial tile — CSS only; no fabricated experiment imagery */
+.echo-card-art{min-height:275px;padding:32px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;background:radial-gradient(circle at 78% 35%,#1c6272 0%,transparent 36%),repeating-linear-gradient(0deg,transparent,transparent 24px,#74e8f110 25px),linear-gradient(145deg,#092128,#071014);border-bottom:1px solid #294750}.echo-card-art span,.echo-card-art small{font:11px/1.5 'IBM Plex Mono',monospace;letter-spacing:.17em;color:#8ae5ef}.echo-card-art strong{font:normal clamp(30px,3vw,47px)/1.05 'Newsreader',Georgia,serif;max-width:410px;color:#f1f8fa}.echo-card-art small{font-size:9px}@media(max-width:760px){.echo-card-art{min-height:240px}}
