@@ -1,23 +1,13 @@
-# VEIL Research Project — Independent Website
+# VEIL Research Project — independent public website
 
-Static website package prepared for migration from Floot, October 9, 2026.
+Founder & Research Director: Andrew Underwood.
 
-**Important:** This is an independent **text-first reconstruction**, not a bit-for-bit Floot source export. The original Floot design images have **not** been migrated. Copy and preserve them separately before decommissioning Floot.
+This is the static, portable independent version of the VEIL Research Project public site. It includes the home page, individual experimental concepts, research center, journal, progress, and collaboration pages.
 
-## Deploy
+## Hosting
+GitHub Pages: `main` branch, `/(root)`. `.nojekyll` is included.
 
-Upload the **contents of this folder** to the GitHub repository root. For the simplest free deployment with GitHub Pages, go to Settings → Pages → Deploy from branch → `main` → `/ (root)` → Save. The public URL is expected to be `https://veilresearchproject.github.io/veil-research-project/`.
+## Important
+The six diagrams in `assets/` are original schematic illustrations created for the migration. They are *not* photographs of actual built devices or experimental test results. The original Floot image assets have **not** been recovered and the original Floot project should be retained until recovered.
 
-Links use relative URLs for repository-based hosting. All pages are static and no private API keys or runtime subscriptions are required.
-
-## Pages
-
-Home, six experiment profiles, research center, journal, progress and collaboration.
-
-## Remaining before launch
-
-- Verify links, mobile navigation and page presentation.
-- Recover original Floot visuals if permitted and decide which to restore.
-- Verify public contact method.
-- Review all statements and research milestones before publishing.
-- Do not delete Floot originals until full fidelity is confirmed.
+VEIL Research Project LLC is proposed, not yet formed. NSF pitch submission is not a grant award or endorsement.
