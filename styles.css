@@ -8,3 +8,6 @@
 .founder-portrait img{display:block;width:100%;max-height:580px;object-fit:cover;object-position:center 25%}
 .founder-portrait figcaption,.gb-gallery figcaption{padding:12px 16px;font:10px/1.5 monospace;letter-spacing:.07em;color:#a4bdc4}
 .gb-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.gb-gallery figure{margin:0;border:1px solid #294047}.gb-gallery img{display:block;width:100%}@media(max-width:700px){.gb-gallery{grid-template-columns:1fr}}
+
+/* Public-launch engagement and readability */
+.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin:25px 0 14px}.hero-actions .btn{margin-top:0}.btn-outline{background:transparent;color:#a1eff8;border:1px solid #6acbd9}.btn-outline:hover{background:#11333c;color:#fff}.microcopy{font-size:12px!important;color:#a7bcc1!important;max-width:700px}.text-link{display:inline-block;margin-top:12px;color:#88e6f1;font-weight:700;text-underline-offset:5px}.text-link:hover{color:#fff}nav a:last-child{color:#8ae1ea}.panel,.card{border-radius:5px}p{overflow-wrap:break-word}section[id]{scroll-margin-top:110px}@media(max-width:760px){.hero-actions{align-items:stretch}.hero-actions .btn{width:100%;text-align:center}.hero{padding-top:55px}.founder-portrait{max-width:100%}section[id]{scroll-margin-top:20px}}
