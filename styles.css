@@ -23,3 +23,14 @@
 
 /* VEIL ECHO editorial tile — CSS only; no fabricated experiment imagery */
 .echo-card-art{min-height:275px;padding:32px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;background:radial-gradient(circle at 78% 35%,#1c6272 0%,transparent 36%),repeating-linear-gradient(0deg,transparent,transparent 24px,#74e8f110 25px),linear-gradient(145deg,#092128,#071014);border-bottom:1px solid #294750}.echo-card-art span,.echo-card-art small{font:11px/1.5 'IBM Plex Mono',monospace;letter-spacing:.17em;color:#8ae5ef}.echo-card-art strong{font:normal clamp(30px,3vw,47px)/1.05 'Newsreader',Georgia,serif;max-width:410px;color:#f1f8fa}.echo-card-art small{font-size:9px}@media(max-width:760px){.echo-card-art{min-height:240px}}
+
+/* Scientific portfolio and transparent readiness gate typography */
+.portfolio-heading{font:normal clamp(29px,3vw,40px) 'Newsreader',Georgia,serif;color:#eaf6f8;margin:64px 0 12px}
+.portfolio-heading + p{max-width:870px}
+.portfolio-briefs .panel{background:#0a191d;border-color:#39525a}
+.portfolio-briefs .eyebrow{color:#c0d5da}
+.research-gates{margin-top:26px}
+.research-gates .panel{padding:24px}
+.research-gates .panel h3{font:600 17px/1.35 'IBM Plex Sans',Arial,sans-serif;margin:0 0 12px;color:#eaf6f8}
+.research-gates .panel p{margin:0}
+@media(max-width:760px){.portfolio-heading{margin-top:42px}.research-gates .panel{padding:22px}}
