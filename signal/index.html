@@ -68,6 +68,8 @@
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 @media(max-width:860px){.journey-grid{grid-template-columns:1fr}.vlog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-wrap{padding:0 16px}.journey-hero{padding:22px}}
 @media(max-width:520px){.vlog-grid{grid-template-columns:1fr}.journey-actions button{width:100%}}
+
+.reason-lab{max-width:1240px;margin:22px auto 30px;padding:26px;background:linear-gradient(155deg,#112744,#09172e);border:1px solid #327d9b;border-radius:19px;box-shadow:0 12px 38px #02061788}.reason-lab h2{margin:12px 0;font-size:clamp(24px,3vw,35px)}.reason-lab p{max-width:920px;color:#d4e6f6}.reason-lab label{display:block;font-size:12px;color:var(--cyan);letter-spacing:.08em;font-weight:700;margin:18px 0 8px}.reason-lab select{max-width:100%;padding:11px;background:#0b1830;color:#fff;border:1px solid #50728d;border-radius:9px}.reason-observation{padding:17px 19px;margin:15px 0;background:#071426;border-left:3px solid #62dafa;border-radius:8px;color:#e9f8ff}.reason-answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.reason-answers button{padding:13px;text-align:left;border:1px solid #467393;background:#13233f;color:#f5fdff;border-radius:10px;cursor:pointer}.reason-answers button:hover,.reason-answers button:focus-visible{background:#254467}.reason-answers button[aria-pressed="true"]{border-color:#75f2ff;background:#15415a}.reason-result{min-height:73px;padding:16px;margin:15px 0;border-radius:10px;background:#081e30;border:1px solid #2a667e;line-height:1.5}.reason-result[data-status="caution"]{border-color:#deba78}.reason-result[data-status="careful"]{border-color:#66cfb5}@media(max-width:680px){.reason-answers{grid-template-columns:1fr}.reason-lab{margin:16px;padding:18px}}
 </style></head><body>
 <header><div><div class="brand">SIGNAL</div><div class="eyebrow">VEIL RESEARCH PROJECT · DIGITAL HOST</div></div><div class="pill">PUBLIC BETA · CHAPTER 02</div></header>
 <main class="layout">
@@ -135,11 +137,30 @@
   <div class="journey-process" aria-label="How visitor feedback can influence future releases"><span>Visitor question</span><b>→</b><span>Human review</span><b>→</b><span>Test and verify</span><b>→</b><span>Documented SIGNAL update</span></div>
  </article>
 </div>
-<section class="vlog" aria-label="SIGNAL development journal"><div class="journey-kicker">PUBLIC EVOLUTION JOURNAL · VERIFIED RELEASES</div><h3>SIGNAL's evolution journal</h3><div class="vlog-grid">
+<section class="reason-lab" id="signal-reason-lab" aria-labelledby="reason-title">
+ <div class="journey-kicker">CHAPTER 02 / EVIDENCE DETECTIVE · GUIDED EXPERIMENT</div>
+ <h2 id="reason-title">Help SIGNAL examine a clue.</h2>
+ <p>“Oh! An observation. Excellent! But does it prove what caused it? Perhaps we should check the controls before I announce a discovery.”</p>
+ <p>These are <strong>fictional educational examples</strong> inspired by research challenges—not real VEIL recordings, physical validation, paranormal findings, or autonomous AI conclusions.</p>
+ <label for="reason-case">SELECT A FICTIONAL CASE FILE</label>
+ <select id="reason-case">
+ <option value="audio">Case A — Sound captured by two microphones</option>
+ <option value="temperature">Case B — A sudden temperature change</option>
+ <option value="dropout">Case C — Missing camera footage</option>
+ <option value="clock">Case D — Instruments disagree on timing</option>
+ <option value="sham">Case E — A detection in the sham control</option>
+ </select>
+ <div class="reason-observation" id="reason-observation" aria-live="polite"></div>
+ <div class="reason-answers" id="reason-answers" aria-label="Choose the evidence-based conclusion"></div>
+ <div class="reason-result" id="reason-result" role="status" aria-live="polite">Choose an interpretation to see SIGNAL's reasoning.</div>
+ <div class="journey-actions"><button id="reason-next" type="button">↻ Next case</button><button id="reason-hear" class="secondary-btn" type="button">▶ Hear SIGNAL explain</button></div>
+ <p class="journey-privacy">Evidence Detective v0.5 uses authored explanations. It does not collect answers, score individuals, call an AI model, or monitor real instruments. Spoken explanations are optional and browser-dependent.</p>
+</section><section class="vlog" aria-label="SIGNAL development journal"><div class="journey-kicker">PUBLIC EVOLUTION JOURNAL · VERIFIED RELEASES</div><h3>SIGNAL's evolution journal</h3><div class="vlog-grid">
  <div class="vlog-entry"><small>v0.1 · PRIVATE PROTOTYPE</small><strong>The first appearance</strong><p>Character studio and the idea of a curious, eccentric research host.</p></div>
  <div class="vlog-entry"><small>v0.2 · PRIVATE PREVIEW</small><strong>Finding the conversation</strong><p>Topic-aware explanations so each VEIL research post can lead to a relevant welcome.</p></div>
  <div class="vlog-entry"><small>v0.3 · PRIVATE PREVIEW</small><strong>Finding his voice</strong><p>Several scripted vocal personalities and a local visitor voice preference.</p></div>
  <div class="vlog-entry"><small>v0.4 · PUBLIC BETA</small><strong>Learning together</strong><p>More questions, a local preference experiment, and a reviewable community-suggestion workflow.</p></div>
+ <div class="vlog-entry"><small>v0.5 · PUBLIC BETA · CHAPTER 02</small><strong>Evidence Detective</strong><p>Five fictional research cases let visitors practice separating measurements, possible explanations, and data-quality failures. SIGNAL explains each answer; no real-world claim is established.</p></div>
  <div class="vlog-entry"><small>OCT 21 · FACEBOOK TRANSMISSION 001</small><strong>His first public words</strong><p>Our earliest public introduction: SIGNAL arrives curious, imperfect, and not entirely sure of his own voice. <a href="https://facebook.com/122097954477511963/posts/122106103389511963" target="_blank" rel="noopener noreferrer">Read the original post ↗</a></p></div>
  <div class="vlog-entry"><small>OCT 21 · FACEBOOK TRANSMISSION 002</small><strong>His first public face</strong><p>The first visual introduction—a snapshot of SIGNAL still exploring his appearance. <a href="https://facebook.com/122097954477511963/posts/122106203955511963" target="_blank" rel="noopener noreferrer">See the original post ↗</a></p></div>
  </div><p class="journey-privacy">These are development milestones, not proof of machine self-awareness. Earlier entries distinguish private prototypes from public milestones. Suggestions aren't collected automatically by this website.</p>
@@ -332,4 +353,4 @@ document.getElementById('save-local-choice').addEventListener('click',()=>{
 });
 document.getElementById('reset-local-choice').addEventListener('click',()=>{try{localStorage.removeItem(localChoiceKey);}catch(e){}document.querySelectorAll('input[name="voice-next"]').forEach(r=>r.checked=false);showChoice()});
 showChoice();
-</script></body></html>
+</script><script src="evidence-detective.js" defer></script></body></html>
