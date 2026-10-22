@@ -80,7 +80,20 @@
     button.addEventListener('click', () => submitQuestion(button.getAttribute('data-signal-prompt')));
   });
 
-  // Browsers may perform recognition remotely. Only start on an explicit click.
+  // Speech recognition may use an online browser service. Only listen on explicit clicks.
+  // Invalidate asynchronous callbacks before cancellation so cleared sessions stay clear.
+  let recognitionGeneration = 0;
+  function stopListening() {
+    recognitionGeneration++;
+    const previous = recognition;
+    recognition = null;
+    listening = false;
+    micButton.textContent = '🎙 Ask by voice';
+    if (previous && typeof previous.abort === 'function') {
+      try { previous.abort(); } catch (_error) { /* already stopped */ }
+    }
+  }
+  window.signalConversationStopListening = stopListening;
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
     micButton.disabled = true;
@@ -89,37 +102,48 @@
     return;
   }
   micButton.addEventListener('click', () => {
-    if (listening) { if (recognition) recognition.stop(); return; }
+    if (recognition) {
+      stopListening();
+      status.textContent = 'Listening stopped. Pending audio results will not appear in this session.';
+      return;
+    }
+    const generation = ++recognitionGeneration;
+    let current = null;
     try {
-      recognition = new SpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-      recognition.onstart = () => {
+      current = new SpeechRecognition();
+      recognition = current;
+      current.lang = 'en-US';
+      current.continuous = false;
+      current.interimResults = false;
+      current.maxAlternatives = 1;
+      const valid = () => recognition === current && generation === recognitionGeneration;
+      current.onstart = () => {
+        if (!valid()) return;
         listening = true;
         micButton.textContent = '■ Stop listening';
-        status.textContent = "Microphone on. Your browser may use an online speech service. No transcript is sent to VEIL by this page.";
+        status.textContent = 'Microphone on. Your browser may use an online speech service. The website does not upload a transcript to VEIL.';
       };
-      recognition.onresult = e => {
+      current.onresult = e => {
+        if (!valid() || !listening) return;
+        listening = false; // ignore any duplicate or late recognition results
         const value = e.results && e.results[0] && e.results[0][0] && e.results[0][0].transcript;
         if (value) submitQuestion(value);
       };
-      recognition.onerror = e => {
+      current.onerror = e => {
+        if (!valid()) return;
         status.textContent = 'Speech input unavailable (' + String(e.error || 'browser error') + '). You can still type your question.';
       };
-      recognition.onend = () => {
+      current.onend = () => {
+        if (!valid()) return;
+        recognition = null;
         listening = false;
         micButton.textContent = '🎙 Ask by voice';
       };
-      recognition.start();
+      current.start();
     } catch (_error) {
-      listening = false;
-      micButton.textContent = '🎙 Ask by voice';
+      if (recognition === current && generation === recognitionGeneration) stopListening();
       status.textContent = 'Microphone could not start. Try typing your question instead.';
     }
   });
-  window.addEventListener('pagehide', () => {
-    if (recognition && listening) recognition.abort();
-  });
+  window.addEventListener('pagehide', stopListening);
 })();
