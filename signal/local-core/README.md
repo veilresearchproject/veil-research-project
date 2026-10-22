@@ -33,3 +33,18 @@ From this directory: `py -3 -m unittest -v test_signal_core.py`
 5. Connect the animated SIGNAL front end only through a secure, authorized boundary after local validation; never publicly expose the Ollama server.
 
 The public SIGNAL website must continue to label scripted experiences as demonstrations.
+
+## Reproducible offline mock evaluation (October 22, 2026)
+
+Run from `signal/local-core/` on Python 3.10+:
+
+```cmd
+py -3 -m unittest -v test_signal_core.py
+py -3 eval_mock.py --iterations 20 --json
+```
+
+The benchmark runs **24 fixed synthetic scenarios × 20 repetitions = 480 mock requests**, covering thermal, audio, integrity, controls, permissions and context. It exercises the real Python Assistant → LocalModel HTTP request construction but substitutes an in-process fake response. It checks the fixed loopback endpoint, eight-turn history limit, required system disclosures, explicit memory write/delete, unknown-command rejection and seven injected response failures. Failures produce a nonzero exit code. No Ollama model, real network, GPU, instrument, camera, or microphone is used. **Mock timing is only Python serialization/test overhead, not actual AI inference latency or response quality.** A mocked model cannot establish that a real model will follow safety instructions.
+
+The local response parser now caps HTTP responses at **1 MB** and individual replies at **8,000 characters**, and converts malformed JSON/invalid UTF-8 to a controlled local error. Offline errors still have **no cloud fallback**. Existing HTTP test fakes were updated to accept bounded `read(size)`.
+
+**Remaining tests:** Windows Xeon/Quadro P5000 + real local Ollama model installation, response latency, model reasoning/accuracy, interrupted/slow inference, and future human-reviewed **read-only** instrument integration. SIGNAL has no instrument controls or real sensor connection. This is an engineering test harness, not scientific validation.
