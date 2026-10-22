@@ -35,6 +35,7 @@
       more: "I was imagined as a guide who learns through documented, human-approved development. I am a fictional host today, and a prototype direction for a future practical assistant." }
   ];
   let lastTopic = null;
+  window.signalConversationReset = () => { lastTopic = null; };
   let recognition = null;
   let listening = false;
 
