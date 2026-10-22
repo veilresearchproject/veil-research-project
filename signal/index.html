@@ -101,6 +101,26 @@
 .signal-practice p.signal-practice-hint{margin-bottom:0}
 @media(max-width:500px){.signal-practice-indicators{grid-template-columns:1fr}.signal-practice-buttons button{flex:1 1 auto}}
 
+
+/* SIGNAL v0.8: functional but explicitly limited local sensor-data audit bench */
+.signal-csv-lab{background:linear-gradient(140deg,#0d2442,#0b142e);border:1px solid #397da0;border-radius:18px;padding:23px;margin:22px 0;color:#e9f6ff}
+.signal-csv-lab h2{font-size:clamp(22px,3vw,30px);margin:8px 0}
+.signal-csv-lab>p{line-height:1.55;color:#cddff0;max-width:930px;font-size:13px}
+.signal-csv-lab .signal-csv-choices{display:grid;grid-template-columns:2fr 1fr 1fr;gap:13px;margin:18px 0}
+.signal-csv-lab label{display:block;font:700 11px ui-monospace,monospace;letter-spacing:.07em;color:#8be7f5;margin:10px 0 6px}
+.signal-csv-lab input,.signal-csv-lab textarea{width:100%;border:1px solid #517a9b;border-radius:9px;background:#08162b;color:#f6fbff;padding:10px;font-size:13px}
+.signal-csv-lab input[type=file]{padding:11px;max-width:100%}
+.signal-csv-lab small{display:block;margin-top:5px;font-size:11px;line-height:1.45;color:#b8d0e1}
+.signal-csv-lab code{color:#eaf9ff}
+.signal-csv-actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.signal-csv-actions button{border:1px solid #4d9bbb;background:#163b5b;color:#eefeff;padding:10px 12px;border-radius:9px;font-size:12px;font-weight:700}
+.signal-csv-actions button:nth-child(2){background:#63dced;color:#071626;border-color:#63dced}
+.signal-csv-actions button:disabled{opacity:.5;cursor:not-allowed}
+.signal-csv-lab textarea{font:12px/1.5 ui-monospace,monospace;resize:vertical;max-height:190px}
+.signal-csv-lab pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:440px;overflow-y:auto;background:#071426;border:1px solid #2f6589;border-radius:9px;padding:17px;color:#e8f8ff;font:12px/1.65 ui-monospace,monospace}
+.signal-csv-lab #signal-audit-status{min-height:1em;color:#ace8f8}
+.signal-csv-lab .signal-csv-caution{font-size:11px;color:#b8ccdf}
+@media(max-width:750px){.signal-csv-lab{margin:16px 0;padding:16px}.signal-csv-lab .signal-csv-choices{grid-template-columns:1fr}.signal-csv-actions button{flex:1 1 46%}}
 </style></head><body>
 <header><div><div class="brand">SIGNAL</div><div class="eyebrow">VEIL RESEARCH PROJECT · DIGITAL HOST</div></div><div class="pill">PUBLIC BETA · CHAPTER 03</div></header>
 <main class="layout">
@@ -201,6 +221,40 @@
   <div class="journey-process" aria-label="How visitor feedback can influence future releases"><span>Visitor question</span><b>→</b><span>Human review</span><b>→</b><span>Test and verify</span><b>→</b><span>Documented SIGNAL update</span></div>
  </article>
 </div>
+<section class="signal-csv-lab" id="signal-csv-lab" aria-labelledby="signal-csv-heading">
+ <div class="journey-kicker">CHAPTER 04 / FIRST REAL DATA UTILITY · DETERMINISTIC, LOCAL</div>
+ <h2 id="signal-csv-heading">SIGNAL's Sensor Data Audit Bench</h2>
+ <p><strong>This tool performs actual calculations on CSV data you choose.</strong> It checks timestamp order, missed sampling intervals, and step changes in temperature for each sensor separately. It does not require a cloud AI service, connect to instruments, determine causes, or prove paranormal activity.</p>
+ <div class="signal-csv-choices">
+  <div>
+   <label for="signal-audit-file">LOCAL CSV INPUT (MAX 1 MB)</label>
+   <input id="signal-audit-file" type="file" accept=".csv,text/csv,text/plain"/>
+   <small>CSV headers: <code>timestamp,temperature_c</code> plus optional <code>sensor_id</code>. Timestamps must include timezone (e.g. 2026-10-22T08:00:00Z). Data remain in this browser page.</small>
+  </div>
+  <div>
+   <label for="signal-audit-interval">EXPECTED SAMPLE INTERVAL (SECONDS)</label>
+   <input id="signal-audit-interval" type="number" min="1" max="86400" step="1" value="60"/>
+   <small>Flags gaps greater than 1.5 × this interval, within each sensor stream.</small>
+  </div>
+  <div>
+   <label for="signal-audit-threshold">TEMPERATURE STEP THRESHOLD (°C)</label>
+   <input id="signal-audit-threshold" type="number" min="0.1" max="100" step="0.1" value="1.5"/>
+   <small>Flags consecutive valid measurements changing by this amount or more.</small>
+  </div>
+ </div>
+ <div class="signal-csv-actions">
+  <button type="button" id="signal-audit-example">Load synthetic example</button>
+  <button type="button" id="signal-audit-run">Analyze CSV</button>
+  <button type="button" id="signal-audit-download" disabled>Download audit report</button>
+  <button type="button" id="signal-audit-clear">Clear input</button>
+ </div>
+ <label for="signal-audit-preview">SOURCE PREVIEW (FIRST 3,000 CHARACTERS)</label>
+ <textarea id="signal-audit-preview" rows="6" readonly placeholder="Load the synthetic demonstration or choose your own CSV."></textarea>
+ <label for="signal-audit-result">CALCULATED AUDIT FINDINGS</label>
+ <pre id="signal-audit-result" role="region" aria-label="Data audit results" aria-live="polite">No analysis run yet.</pre>
+ <p id="signal-audit-status" role="status" aria-live="polite"></p>
+ <p class="signal-csv-caution"><strong>Evidence integrity:</strong> SHA-256 fingerprints are computed when the browser permits, but a hash does not establish authenticity or chain of custody. This is an experimental quality-control utility, not a validated scientific instrument. All flags require human review and independent controls. The example data are invented for demonstration.</p>
+</section>
 <section class="reason-lab" id="signal-reason-lab" aria-labelledby="reason-title">
  <div class="journey-kicker">CHAPTER 02 / EVIDENCE DETECTIVE · GUIDED EXPERIMENT</div>
  <h2 id="reason-title">Help SIGNAL examine a clue.</h2>
@@ -228,12 +282,13 @@
  <div class="vlog-entry"><small>v0.5.1 · OCT 22 · PUBLIC BETA</small><strong>Finding one consistent voice</strong><p>Evidence Detective now uses SIGNAL's selected browser voice and animated portrait, stopping old narration when cases change. Automated simulated interaction tests passed; real-device speech remains to be checked.</p></div>
  <div class="vlog-entry"><small>v0.6 · OCT 22 · PUBLIC BETA</small><strong>Learning to listen</strong><p>Visitors can type questions and receive honest, authored replies about future lab assistance, scientific controls and focus reminders. Optional microphone transcription depends on browser support. Short-term topic context is not saved.</p></div>
  <div class="vlog-entry"><small>v0.7 · OCT 22 · PUBLIC BETA</small><strong>Say No to Squirls</strong><p>Visitors can try a single focused task, create temporary practice notes, recall them and download a clearly marked local text log. No real instruments, reminders, background tasks or paid AI models are involved.</p></div>
+ <div class="vlog-entry"><small>v0.8 · OCT 22 · PUBLIC BETA</small><strong>The first useful measuring tool</strong><p>The Sensor Data Audit Bench now computes temperature steps, sampling gaps, and clock-order issues from a visitor-selected local CSV, with optional SHA-256 and exported audit notes. Synthetic examples are unmistakably labeled; this is not connected to physical instruments or an AI model.</p></div>
  <div class="vlog-entry"><small>OCT 21 · FACEBOOK TRANSMISSION 001</small><strong>His first public words</strong><p>Our earliest public introduction: SIGNAL arrives curious, imperfect, and not entirely sure of his own voice. <a href="https://facebook.com/122097954477511963/posts/122106103389511963" target="_blank" rel="noopener noreferrer">Read the original post ↗</a></p></div>
  <div class="vlog-entry"><small>OCT 21 · FACEBOOK TRANSMISSION 002</small><strong>His first public face</strong><p>The first visual introduction—a snapshot of SIGNAL still exploring his appearance. <a href="https://facebook.com/122097954477511963/posts/122106203955511963" target="_blank" rel="noopener noreferrer">See the original post ↗</a></p></div>
  </div><p class="journey-privacy">These are development milestones, not proof of machine self-awareness. Earlier entries distinguish private prototypes from public milestones. Suggestions aren't collected automatically by this website.</p>
 </section>
 </section>
-<footer class="footer">SIGNAL: LEARNING TOGETHER v0.7 · PUBLIC BETA · Inspired by the private SIGNAL Studio v0.1. Voice development is a scripted character effect; not autonomous learning. © VEIL Research Project.</footer>
+<footer class="footer">SIGNAL: LEARNING TOGETHER v0.8 · PUBLIC BETA · Inspired by the private SIGNAL Studio v0.1. Voice development is a scripted character effect; not autonomous learning. © VEIL Research Project.</footer>
 <script>
 'use strict';
 // All routing is local and predefined. No query parameter is inserted as HTML.
@@ -425,4 +480,4 @@ window.signalConversationBridge=Object.freeze({
  post(question,response){append('visitor',question);lastText=response;append('signal',response);speak(response);},
  clear(){transcript.replaceChildren();stopVoice();lastText='Practice session cleared. We can start another question when you are ready.';append('signal',lastText);}
 });
-</script><script src="evidence-detective.js" defer></script><script src="signal-conversation.js" defer></script><script src="signal-focus-practice.js" defer></script></body></html>
+</script><script src="evidence-detective.js" defer></script><script src="signal-conversation.js" defer></script><script src="signal-focus-practice.js" defer></script><script src="csv-audit-core.js" defer></script><script src="csv-audit-ui.js" defer></script></body></html>
