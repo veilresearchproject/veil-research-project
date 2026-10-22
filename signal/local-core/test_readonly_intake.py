@@ -72,5 +72,13 @@ class IntakeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             s.inspect_synthetic(bytes([255]), 'thermal')
 
+    def test_benchmark_reproducible_fingerprint(self):
+        import benchmark_readonly_intake as bench
+        result = bench.run(cases=240, seed=20261022)
+        self.assertEqual(result['passed'], 240)
+        self.assertEqual(result['failed'], 0)
+        self.assertEqual(result['output_sha256'],
+                         '24b8ae8c10ca88cba5c2e50945a4224bf359caa0d5f93b01566df20f5cbf8f8d')
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
