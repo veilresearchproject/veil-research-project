@@ -54,9 +54,9 @@ python -m unittest -v test_signal_core.py test_readonly_intake.py
 python benchmark_readonly_intake.py --cases 240 --seed 20261022 --json
 ```
 
-The first command runs the original nine mocked local-model interface tests plus twelve synthetic evidence intake regression tests. The benchmark generates **240 deterministic synthetic cases across eight categories**, including thermal changes, cadence gaps, timestamp-order problems, MTC metadata, SHA mismatch, unsupported schemas and marker rejection. It exits nonzero if a case fails. The JSON includes a reproducible output digest and machine-dependent Python parser timing and peak traced memory; **neither timing nor accuracy reflects a real Ollama model or a physical instrument**.
+The first command runs the original nine mocked local-model interface tests plus thirteen synthetic evidence intake regression tests. The benchmark generates **240 deterministic synthetic cases across eight categories**, including thermal changes, cadence gaps, timestamp-order problems, MTC metadata, SHA mismatch, unsupported schemas and marker rejection. It exits nonzero if a case fails. The JSON includes a reproducible output digest and machine-dependent Python parser timing and peak traced memory; **neither timing nor accuracy reflects a real Ollama model or a physical instrument**.
 
-Verified in an isolated Python 3.13.5 environment on October 22, 2026: twelve intake tests passed; 240/240 generated synthetic cases passed, output fingerprint `24b8ae8c10ca88cba5c2e50945a4224bf359caa0d5f93b01566df20f5cbf8f8d`. The original nine local-core mock tests were previously reported passing, but this change is not a live Windows/Ollama test. Repeat the full command after checking out this branch.
+Verified in an isolated Python 3.13.5 environment on October 22, 2026: thirteen intake tests passed; 240/240 generated synthetic cases passed, output fingerprint `24b8ae8c10ca88cba5c2e50945a4224bf359caa0d5f93b01566df20f5cbf8f8d`. The original nine local-core mock tests were previously reported passing, but this change is not a live Windows/Ollama test. Repeat the full command after checking out this branch.
 
 ### Before any actual lab connection
 
