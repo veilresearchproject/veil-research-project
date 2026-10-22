@@ -1,4 +1,4 @@
-/* SIGNAL v0.6: scripted visitor conversation & optional microphone preview.
+/* SIGNAL v0.7: guided conversation and optional microphone, now integrating private practice sessions.
    This is NOT generative AI, live lab hardware, or a remote data service. */
 (() => {
   'use strict';
@@ -40,6 +40,9 @@
 
   function chooseResponse(question) {
     const q = question.trim();
+    // Before generic topic matching, handle explicit focus/note commands on the local page.
+    const practiceReply = window.signalPractice && window.signalPractice.respond(q);
+    if (typeof practiceReply === 'string') return practiceReply;
     if (/^(more|tell me more|how so|explain|go on|continue|why)[\s?.!]*$/i.test(q) && lastTopic) {
       return lastTopic.more;
     }
@@ -61,7 +64,9 @@
       status.textContent = "SIGNAL's conversation display is not ready. Refresh the page to try again.";
       return;
     }
-    bridge.post(question, chooseResponse(question));
+    const response = chooseResponse(question);
+    if (window.signalPractice) window.signalPractice.recordQuestion(question, response);
+    bridge.post(question, response);
     field.value = '';
     status.textContent = 'Guided reply shown above. Spoken replies are optional.';
   }
