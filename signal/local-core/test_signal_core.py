@@ -71,7 +71,7 @@ class TestSignal(unittest.TestCase):
         class Response:
             def __enter__(self): return self
             def __exit__(self, *args): return False
-            def read(self): return b'{"message":{"content":"Hello from Ollama"}}'
+            def read(self, _size=-1): return b'{"message":{"content":"Hello from Ollama"}}'
         with patch.object(s.request, 'urlopen', return_value=Response()) as call:
             self.assertEqual(s.LocalModel().answer([]), 'Hello from Ollama')
         body = json.loads(call.call_args.args[0].data)
@@ -82,7 +82,7 @@ class TestSignal(unittest.TestCase):
         class Response:
             def __enter__(self): return self
             def __exit__(self, *args): return False
-            def read(self): return b'{}'
+            def read(self, _size=-1): return b'{}'
         with patch.object(s.request, 'urlopen', return_value=Response()):
             with self.assertRaisesRegex(RuntimeError, 'Unexpected'):
                 s.LocalModel().answer([])
