@@ -85,6 +85,7 @@
         !window.confirm("Clear SIGNAL's temporary practice focus, notes, and visible conversation?")) return;
     task = ''; notes = []; events = []; started = new Date();
     refresh();
+    if (typeof window.signalConversationReset === 'function') window.signalConversationReset();
     if (window.signalConversationBridge?.clear) window.signalConversationBridge.clear();
     status.textContent = 'Temporary practice session cleared. No information was uploaded.';
   }
