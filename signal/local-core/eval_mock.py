@@ -66,7 +66,7 @@ def fault_probes():
     failures = (
         ('offline', URLError('offline'), 'No cloud fallback'),
         ('bad_json', b'{broken', 'Invalid JSON'),
-        ('bad_utf8', b'\\xff\\xfe', 'Invalid JSON'),
+        ('bad_utf8', bytes([255, 254]), 'Invalid JSON'),
         ('oversize_http', b'x' * (core.MAX_RESPONSE_BYTES + 1), '1 MB'),
         ('empty', b'{"message":{"content":" "}}', 'Unexpected local model response'),
         ('missing', b'{}', 'Unexpected local model response'),
