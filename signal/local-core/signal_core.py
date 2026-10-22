@@ -8,6 +8,8 @@ from urllib import request, error
 
 LOCAL_URL = 'http://127.0.0.1:11434/api/chat'
 MODEL = 'llama3.2:3b'
+MAX_RESPONSE_BYTES = 1_000_000  # bound even an unexpected loopback HTTP response
+MAX_REPLY_CHARS = 8_000  # do not let one reply dominate session history
 SYSTEM = ("You are SIGNAL, VEIL Research Project's developing local research assistant. "
           "Be warm, curious and evidence-first. Be clear about uncertainty. "
           "You are text-only. You cannot see, hear, access files, run lab instruments, "
@@ -71,14 +73,22 @@ class LocalModel:
         req = request.Request(LOCAL_URL, payload, {'Content-Type': 'application/json'})
         try:
             with request.urlopen(req, timeout=90) as response:
-                data = json.load(response)
+                raw = response.read(MAX_RESPONSE_BYTES + 1)
         except (error.URLError, TimeoutError, OSError) as exc:
             raise RuntimeError('Local Ollama unavailable. Run ollama pull ' + self.model +
                                ' and start Ollama. No cloud fallback.') from exc
+        if len(raw) > MAX_RESPONSE_BYTES:
+            raise RuntimeError('Local model response exceeds the 1 MB safety limit')
+        try:
+            data = json.loads(raw.decode('utf-8'))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise RuntimeError('Invalid JSON from local model') from exc
         try:
             text = data['message']['content']
             if not isinstance(text, str) or not text.strip():
                 raise ValueError('Empty reply')
+            if len(text) > MAX_REPLY_CHARS:
+                raise RuntimeError('Local model reply exceeds the 8,000-character safety limit')
             return text.strip()
         except (KeyError, TypeError, ValueError) as exc:
             raise RuntimeError('Unexpected local model response') from exc
