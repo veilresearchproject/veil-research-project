@@ -1,4 +1,4 @@
-/* SIGNAL Evidence Detective v0.5 — fictional cases; no telemetry, models, or external API. */
+/* SIGNAL Evidence Detective v0.5.1 — shared voice / animation; fictional cases, no telemetry or external API. */
 (() => {
   'use strict';
   const cases = {
@@ -42,6 +42,9 @@
   const caseKeys = Object.keys(cases);
 
   function render() {
+    // Stop the previous case's speech before replacing its visible explanation.
+    if (typeof stopVoice === 'function') stopVoice();
+    else if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     const c = cases[chooser.value] || cases.audio;
     observation.textContent = c.observation;
     answers.replaceChildren();
@@ -76,6 +79,12 @@
       result.textContent = lastAnswer + ' Enable spoken replies above if you want to hear this explanation.';
       return;
     }
+    if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance !== 'function') {
+      result.textContent = lastAnswer + ' Spoken replies are unavailable in this browser.';
+      return;
+    }
+    // Use the main SIGNAL voice engine: selected character voice plus speaking animation.
+    if (typeof speak === 'function') { speak(lastAnswer); return; }
     if ('speechSynthesis' in window) {
       try {
         window.speechSynthesis.cancel();
