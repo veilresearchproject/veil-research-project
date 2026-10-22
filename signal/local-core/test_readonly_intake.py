@@ -42,5 +42,35 @@ class IntakeTests(unittest.TestCase):
         s.inspect_synthetic(THERMAL, 'thermal')
         self.assertEqual(before, hashlib.sha256(THERMAL).hexdigest())
 
+    def test_invalid_marker_rejected(self):
+        changed = MTC.replace(b'QUESTION_START', b'UNKNOWN_MARKER')
+        with self.assertRaises(ValueError):
+            s.inspect_synthetic(changed, 'mtc_markers')
+
+    def test_empty_and_size_limit(self):
+        for raw in (b'', b'a' * (s.MAX_BYTES + 1)):
+            with self.assertRaises(ValueError):
+                s.inspect_synthetic(raw, 'thermal')
+
+    def test_bad_calendar_and_missing_timezone(self):
+        for stamp in (b'2026-02-30T08:00:00Z', b'2026-10-22T08:00:00'):
+            changed = THERMAL.replace(b'2026-10-22T08:00:00Z', stamp)
+            with self.assertRaises(ValueError):
+                s.inspect_synthetic(changed, 'thermal')
+
+    def test_nonfinite_temperature(self):
+        changed = THERMAL.replace(b'Room-A,21.0', b'Room-A,NaN')
+        with self.assertRaises(ValueError):
+            s.inspect_synthetic(changed, 'thermal')
+
+    def test_fixed_csv_header(self):
+        changed = THERMAL.replace(b'temperature_c', b'temperature_c,extra', 1)
+        with self.assertRaises(ValueError):
+            s.inspect_synthetic(changed, 'thermal')
+
+    def test_bad_encoding(self):
+        with self.assertRaises(ValueError):
+            s.inspect_synthetic(bytes([255]), 'thermal')
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
