@@ -1,6 +1,6 @@
 # VEIL Research Project — independent public website
 
-Founder & Research Director: Andrew Underwood.
+Founder & Lead Researcher: Andrew Underwood.
 
 This is the static, portable independent version of the VEIL Research Project public site. It includes the home page, individual experimental concepts, research center, journal, progress, and collaboration pages.
 
