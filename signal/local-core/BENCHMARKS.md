@@ -2,12 +2,20 @@
 
 **2026-10-23 | Scope: repeatable offline benchmark infrastructure.** No real Ollama model or user's Windows hardware was available during implementation. No accuracy, hallucination, or hardware-speed claims are made.
 
+## Windows readiness check (before running the live benchmark)
+
+On the home Windows PC, open the folder `signal/local-core/` and double-click `CHECK_SIGNAL.bat` **after Python 3.10+ and local Ollama are installed**. Alternatively run `py -3 preflight.py`.
+
+This local-only check queries `http://127.0.0.1:11434/api/tags` with a four-second timeout; it checks Python version, host OS, local Ollama availability, and whether the exact `llama3.2:3b` model tag appears. It never sends an AI prompt, downloads a model, connects to the cloud, changes settings, or writes a report. It does **not** verify model accuracy, successful inference, Windows drivers, GPU compatibility, or performance.
+
+If the model is missing, the checker displays a manual `ollama pull llama3.2:3b` command; it does **not** run that command. If the check passes, you may choose to run the separate live benchmark shown below.
+
 ## Running it
 
 From `signal/local-core/`:
 
 ```bat
-py -3 -m unittest -v test_signal_core.py test_benchmark.py
+py -3 -m unittest -v test_signal_core.py test_benchmark.py test_preflight.py
 py -3 benchmark.py --mode mock --output benchmark_mock_metrics.json
 ```
 
@@ -41,5 +49,7 @@ For each case, run with `--show-responses` and read the live output **on screen 
 - No file/sensor adapter or hardware control is included.
 
 ## Change record
+
+2026-10-23 (second step): Add optional one-click Windows local readiness check and nine deterministic preflight tests. The nine preflight tests passed in isolated Linux Python; actual Windows/Ollama test pending. No changes to the public website.
 
 2026-10-23: Add deterministic mock-mode evaluation plumbing, explicit live-only local model mode, six synthetic safety/evidence prompts, JSON metric export with no raw prompts or responses, and nine harness tests. Public scripted SIGNAL character, website, CSV audit, assignment runner, and research pages unchanged.
