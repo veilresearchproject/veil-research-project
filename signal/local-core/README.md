@@ -33,3 +33,34 @@ From this directory: `py -3 -m unittest -v test_signal_core.py`
 5. Connect the animated SIGNAL front end only through a secure, authorized boundary after local validation; never publicly expose the Ollama server.
 
 The public SIGNAL website must continue to label scripted experiences as demonstrations.
+
+## Experimental read-only synthetic evidence boundary (separate module)
+
+`synthetic_evidence.py` is a deterministic, stdlib-only parser. It accepts **caller-supplied bytes**, not filenames, network addresses, microphones, devices, or instrument commands. It is **not wired into Ollama, the public SIGNAL character, the existing CSV Audit Bench, or the assignment runner**. It deliberately labels every output `SYNTHETIC_ONLY` and `model_inference: false`.
+
+Supported fixed CSV schemas are:
+
+- `thermal`: `timestamp,sensor_id,temperature_c` — per-stream sampling gaps, temperature steps and timestamp-order warnings.
+- `mtc_markers`: `timestamp,recorder_id,marker` — counts from a restricted marker vocabulary. This **does not** interpret or capture EVP/audio, and marker ordering/state validity is **not yet checked**.
+
+Limits: UTF-8 only, 128 KB maximum, 1,000 data rows, strict header and identifier checks, explicit ISO 8601 timezones, optional expected SHA-256 verification. Source identity and chain of custody are **not** established by a hash. A caller must independently verify input provenance and consent before any future integration.
+
+### Reproducible verification
+
+From `signal/local-core` with Python 3.10+:
+
+```shell
+python -m unittest -v test_signal_core.py test_readonly_intake.py
+python benchmark_readonly_intake.py --cases 240 --seed 20261022 --json
+```
+
+The first command runs the original nine mocked local-model interface tests plus thirteen synthetic evidence intake regression tests. The benchmark generates **240 deterministic synthetic cases across eight categories**, including thermal changes, cadence gaps, timestamp-order problems, MTC metadata, SHA mismatch, unsupported schemas and marker rejection. It exits nonzero if a case fails. The JSON includes a reproducible output digest and machine-dependent Python parser timing and peak traced memory; **neither timing nor accuracy reflects a real Ollama model or a physical instrument**.
+
+Verified in an isolated Python 3.13.5 environment on October 22, 2026: thirteen intake tests passed; 240/240 generated synthetic cases passed, output fingerprint `24b8ae8c10ca88cba5c2e50945a4224bf359caa0d5f93b01566df20f5cbf8f8d`. The original nine local-core mock tests were previously reported passing, but this change is not a live Windows/Ollama test. Repeat the full command after checking out this branch.
+
+### Before any actual lab connection
+
+1. Review the code and regression cases in a pull request; do not assume tests establish physical measurement validity.
+2. Validate on the user's Windows workstation with the intended Python version, real local Ollama and actual model (separate from synthetic intake).
+3. Add an explicit, permissioned **read-only** input adapter with bounded file selection, source identity, immutable raw-byte hashing and documented provenance.
+4. Validate MTC marker sequencing, timing synchronization, and sensor calibration independently; never grant this parser instrument-control capability.

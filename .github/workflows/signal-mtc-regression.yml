@@ -1,0 +1,39 @@
+name: SIGNAL synthetic evidence regression tests
+
+on:
+  push:
+    branches:
+      - signal/mtc-sequence-validation-20261022
+    paths:
+      - "signal/local-core/**"
+      - ".github/workflows/signal-mtc-regression.yml"
+  pull_request:
+    paths:
+      - "signal/local-core/**"
+      - ".github/workflows/signal-mtc-regression.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run all stdlib unit tests
+        working-directory: signal/local-core
+        run: python -m unittest discover -v -p "test_*.py"
+      - name: Run deterministic synthetic intake benchmark
+        working-directory: signal/local-core
+        run: python benchmark_readonly_intake.py --cases 240 --seed 20261022 --json
