@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VEIL Research Center — A Vision Taking Shape | Virtual Walkthrough</title>
 <meta name="description" content="Explore a proposed future VEIL Research Center through an interactive 3D walkthrough. A vision of evidence-first experiments, SIGNAL-assisted research, and instrument development—not an existing facility.">
 <meta property="og:title" content="VEIL Research Center — A Vision Taking Shape">
@@ -121,7 +121,7 @@ const keys=new Set();
 STOPS.forEach((s,i)=>{const b=document.createElement('button');b.className='stop';b.innerHTML=`<span class="n">${String(i+1).padStart(2,'0')}</span><span><b>${s.title}</b><small>${s.level===2?'Second floor':s.level===1?'Ground level':'Outside / overview'}</small></span>`;b.onclick=()=>go(i);stopList.appendChild(b);});
 function go(i){active=(i+STOPS.length)%STOPS.length;const s=STOPS[active];position=[...s.pos];yaw=s.yaw;pitch=s.pitch;level=s.level;document.getElementById('tour-title').textContent=s.title;document.getElementById('tour-desc').textContent=s.desc;[...stopList.children].forEach((n,j)=>n.classList.toggle('active',j===active));}
 go(0);
-document.getElementById('next').onclick=()=>go(active+1);document.getElementById('prev').onclick=()=>go(active-1);document.getElementById('overview').onclick=()=>go(0);document.getElementById('level').onclick=()=>level===2?go(1):go(0);
+document.getElementById('next').onclick=()=>go(active+1);document.getElementById('prev').onclick=()=>go(active-1);document.getElementById('overview').onclick=()=>go(0);document.getElementById('level').onclick=()=>level===2?go(2):go(STOPS.length-1);
 window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();keys.add(e.code);if(e.code==='KeyE')go(STOPS.length-1);if(e.code==='KeyQ')go(2);if(/^Digit[1-9]$/.test(e.code))go(Number(e.code.slice(5))-1)});window.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>keys.clear());
 for(const b of document.querySelectorAll('[data-key]')){const k=b.dataset.key;b.addEventListener('pointerdown',e=>{e.preventDefault();keys.add(k);b.setPointerCapture(e.pointerId)});for(const ev of ['pointerup','pointercancel','pointerleave'])b.addEventListener(ev,()=>keys.delete(k));}
 let drag=false,prevX=0,prevY=0;canvas.addEventListener('pointerdown',e=>{drag=true;prevX=e.clientX;prevY=e.clientY;canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!drag)return;yaw+=(e.clientX-prevX)*.0035;pitch=Math.max(-1.25,Math.min(1.25,pitch-(e.clientY-prevY)*.003));prevX=e.clientX;prevY=e.clientY});canvas.addEventListener('pointerup',()=>drag=false);
@@ -168,7 +168,7 @@ let position=[...STOPS[0].pos],yaw=STOPS[0].yaw,pitch=STOPS[0].pitch,active=0,le
 const list=document.getElementById('stops');STOPS.forEach((s,i)=>{let b=document.createElement('button');b.className='stop';b.innerHTML=`<span class="n">${String(i+1).padStart(2,'0')}</span><span><b>${s.title}</b><small>${s.level===2?'Second floor':s.level===1?'Ground level':'Outside / overview'}</small></span>`;b.onclick=()=>go(i);list.appendChild(b);});
 function go(i){active=(i+STOPS.length)%STOPS.length;let s=STOPS[active];position=[...s.pos];yaw=s.yaw;pitch=s.pitch;level=s.level;document.getElementById('tour-title').textContent=s.title;document.getElementById('tour-desc').textContent=s.desc;[...list.children].forEach((n,j)=>n.classList.toggle('active',j===active));}
 go(0);
-document.getElementById('next').onclick=()=>go(active+1);document.getElementById('prev').onclick=()=>go(active-1);document.getElementById('overview').onclick=()=>go(0);document.getElementById('level').onclick=()=>level===2?go(1):go(0);
+document.getElementById('next').onclick=()=>go(active+1);document.getElementById('prev').onclick=()=>go(active-1);document.getElementById('overview').onclick=()=>go(0);document.getElementById('level').onclick=()=>level===2?go(2):go(STOPS.length-1);
 const keys=new Set();window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();keys.add(e.code);if(e.code==='KeyE')go(STOPS.length-1);if(e.code==='KeyQ')go(2);if(e.code.startsWith('Digit')){let v=parseInt(e.code.slice(5));if(v>=1&&v<=STOPS.length)go(v-1)}});window.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>keys.clear());
 for(let b of document.querySelectorAll('[data-key]')){const k=b.dataset.key;b.addEventListener('pointerdown',e=>{e.preventDefault();keys.add(k);b.setPointerCapture(e.pointerId)});for(let t of ['pointerup','pointercancel','pointerleave'])b.addEventListener(t,()=>keys.delete(k));}
 let dragging=false,prevX=0,prevY=0;
