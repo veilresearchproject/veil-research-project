@@ -1,36 +1,20 @@
-VEIL SIGNAL Desktop v0.8 — Local readiness and evidence-notebook release
+VEIL SIGNAL Desktop v0.9 — Review Scanner Bridge
 
-EXTRACT THE ENTIRE ZIP FIRST (do not run programs inside the ZIP).
+Extract the entire ZIP before running any .bat file. Do not overwrite your older SIGNAL releases.
 
-1. Double-click CHECK_SIGNAL_SETUP.bat.
-   - Checks local Ollama model listing, available Windows voices, and whether
-     an offline speech recognizer can be instantiated.
-   - It DOES NOT listen, speak, install models, download anything or contact a cloud AI.
+1. Double-click CHECK_SIGNAL_SETUP.bat (local diagnostics, no model installation).
+2. For a visual-only test, double-click START_SIGNAL_FACE_DEMO.bat (scripted demo, NOT AI).
+3. For real conversations: start local Ollama; then double-click START_SIGNAL_DESKTOP.bat.
+   Ollama model expected by default: llama3.2:3b. Download only when you choose.
+4. First load MTC evidence logs using the session directory in SIGNAL.
+5. Under "MTC scanner flags" click "Find latest matching report" to load your
+   already-generated VEIL Local Audio Review summary (no 500 MB WAV upload).
+6. Click "Note this time" to prefill the investigator notebook. Listen to the
+   actual audio in the separate MTC waveform viewer before classifying anything.
 
-2. Double-click START_SIGNAL_FACE_DEMO.bat to look at SIGNAL's approved face,
-   expressions and controls WITHOUT any AI model. The banner says SCRIPTED DEMO.
+Original WAV files, event logs and scanner summary are not changed.
+Scanned sound spikes are NOT confirmed voices, EVP or paranormal evidence.
+The HTML speaking face remains illustrative, not synchronized phoneme animation.
 
-3. When ready for a real AI conversation, launch Ollama locally.
-   In Command Prompt check: ollama list
-   If you have not downloaded llama3.2:3b, you can choose to run:
-     ollama pull llama3.2:3b
-   (First download requires internet and disk space. No paid API is used.)
-   Then double-click START_SIGNAL_DESKTOP.bat.
-
-4. In live desktop, select "Local readiness check" to view setup results.
-   You can type a message; Windows voice is OFF until enabled.
-
-5. To review MTC evidence: expand "Load a local MTC evidence log", enter the
-   folder containing session_result.json, session_metadata.json and events.jsonl.
-   Expand "Investigator observation notebook" to log known sources/needs-review
-   with a time offset in SECONDS from the session start. The original WAV files
-   and MTC evidence logs stay untouched. Notes are unencrypted and kept under
-   %LOCALAPPDATA%\VEIL\SIGNAL\review_notes\ in a separate JSONL file.
-
-6. To stop SIGNAL, close the browser tab then press Ctrl+C in the command window.
-
-WARNING: This is a local engineering prototype, not a validated research
-instrument. No automatic EVP identification, genuine lip-sync or continuous
-listening. Test your microphone, speakers and model on your own Windows PC.
-
-Test: py -3 -m unittest discover -v
+Regression: py -3 -m unittest discover -v
+Details: V09_DEVELOPMENT_NOTES.md

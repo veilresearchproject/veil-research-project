@@ -104,7 +104,7 @@
       answering=false;
       syncStatus(reply.status);
       setActivity(origin==='mtc' ? 'MTC log review returned' : 'Response complete');
-      if (origin === 'mtc') refreshNotes();
+      if (origin === 'mtc') {refreshNotes();refreshScanner();}
     } catch (err) {
       answering=false; lastExpression='concentrating'; pose(lastExpression);
       addMessage('error',err.message,'Local server error • no cloud fallback');
@@ -261,6 +261,65 @@
     } catch (err) { diagOutput.textContent = 'Readiness check failed: ' + err.message; }
     finally { diagButton.disabled = false; }
   });
+  // v0.9: opt-in, read-only acoustic scanner summary, not WAV/EVP analysis.
+  const scannerState = $('scanner-state'), scannerList = $('scanner-list');
+  function clearScannerDisplay(message) {
+    scannerList.replaceChildren();
+    scannerState.textContent = message;
+  }
+  function renderScannerReview(review) {
+    scannerList.replaceChildren();
+    if (!review) {clearScannerDisplay('No scanner report loaded. MTC evidence logs and original audio remain unchanged.');return;}
+    scannerState.textContent = review.raw_candidates + ' raw scanner flags grouped into ' +
+      review.review_windows + ' overlapping review windows. These are acoustic changes, not identified voices or causes.';
+    const groups = Array.isArray(review.groups) ? review.groups.slice(0,100) : [];
+    for (const group of groups) {
+      const card = document.createElement('div'); card.className = 'scanner-item';
+      const label = document.createElement('span');
+      label.textContent = group.review_id + ' · ' + formatClock(group.start) + ' – ' + formatClock(group.end);
+      const details = document.createElement('small');
+      details.textContent = group.count + ' scanner flag(s) · acoustic score ' + group.score;
+      const select = document.createElement('button'); select.type = 'button'; select.textContent = 'Note this time';
+      select.addEventListener('click', () => {
+        $('review-notebook').open = true;
+        $('review-time').value = String(group.start);
+        $('review-label').value = 'needs_review';
+        $('review-text').focus();
+        reviewState.textContent = 'Selected ' + group.review_id + '. Listen in the separate MTC waveform viewer, then enter your observation here.';
+      });
+      card.append(label, details, select); scannerList.append(card);
+    }
+    if (review.warnings?.length) {
+      const w = document.createElement('p'); w.textContent = 'Scanner warnings: ' + review.warnings.join(' | '); scannerList.prepend(w);
+    }
+  }
+  async function refreshScanner() {
+    try { const data = await request('/api/review'); renderScannerReview(data.review); }
+    catch(err) {clearScannerDisplay('Scanner summary unavailable: ' + err.message);}
+  }
+  $('scanner-form').addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    const path = $('scanner-path').value.trim();
+    if (!path) {scannerState.textContent = 'Enter the complete review_summary.json file path.';return;}
+    scannerState.textContent = 'Loading scanner report locally and checking its session and duration…';
+    try {
+      const data=await request('/api/review',{action:'load',path});
+      renderScannerReview(data.review);
+      setActivity('Scanner intervals loaded for review');
+    } catch(err) { scannerState.textContent = 'Could not load scanner report: ' + err.message; }
+  });
+  $('scanner-latest').addEventListener('click',async()=>{
+    scannerState.textContent = 'Checking existing local VEIL_Reviews reports for this session…';
+    try {const data=await request('/api/review',{action:'latest'});renderScannerReview(data.review);
+      setActivity('Matching MTC scanner report loaded');}
+    catch(err) {scannerState.textContent = 'Cannot find matching scanner report: ' + err.message;}
+  });
+  $('scanner-clear').addEventListener('click',async()=>{
+    try {await request('/api/review',{action:'clear'});renderScannerReview(null);}
+    catch(err) {scannerState.textContent = err.message;}
+  });
+  $('scanner-refresh').addEventListener('click',refreshScanner);
+  $('scanner-review').addEventListener('toggle',()=>{if($('scanner-review').open)refreshScanner();});
   const reviewState = $('review-state'), reviewList = $('review-list');
   function formatClock(seconds) {
     const n = Number(seconds);

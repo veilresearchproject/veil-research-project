@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.8. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.9. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -16,6 +16,7 @@ import signal_core
 import signal_listen
 import signal_diagnostics
 import signal_annotations
+import signal_review_import
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / 'face_assets'
@@ -61,12 +62,13 @@ class SessionState:
                 'speaking': proc is not None and proc.poll() is None,
                 'mtc_loaded': self.bot.loaded_mtc is not None,
                 'session_id': (self.bot.loaded_mtc or {}).get('session_id'),
+                'review_loaded': self.bot.loaded_review is not None,
                 'mic_enabled': self.listener.status()['state'] == 'listening', 'hardware_control': False}
 
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.8'
+        server_version = 'SIGNAL-Desktop-v0.9'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -123,6 +125,12 @@ def make_handler(state):
                 else:
                     self._json(200, signal_diagnostics.run_checks(state.bot.model.model, state.bot.voice))
                 return
+            if route == '/api/review':
+                if not self._authorized():
+                    self._json(403, {'error': 'Unauthorized'}); return
+                result = state.bot.loaded_review
+                self._json(200, {'review': result})
+                return
             if route == '/api/notes':
                 if not self._authorized():
                     self._json(403, {'error': 'Unauthorized'}); return
@@ -148,7 +156,7 @@ def make_handler(state):
             route = urlsplit(self.path).path
             if not self._authorized():
                 self._json(403, {'error': 'Unauthorized'}); return
-            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes'):
+            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review'):
                 self._json(404, {'error': 'Not found'}); return
             try:
                 size = int(self.headers.get('Content-Length', '-1'))
@@ -165,7 +173,26 @@ def make_handler(state):
             if not state.lock.acquire(blocking=False):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
             try:
-                if route == '/api/notes':
+                if route == '/api/review':
+                    action = data.get('action')
+                    if action == 'clear':
+                        state.bot.loaded_review = None
+                        self._json(200, {'review': None})
+                    elif action == 'latest':
+                        result = signal_review_import.latest_report(state.bot.loaded_mtc)
+                        state.bot.loaded_review = result
+                        self._json(200, {'review': result})
+                    elif action == 'load':
+                        user_path = data.get('path')
+                        if not isinstance(user_path, str) or not 0 < len(user_path) <= 1000:
+                            raise ValueError('Enter the full local review_summary.json file path')
+                        # Assignment happens only after complete validation.
+                        result = signal_review_import.import_report(user_path, state.bot.loaded_mtc)
+                        state.bot.loaded_review = result
+                        self._json(200, {'review': result})
+                    else:
+                        raise ValueError('Choose latest, load or clear for audio-review summary')
+                elif route == '/api/notes':
                     note = signal_annotations.append_note(state.review_dir, state.bot.loaded_mtc,
                                                           data.get('time_s'), data.get('classification'), data.get('note'))
                     self._json(200, {'entry': note, 'message':'Manual observation saved separately from the original evidence.'})

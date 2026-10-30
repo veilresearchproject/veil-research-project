@@ -59,6 +59,10 @@ py -3 -m unittest -v test_signal_core test_mtc_evidence test_signal_mtc_integrat
 ## v0.7 facial motion refinement
 The artificial dark mouth slit and rapid full-face cycling were removed. Use Motion: subtle / Motion: still under the portrait. Our next real-world step is to launch Ollama and verify voice playback with this visual interface.
 
-## v0.8 — Local setup check and manual MTC review notebook
+## v0.9 — Local setup check and manual MTC review notebook
 
 Run `CHECK_SIGNAL_SETUP.bat` before attempting Ollama. This tests the local model list and Windows speech component availability without activating the microphone. See `V08_DEVELOPMENT_NOTES.md` for detailed validation and limitations. The interface adds a **Local readiness check** and a separate **Investigator observation notebook** for manually classified MTC timestamps. Notes never overwrite raw evidence.
+
+### v0.9 — local audio scanner bridge
+
+After verifying MTC session logs, expand **MTC scanner flags — group and review**. Use **Find latest matching report** to select the latest compatible existing `~/VEIL_Reviews/*/review_summary.json`, or paste the file path. The imported acoustic candidate time windows are grouped when overlapping. You can select a group to prefill the existing notebook, but you still need to listen in the **separate** MTC waveform viewer and identify possible ordinary causes. See `V09_DEVELOPMENT_NOTES.md`.
