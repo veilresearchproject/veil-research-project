@@ -1,4 +1,5 @@
 import io
+import json
 import unittest
 from unittest.mock import Mock, patch
 
@@ -40,7 +41,7 @@ class VoiceTests(unittest.TestCase):
             self.assertEqual(args[0][0], 'powershell.exe')
             self.assertNotIn(dangerous, repr(args[0]))
             self.assertEqual(kwargs['stdout'], signal_voice.subprocess.DEVNULL)
-            self.assertEqual(proc.stdin.saved, dangerous.encode('utf-8'))
+            self.assertEqual(json.loads(proc.stdin.saved), {'text': dangerous, 'voice': None})
 
     def test_stop_terminates_active_speech(self):
         proc = Mock()

@@ -1,27 +1,40 @@
-# SIGNAL Local Voice Output v0.3 — offline Windows proof of concept
+# SIGNAL local Windows voice output — v0.18
 
-**VEIL Research Project | October 30, 2026 | engineering prototype**
+SIGNAL uses optional Windows System.Speech text-to-speech with locally available
+voices. It starts off. There are no paid speech services, downloads or voice cloning.
 
-SIGNAL now has **optional local Windows text-to-speech output**, using the Windows built-in System.Speech synthesizer. No paid API, cloud calls, third-party Python packages, or voice cloning. This extends the existing local-core Python/Ollama program and the read-only MTC log adapter.
+## Desktop test
 
-## Windows instructions
-1. Keep these files together. Python 3.10+, Windows PowerShell and an installed Windows speech voice are required.
-2. Double-click **START_VOICE_TEST.bat** to hear a test **without Ollama**.
-3. Double-click **START_SIGNAL.bat** to start SIGNAL conversational chat (requires Ollama with a local model).
-4. Type `/voice list` for available voices, `/voice on` to speak responses, `/voice stop` to interrupt, `/voice off` to disable, `/voice rate 1` (-5 to 5) to change speed, or `/voice test` for a short test phrase.
-5. For opt-in MTC log context, use `/mtc "C:\path\to\your\session"`; `/mtc-clear` and `/clear` clear the loaded log summary.
+1. Extract the complete ZIP and open START_HERE.bat.
+2. Choose the scripted face demo to try audio without Ollama, or the live assistant
+   when local Ollama is running. Demo dialogue remains scripted.
+3. Open Choose an installed Windows voice, then List installed voices. Choose a
+   name or System default and click Use selected voice. This does not enable speech
+   or play a sample. The choice lasts until SIGNAL is restarted.
+4. Click Enable voice, then Test voice. Check volume and Windows output device.
+   Naturalness depends on the voices on your PC.
+5. Stop speaking stops the current utterance. Disable voice also prevents a pending
+   reply from speaking later. Stop reply is a separate best-effort model control.
+   The speed selector adjusts the installed voice rate.
 
-## Scientific, privacy and safety constraints
-- Voice synthesis is **output only**: no microphone, recognition, audio analysis, instrument control or voice cloning.
-- The program sends plain speech text through a local subprocess standard-input pipe, not into constructed shell commands.
-- Voice starts **off** for each run; it speaks only if explicitly enabled. Long replies are spoken only in a bounded excerpt; the full reply remains on screen.
-- The spoken model can be mistaken; source verification and human review remain essential. The MTC adapter reads only JSON logs, not WAV audio.
-- Speech quality depends on locally installed Windows voices. Actual Windows voice playback has **not been verified on the user's PC**.
-- No cloud fallback or paid API. Local Ollama model setup is separate.
-- If anything fails, consult `/voice list` and the test launcher before troubleshooting Ollama.
+Changing the voice stops its current utterance. Invalid/unavailable selections
+leave the old choice unchanged. If inventory fails, typing remains available.
+Voice and microphone are separate opt-in controls.
 
-## Testing
-Run from this directory:
-`py -3 -m unittest -v test_signal_core test_mtc_evidence test_signal_mtc_integration test_signal_voice`
+The legacy console still supports /voice list, /voice on, /voice off, /voice stop,
+/voice test and /voice rate N. Voice-name selection is in the desktop interface.
+START_VOICE_TEST.bat remains a separate local test.
 
-**30 tests passed in development:** 20 existing SIGNAL/MTC tests and 10 new voice tests using mocked Windows PowerShell processes. The actual Windows sound output still needs a device-level test. Voice cloning, if pursued later, would be a separate, explicitly consented, carefully protected feature.
+## Data and validation
+
+Speech text and the chosen name travel as JSON through a local UTF-8 stdin pipe
+into a fixed PowerShell script. They are not evaluated as code. Spoken text is
+bounded to roughly 650 characters; the full model response stays on screen.
+
+The voice can read inaccurate model output. Spoken claims about MTC logs do not
+establish what was audible or what caused a sound. This is not custom SIGNAL
+speech, voice cloning or phoneme lip synchronization.
+
+185 Python tests and simulated interface checks passed. Real Windows voice
+selection, speaker output and model performance still need desktop acceptance.
+Run RUN_SIGNAL_TESTS.bat for Python tests. See V18_DEVELOPMENT_NOTES.md for limits.

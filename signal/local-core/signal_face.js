@@ -106,11 +106,12 @@
       $('reply-status').textContent = 'No local model request is running.';
     }
     voiceOn = Boolean(state.voice_enabled);
+    const voiceLabel = typeof state.voice_name === 'string' ? state.voice_name : 'system default';
     $('voice-toggle').textContent = voiceOn ? 'Disable voice' : 'Enable voice';
     $('voice-toggle').setAttribute('aria-pressed',String(voiceOn));
     speaking = Boolean(state.speaking);
-    $('voice-status').textContent = previewMotion ? 'Silent character movement preview. No microphone or speech is active.' : (speaking ? 'Speaking locally using Windows speech.' :
-       (voiceOn ? 'Voice enabled. Replies will be spoken on this computer.' : 'Voice starts OFF. Face motion responds to speech activity, not phonemes.'));
+    $('voice-status').textContent = previewMotion ? 'Silent character movement preview. No microphone or speech is active.' : (speaking ? 'Speaking locally using ' + voiceLabel + '.' :
+       (voiceOn ? 'Voice enabled: ' + voiceLabel + '. Replies will be spoken on this computer.' : 'Voice is OFF. Selected: ' + voiceLabel + '.'));
     if (state.mtc_loaded) $('mtc-state').textContent = 'Loaded session: '+(state.session_id || 'MTC');
     else $('mtc-state').textContent = 'No session loaded';
     if (listening) { pose('excited'); portrait.dataset.state='listening'; }
@@ -353,6 +354,37 @@
   $('voice-stop').addEventListener('click',()=>voiceCommand('stop'));
   $('voice-test').addEventListener('click',()=>voiceCommand('test'));
   $('rate').addEventListener('change',(e)=>voiceCommand('rate',{rate:Number(e.target.value)}));
+  const voiceSelect = $('voice-select'), voiceApply = $('voice-select-apply');
+  const voiceChoiceState = $('voice-selection-state');
+  $('voices-refresh').addEventListener('click', async () => {
+    if (answering || listening || serverGenerating) {voiceChoiceState.textContent='Finish the current reply or microphone attempt first.';return;}
+    const button=$('voices-refresh');
+    button.disabled=true;voiceApply.disabled=true;voiceSelect.disabled=true;
+    voiceSelect.replaceChildren();
+    voiceChoiceState.textContent='Reading voices available to Windows speech…';
+    try {
+      const result=await request('/api/voice',{action:'list'});
+      const defaultOption=document.createElement('option');
+      defaultOption.value='';defaultOption.textContent='System default';voiceSelect.append(defaultOption);
+      for(const name of result.voices) {
+        const option=document.createElement('option');option.value=name;option.textContent=name;voiceSelect.append(option);
+      }
+      voiceSelect.value=result.status.voice_name || '';
+      voiceApply.disabled=voiceSelect.disabled=result.voices.length===0;
+      voiceChoiceState.textContent=result.voices.length ? 'Choose a voice, then Use selected voice. No sample plays automatically.' : 'No installed Windows speech voices found. Typing still works.';
+    } catch(err) {voiceChoiceState.textContent='Voice list unavailable: '+err.message;}
+    finally {button.disabled=false;}
+  });
+  voiceApply.addEventListener('click', async () => {
+    if (answering || listening || serverGenerating || voiceSelect.disabled) return;
+    voiceApply.disabled=true;
+    try {
+      const result=await request('/api/voice',{action:'select',name:voiceSelect.value || null});
+      syncStatus(result.status);
+      voiceChoiceState.textContent='Selected: '+(result.status.voice_name || 'system default')+'. '+result.reply;
+    } catch(err) {voiceChoiceState.textContent='Voice selection unchanged: '+err.message;}
+    finally {voiceApply.disabled=voiceSelect.disabled;}
+  });
   $('mtc-form').addEventListener('submit',(e)=>{
     e.preventDefault();
     const path = $('mtc-path').value.trim();

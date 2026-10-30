@@ -167,3 +167,11 @@ Submitting no longer immediately clears the editor. Failure or interruption keep
 a tab-local recovery copy. Restore fills the editor without sending, and successful
 manual retry clears the matching copy. Confirmed model/chat resets clear old draft
 context. See `V17_DEVELOPMENT_NOTES.md`; no automatic retry or disk storage is added.
+
+
+## Update — v0.18: Installed Windows voice selection
+
+Choose an installed voice in the desktop interface or return to System default.
+Selection lasts for the current run, never enables speech or auto-plays a sample,
+and preserves the old choice on invalid input. See `VOICE_OUTPUT.md` and
+`V18_DEVELOPMENT_NOTES.md`; actual Windows selection/playback still need testing.
