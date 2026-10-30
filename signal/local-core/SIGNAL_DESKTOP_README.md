@@ -133,3 +133,12 @@ Use **Choose an installed local model** to list and select an eligible Ollama mo
 already on this PC. Selection lasts for this run; it does not download anything.
 A confirmed change starts a new chat and unloads research context. Saved files
 are unchanged. See `V13_DEVELOPMENT_NOTES.md` for acceptance tests and limits.
+
+
+## Update — v0.14: Responsive audio controls
+
+Stop speaking, Disable voice and Stop listening no longer wait behind a slow
+model reply. Windows speech-process updates are synchronized. A failed microphone
+stop/status request leaves a visible uncertain state and a retry control. A new
+Test voice button uses the existing opt-in local speech test. Read
+`DESKTOP_TEST_STEPS.md` and `V14_DEVELOPMENT_NOTES.md` before real-PC acceptance.

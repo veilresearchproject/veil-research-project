@@ -7,6 +7,8 @@ import os
 import re
 import shutil
 import subprocess
+import threading
+from functools import wraps
 
 _MAX_SPOKEN = 650
 # The voice runs on Windows with locally-installed voices; no network calls.
@@ -49,6 +51,14 @@ def speech_text(value):
     return text[:cut].rstrip() + ' ... The rest is on the screen.'
 
 
+def _voice_locked(method):
+    @wraps(method)
+    def guarded(self, *args, **kwargs):
+        with self._mutex:
+            return method(self, *args, **kwargs)
+    return guarded
+
+
 class WindowsVoice:
     """Single-operator, text-to-speech output only, off by default."""
 
@@ -56,20 +66,24 @@ class WindowsVoice:
         self.enabled = False
         self.rate = 0
         self._process = None
+        self._mutex = threading.RLock()
 
     @staticmethod
     def _require_windows():
         if os.name != 'nt' or shutil.which('powershell.exe') is None:
             raise RuntimeError('Local speech requires Windows PowerShell and a Windows speech voice; no cloud fallback.')
 
+    @_voice_locked
     def enable(self):
         self._require_windows()
         self.enabled = True
 
+    @_voice_locked
     def disable(self):
         self.enabled = False
         self.stop()
 
+    @_voice_locked
     def stop(self):
         p = self._process
         self._process = None
@@ -81,6 +95,7 @@ class WindowsVoice:
                 p.kill()
                 p.wait(timeout=2)
 
+    @_voice_locked
     def speak(self, text):
         if not self.enabled:
             return False
@@ -117,6 +132,7 @@ class WindowsVoice:
         output = result.stdout.decode('utf-8-sig', errors='replace')
         return [line.strip() for line in output.splitlines() if line.strip()][:40]
 
+    @_voice_locked
     def set_rate(self, rate):
         if isinstance(rate, bool) or not isinstance(rate, int) or not -5 <= rate <= 5:
             raise ValueError('Voice rate must be a whole number from -5 to 5')

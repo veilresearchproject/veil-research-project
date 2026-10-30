@@ -210,7 +210,7 @@
     else pose(previewMotion ? 'neutral' : lastExpression, speaking || previewMotion);
   };
   async function listenOnce() {
-    if (listenRequestPending || answering) return;
+    if (listenRequestPending || (answering && !listening)) return;
     listenRequestPending=true;
     try {
       if (listening) {
@@ -223,7 +223,8 @@
         micState(true,'Listening locally for one phrase (up to 12 seconds). Click Stop to cancel.', 'listening');
       }
     } catch (err) {
-      micState(false,'Microphone unavailable: '+err.message);
+      if (listening) micState(true,'Could not confirm microphone stop: '+err.message+' Try Stop listening again.', 'listening');
+      else micState(false,'Microphone unavailable: '+err.message);
     } finally { listenRequestPending=false; }
   }
   micButton.addEventListener('click',listenOnce);
@@ -240,7 +241,7 @@
       } else if (result.state==='empty' || result.state==='error') {
         micState(false,'Microphone OFF. '+(result.message || 'No phrase recognized. Try again or type.'));
       } else micState(false,'Microphone OFF.');
-    } catch(err) { micState(false,'Mic status unavailable: '+err.message); }
+    } catch(err) { micState(true,'Microphone status unavailable; it may still be listening. Use Stop listening. '+err.message, 'listening'); }
   }
   window.setInterval(pollListen,500);
   $('chat-form').addEventListener('submit',(e)=>{e.preventDefault();submitMessage(question.value)});
@@ -311,6 +312,7 @@
   });
   $('voice-toggle').addEventListener('click',()=>voiceCommand(voiceOn?'off':'on'));
   $('voice-stop').addEventListener('click',()=>voiceCommand('stop'));
+  $('voice-test').addEventListener('click',()=>voiceCommand('test'));
   $('rate').addEventListener('change',(e)=>voiceCommand('rate',{rate:Number(e.target.value)}));
   $('mtc-form').addEventListener('submit',(e)=>{
     e.preventDefault();

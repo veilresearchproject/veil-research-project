@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.13. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.14. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -78,7 +78,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.13'
+        server_version = 'SIGNAL-Desktop-v0.14'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -249,9 +249,34 @@ def make_handler(state):
                     state.generation_cancel.set()
                 self._json(200, {'stop_requested': bool(active)})
                 return
+            # Deactivation must remain available during a slow model call.
+            # The voice/listener own their short-lived process synchronization.
+            # These branches never acquire the generation lock or start audio.
+            if route == '/api/voice' and data.get('action') in ('stop', 'off'):
+                try:
+                    if data['action'] == 'off':
+                        state.bot.voice.disable()
+                        message = 'Local voice disabled.'
+                    else:
+                        state.bot.voice.stop()
+                        message = 'Speech stopped.'
+                    self._json(200, {'reply': message, 'status': state.status()})
+                except (RuntimeError, OSError) as exc:
+                    self._json(422, {'error': str(exc)[:500]})
+                return
+            if route == '/api/listen' and data.get('action') == 'stop':
+                try:
+                    self._json(200, state.listener.stop())
+                except (RuntimeError, OSError) as exc:
+                    self._json(422, {'error': str(exc)[:500]})
+                return
             if not state.lock.acquire(timeout=0.15):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
             try:
+                if ((route in ('/api/chat', '/api/chat/stream')) or
+                    (route == '/api/voice' and data.get('action') == 'test')):
+                    if state.listener.status()['state'] == 'listening':
+                        raise ValueError('Stop listening before generating or testing speech')
                 if route == '/api/models':
                     if state.mode == 'demo':
                         raise ValueError('Model selection requires live SIGNAL desktop')
@@ -366,6 +391,8 @@ def make_handler(state):
                 elif route == '/api/listen':
                     action = data.get('action')
                     if action == 'start':
+                        # Enforced server-side as well as in the browser, including multiple tabs.
+                        state.bot.voice.stop()
                         self._json(200, state.listener.start())
                     elif action == 'stop':
                         self._json(200, state.listener.stop())
