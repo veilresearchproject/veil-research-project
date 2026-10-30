@@ -394,6 +394,54 @@
     } catch(err) {output.textContent='Local Ollama check failed: '+err.message;}
     finally{button.disabled=false;}
   });
+  // v0.13: explicitly choose an installed model; no downloads, no background inventory.
+  const modelSelect = $('model-select'), modelApply = $('model-select-apply');
+  const modelSelectionState = $('model-selection-state');
+  $('models-refresh').addEventListener('click', async () => {
+    const button = $('models-refresh');
+    button.disabled = true; modelSelect.disabled = true; modelApply.disabled = true;
+    modelSelect.replaceChildren();
+    modelSelectionState.textContent = 'Reading the installed local Ollama model list…';
+    try {
+      const result = await request('/api/models');
+      for (const name of result.models) {
+        const option = document.createElement('option');
+        option.value = name; option.textContent = name;
+        modelSelect.append(option);
+      }
+      if (result.models.includes(result.selected)) modelSelect.value = result.selected;
+      modelSelect.disabled = result.models.length === 0;
+      modelApply.disabled = result.models.length === 0;
+      modelSelectionState.textContent = 'Current model: ' + result.selected + '. ' +
+        (result.models.length ? 'Choose an installed model, then test its response time.' :
+          'No eligible installed models found. Nothing was downloaded or changed.');
+    } catch (err) { modelSelectionState.textContent = 'Model list unavailable: ' + err.message; }
+    finally { button.disabled = false; }
+  });
+  modelApply.addEventListener('click', async () => {
+    if (!snapshotReady()) {
+      modelSelectionState.textContent = 'Finish the reply, listening, or speech before switching models.'; return;
+    }
+    if (!modelSelect.value) return;
+    if (!window.confirm('Use ' + modelSelect.value + ' for this run? Switching to a different model clears the active chat and unloads MTC/scanner context. Saved snapshots and original files are unchanged.')) return;
+    modelApply.disabled = true;
+    try {
+      const result = await request('/api/models', {model:modelSelect.value, confirm_reset:true});
+      if (result.changed) {
+        messages.replaceChildren();
+        addMessage('signal', 'Local model selected: ' + result.selected + '. Start a new conversation or explicitly restore a saved chat.', 'Model change • evidence must be reloaded');
+        clearScannerDisplay('No MTC session or scanner report loaded. Reload evidence explicitly.');
+        reviewList.replaceChildren();
+        reviewState.textContent = 'Load an MTC session to review its notes.';
+        $('model-check-results').textContent = 'Selected model has not been tested. Click Test Ollama conversation.';
+        diagOutput.textContent = 'Model changed. Run Check local setup again.';
+        lastExpression = 'neutral';
+      }
+      syncStatus(result.status);
+      modelSelectionState.textContent = result.message + ' Current model: ' + result.selected;
+    } catch (err) { modelSelectionState.textContent = 'Model unchanged: ' + err.message; }
+    finally { modelApply.disabled = modelSelect.disabled; }
+  });
   // v0.9: opt-in, read-only acoustic scanner summary, not WAV/EVP analysis.
   const scannerState = $('scanner-state'), scannerList = $('scanner-list');
   function clearScannerDisplay(message) {

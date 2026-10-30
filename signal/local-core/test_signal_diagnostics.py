@@ -32,7 +32,7 @@ class DiagnosticsTests(unittest.TestCase):
         self.assertNotIn('offline',str(r))
 
     def test_invalid_response_is_not_ready(self):
-        for response in [b'not json',b'{"models":"broken"}',b'{"models":[]}']:
+        for response in [b'not json', b'null', b'[]', b'{"models":"broken"}',b'{"models":[]}']:
             r=sd.check_ollama('llama3.2:3b',lambda *a,**k: Response(response))
             self.assertNotEqual(r['status'],'ready')
 

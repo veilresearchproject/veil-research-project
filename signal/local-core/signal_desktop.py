@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.11. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.13. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -20,6 +20,7 @@ import signal_annotations
 import signal_review_import
 import signal_packet
 import signal_session
+import signal_models
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / 'face_assets'
@@ -77,7 +78,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.12'
+        server_version = 'SIGNAL-Desktop-v0.13'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -116,6 +117,21 @@ def make_handler(state):
                 self._json(403, {'error': 'Loopback host only'})
                 return
             route = urlsplit(self.path).path
+            if route == '/api/models':
+                if not self._authorized():
+                    self._json(403, {'error': 'Unauthorized'}); return
+                if state.mode == 'demo':
+                    self._json(422, {'error': 'Start live SIGNAL desktop to choose an installed Ollama model.'}); return
+                if not state.lock.acquire(timeout=0.15):
+                    self._json(409, {'error': 'Finish the current request before listing models'}); return
+                try:
+                    self._json(200, {'models': signal_models.installed_models(),
+                                     'selected': state.bot.model.model})
+                except ValueError as exc:
+                    self._json(422, {'error': str(exc)})
+                finally:
+                    state.lock.release()
+                return
             if route == '/api/listen/status':
                 if not self._authorized():
                     self._json(403, {'error': 'Unauthorized'}); return
@@ -211,7 +227,7 @@ def make_handler(state):
             route = urlsplit(self.path).path
             if not self._authorized():
                 self._json(403, {'error': 'Unauthorized'}); return
-            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check', '/api/chat/stream', '/api/chat/stop', '/api/session'):
+            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check', '/api/chat/stream', '/api/chat/stop', '/api/session', '/api/models'):
                 self._json(404, {'error': 'Not found'}); return
             try:
                 size = int(self.headers.get('Content-Length', '-1'))
@@ -236,7 +252,17 @@ def make_handler(state):
             if not state.lock.acquire(timeout=0.15):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
             try:
-                if route == '/api/session':
+                if route == '/api/models':
+                    if state.mode == 'demo':
+                        raise ValueError('Model selection requires live SIGNAL desktop')
+                    if state.listener.status()['state'] == 'listening':
+                        raise ValueError('Stop listening before switching models')
+                    changed = signal_models.select_model(state.bot, data.get('model'), data.get('confirm_reset'))
+                    self._json(200, {'changed': changed, 'selected': state.bot.model.model,
+                        'message': ('Model selected for this run. A new chat has started; reload evidence when needed.'
+                                    if changed else 'This model is already selected. Current chat is unchanged.'),
+                        'status': state.status()})
+                elif route == '/api/session':
                     action = data.get('action')
                     if action == 'save':
                         result = state.session_store.save(state.bot.history)

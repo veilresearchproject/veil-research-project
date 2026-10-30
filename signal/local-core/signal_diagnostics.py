@@ -28,6 +28,8 @@ def check_ollama(model, opener=None):
             if len(data) > MAX_TAG_BYTES:
                 raise ValueError('Model list too large')
         payload = json.loads(data.decode('utf-8'))
+        if not isinstance(payload, dict):
+            raise ValueError('Invalid model listing')
         entries = payload.get('models', [])
         if not isinstance(entries, list):
             raise ValueError('Invalid model listing')

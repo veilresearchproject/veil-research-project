@@ -44,6 +44,13 @@
           <p id="session-state" role="status" aria-live="polite">No conversation saved or restored automatically. Saving replaces the previous snapshot.</p>
         </details>
         <details class="mtc-panel" id="diagnostics-panel"><summary>Local readiness check — Ollama, voice and microphone</summary><p>Check installed capabilities without recording, speaking, downloading models, or using a cloud service.</p><button type="button" id="check-setup">Check local setup</button> <button type="button" id="model-check">Test Ollama conversation</button><div id="model-check-results" role="status" aria-live="polite">Not tested. This sends only a fixed harmless question to local Ollama when clicked, without opening the microphone or activating speech.</div><div id="diagnostics-results" role="status" aria-live="polite">Not checked. Ollama will be tested only when you click the button.</div></details>
+        <details class="mtc-panel" id="model-panel"><summary>Choose an installed local model</summary>
+          <p>Try another model already installed in Ollama without editing code. Nothing is downloaded. Models identified as cloud or remote are excluded. Selection lasts for this run; restarting uses the default model.</p>
+          <button id="models-refresh" type="button">List installed models</button>
+          <label for="model-select">Installed model</label><select id="model-select" disabled><option value="">Refresh the list first</option></select>
+          <button id="model-select-apply" type="button" disabled>Use selected model</button>
+          <p id="model-selection-state" role="status" aria-live="polite">Not checked. Switching starts a new chat and unloads evidence context. Saved chats and source files stay unchanged.</p>
+        </details>
         <details class="mtc-panel"><summary>Load a local MTC evidence log</summary><p>Read-only: session_result.json, session_metadata.json and events.jsonl. The WAV files stay untouched.</p><form id="mtc-form"><label for="mtc-path">MTC session folder on this PC</label><div class="input-line"><input id="mtc-path" type="text" placeholder="C:\MTC_Oct27\MTC_20261027_..." spellcheck="false"><button type="submit">Load logs</button></div></form><span id="mtc-state" class="mtc-status">No session loaded</span></details>
         <details class="mtc-panel" id="scanner-review"><summary>MTC scanner flags — group and review</summary>
           <p>Load the <code>review_summary.json</code> created by our separate local WAV scanner. SIGNAL reads the summary only, groups overlapping alert windows and lets you select a time to annotate below. This does not rescan or play the WAV files.</p>
