@@ -19,6 +19,7 @@ import signal_diagnostics
 import signal_annotations
 import signal_review_import
 import signal_packet
+import signal_session
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / 'face_assets'
@@ -58,6 +59,7 @@ class SessionState:
         self.requests = 0
         self.listener = signal_listen.PushToTalk()
         self.review_dir = signal_core.default_dir() / 'review_notes'
+        self.session_store = signal_session.SessionStore(signal_core.default_dir())
 
     def status(self):
         voice = self.bot.voice
@@ -69,12 +71,13 @@ class SessionState:
                 'review_loaded': self.bot.loaded_review is not None,
                 'stream_supported': self.mode != 'demo' and callable(getattr(self.bot.model, 'stream_answer', None)),
                 'generating': self.streaming_active,
-                'mic_enabled': self.listener.status()['state'] == 'listening', 'hardware_control': False}
+                'mic_enabled': self.listener.status()['state'] == 'listening', 'hardware_control': False,
+                'conversation_turns': len(self.bot.history) // 2}
 
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.11'
+        server_version = 'SIGNAL-Desktop-v0.12'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -123,6 +126,14 @@ def make_handler(state):
                     self._json(403, {'error': 'Unauthorized'}); return
                 self._json(200, state.status())
                 return
+            if route == '/api/session':
+                if not self._authorized():
+                    self._json(403, {'error': 'Unauthorized'}); return
+                try:
+                    self._json(200, state.session_store.status())
+                except signal_session.SnapshotError as exc:
+                    self._json(422, {'error': str(exc)[:250]})
+                return
             if route == '/api/diagnostics':
                 if not self._authorized():
                     self._json(403, {'error': 'Unauthorized'}); return
@@ -146,7 +157,7 @@ def make_handler(state):
                 kind = requested.get('format', ['json'])
                 if len(kind) != 1 or kind[0] not in ('json', 'html'):
                     self._json(422, {'error': 'Choose JSON or printable HTML'}); return
-                if not state.lock.acquire(blocking=False):
+                if not state.lock.acquire(timeout=0.15):
                     self._json(409, {'error': 'SIGNAL is processing another request'}); return
                 try:
                     packet = signal_packet.build_packet(state.bot.loaded_mtc, state.bot.loaded_review,
@@ -200,7 +211,7 @@ def make_handler(state):
             route = urlsplit(self.path).path
             if not self._authorized():
                 self._json(403, {'error': 'Unauthorized'}); return
-            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check', '/api/chat/stream', '/api/chat/stop'):
+            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check', '/api/chat/stream', '/api/chat/stop', '/api/session'):
                 self._json(404, {'error': 'Not found'}); return
             try:
                 size = int(self.headers.get('Content-Length', '-1'))
@@ -222,10 +233,29 @@ def make_handler(state):
                     state.generation_cancel.set()
                 self._json(200, {'stop_requested': bool(active)})
                 return
-            if not state.lock.acquire(blocking=False):
+            if not state.lock.acquire(timeout=0.15):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
             try:
-                if route == '/api/chat/stream':
+                if route == '/api/session':
+                    action = data.get('action')
+                    if action == 'save':
+                        result = state.session_store.save(state.bot.history)
+                        self._json(200, {'message': 'Completed conversation saved locally by operator choice.', **result})
+                    elif action == 'restore':
+                        hist = state.session_store.restore()  # Validate before changing live state.
+                        state.bot.voice.stop()
+                        state.bot.history = hist
+                        state.bot.loaded_mtc = None
+                        state.bot.loaded_review = None
+                        self._json(200, {'message': 'Chat restored. Reload MTC evidence explicitly if needed.',
+                                         'history': hist, 'status': state.status()})
+                    elif action == 'delete':
+                        removed = state.session_store.delete()
+                        self._json(200, {'message': 'Saved conversation deleted. Current conversation left unchanged.',
+                                         'deleted': removed})
+                    else:
+                        raise ValueError('Choose save, restore or delete for conversation snapshot')
+                elif route == '/api/chat/stream':
                     message = data.get('message')
                     if not isinstance(message, str) or not 0 < len(message.strip()) <= 4000:
                         raise ValueError('Message must be 1–4,000 characters')

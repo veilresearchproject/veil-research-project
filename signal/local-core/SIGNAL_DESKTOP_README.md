@@ -34,7 +34,7 @@ Click **Start listening** in the conversation input row, speak a brief phrase, a
 - Actual conversation calls the previously tested local Ollama connection. **Requires a running local model and enough PC resources.**
 - Opt-in Windows speech via existing Windows System.Speech; supported controls: enable/disable, rate, and stop speaking.
 - Read-only MTC session log load; original WAV and logs remain untouched. Optional one-shot offline Windows microphone dictation (never auto-submits), but no continuous listener, camera, automatic EVP classification, speaker cloning or safety-critical device control.
-- Local-only HTTP service binds `127.0.0.1` to an ephemeral port. No remote fallback. Exact allowlist of browser files; random per-launch request token and origin checks; no third-party CSS, fonts, libraries or scripts. Your typed messages are not persisted as a chat transcript by this app.
+- Local-only HTTP service binds `127.0.0.1` to an ephemeral port. No remote fallback. Exact allowlist of browser files; random per-launch request token and origin checks; no third-party CSS, fonts, libraries or scripts. Your typed messages are not persisted automatically; only an explicit operator-selected conversation snapshot is saved locally.
 - Browser expression states are selected by simple keyword rules and speech-process activity; they **do not indicate actual emotions, perceptual understanding, or human presence**.
 
 ## Known limits
@@ -95,3 +95,33 @@ The stream is returned as bounded local-only NDJSON. Text is displayed with
 `textContent`, not evaluated as HTML. Same per-launch request token and host/origin
 checks as other endpoints. There is no cloud fallback or automatic logging of
 conversation content. See `V11_DEVELOPMENT_NOTES.md` and run `RUN_SIGNAL_TESTS.bat`.
+
+
+## Update — v0.12: Optional local conversation continuity
+
+The **Conversation continuity** panel provides three explicit choices:
+**Save current conversation**, **Restore saved conversation**, and **Delete saved conversation**.
+There is no autosave or auto-restore. SIGNAL saves at most the last eight *completed*
+question-and-answer exchanges to a local plaintext JSON file in the current Windows
+user profile (typically `%LOCALAPPDATA%\VEIL\SIGNAL\conversation_snapshot.json`).
+The file is not encrypted and is **not** an evidence archive: do not save passwords,
+private evidence, sensitive personal details, or investigator observations as chat.
+Original MTC WAVs, log files, imported scanner flags, manual notes, microphone recordings,
+API tokens and optional memory facts are not included. The saved conversation is background
+context only and can contain unverified model text; independently reload MTC data when needed.
+
+Restore requires an operator confirmation, replaces the in-memory chat, and explicitly
+unloads MTC and scanner context to avoid accidental cross-session claims. Delete removes
+only the saved snapshot, not the current chat or separately stored evidence notes.
+Invalid/corrupt/oversize snapshots are rejected before existing chat is changed. Atomic
+file replacement reduces half-written saves. SHA-256 checks accidental corruption, not
+adversarial tampering; the local file is not signed. No cloud synchronization is attempted.
+
+The local desktop HTTP server also gives a short 150ms grace period for back-to-back
+requests to avoid spurious 'busy' results after another response has already finished.
+The operator's Stop reply remains responsive while generation is active; the system does
+not permit saving during an incomplete generation.
+
+**Verification:** 137 tests passed in three consecutive full-suite runs; an isolated
+Chromium UI simulation tested save, restore and delete with mocked replies. Windows/Ollama,
+Windows speech, and local microphone hardware are still unverified on the user's PC.
