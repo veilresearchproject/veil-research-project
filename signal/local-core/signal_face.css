@@ -7,3 +7,9 @@
 #mic-note{min-height:18px;color:#bacddf}
 #mic-note[data-state="listening"]{color:#f6cf89;font-weight:650}
 @media(max-width:620px){.composer .input-line{flex-wrap:wrap}.composer .input-line textarea{width:100%;flex-basis:100%}#mic-button{flex:1}}
+
+/* v0.6: gentle breathing movement when idle, never exaggerated theatrical movement. */
+.portrait[data-state="neutral"] img {animation: signal-breathe 8s ease-in-out infinite alternate}
+@keyframes signal-breathe { from {transform:scale(1.045) translateY(0)} to {transform:scale(1.051) translateY(1px)} }
+#motion-preview {font-size:12px;border-color:#465c74;background:#152a3c}
+#motion-preview[aria-pressed="true"] {border-color:#e9b878;color:#e9b878}

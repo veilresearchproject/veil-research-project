@@ -1,4 +1,4 @@
-VEIL SIGNAL Desktop Face Alpha v0.5
+VEIL SIGNAL Desktop Face Alpha v0.6
 =================================
 
 1. Extract ALL ZIP files to a normal Windows folder.
@@ -12,4 +12,6 @@ Everything stays local; no paid API, no microphone and no device-control functio
 The live Ollama model and Windows audio need checking on your actual PC.
 See SIGNAL_DESKTOP_README.md for complete instructions.
 
-NEW v0.5: Start listening records one short phrase via offline Windows speech recognition (if available). Text must be reviewed and manually sent; no always-on microphone. See MICROPHONE_PRIVACY.md.
+NEW v0.6: Click Start listening to speak once, locally (Windows offline speech recognizer required). It returns text for you to review and manually Send. No always-on listening. See MICROPHONE_PRIVACY.md.
+
+NEW v0.6: Preview face movement beneath the portrait. This is silent, 2D illustrative motion, not lip sync. See MOTION_ANIMATION.md.

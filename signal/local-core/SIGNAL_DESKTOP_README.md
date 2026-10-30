@@ -1,3 +1,7 @@
+## Update — v0.6 (October 30, 2026)
+
+The existing desktop now supports subtle speaking-activity facial movement and a silent Preview face movement control. Mouth poses are illustrative and not accurate phoneme lip sync. System Reduce Motion accessibility settings are respected. For details, see MOTION_ANIMATION.md.
+
 # SIGNAL — Desktop Face Alpha v0.5
 
 **VEIL Research Project | October 30, 2026 | local Windows engineering prototype**
@@ -12,11 +16,9 @@ This adds an **optional graphical character interface** to the same Python SIGNA
 4. Test the character's expressions and text interface. The top banner says **SCRIPTED VISUAL DEMO**. This is **not a real AI conversation**.
 5. Try **Enable voice**. It uses Windows' installed speech voices through the existing `signal_voice.py`. Voice starts OFF and requires an explicit click. Stop speaking cancels the local speech process.
 
-## NEW in v0.5: One-shot local microphone dictation
+## NEW in v0.5: Optional microphone (offline, one phrase)
 
-Click **Start listening** near the chat input to capture one short phrase with the installed local Windows speech recognizer. SIGNAL places recognized text in the message box but **does not automatically send it**. Correct the text, then click **Send**. **Stop listening** cancels an attempt immediately. Microphone is off at startup, and no raw audio is saved or uploaded. If Windows' offline recognition engine is absent, typing still works.
-
-See [Microphone privacy and technical limits](MICROPHONE_PRIVACY.md).
+Click **Start listening** in the conversation input row, speak a brief phrase, and review the resulting text **before clicking Send**. The microphone is off at startup, and **Stop listening** immediately cancels an active attempt. It never records an audio file or streams audio to the AI. Requires a locally installed Windows speech recognizer and microphone; not all Windows setups have the legacy offline recognizer. If unavailable, the rest of SIGNAL continues to work by typing. [Read microphone privacy and limitations](MICROPHONE_PRIVACY.md).
 
 ## Live conversation with local Ollama
 
@@ -31,13 +33,13 @@ See [Microphone privacy and technical limits](MICROPHONE_PRIVACY.md).
 - Approved SIGNAL portrait with 6 expressive stills (attentive, analytical, amused, curious, focused, reassuring), plus gentle motion and voice-activity animation. **This is not phoneme-synchronized lip movement.**
 - Actual conversation calls the previously tested local Ollama connection. **Requires a running local model and enough PC resources.**
 - Opt-in Windows speech via existing Windows System.Speech; supported controls: enable/disable, rate, and stop speaking.
-- Read-only MTC session log load; original WAV and logs remain untouched. Optional one-shot local dictation, but no always-on microphone, camera, automatic EVP classification, speaker cloning or safety-critical device control.
+- Read-only MTC session log load; original WAV and logs remain untouched. Optional one-shot offline Windows microphone dictation (never auto-submits), but no continuous listener, camera, automatic EVP classification, speaker cloning or safety-critical device control.
 - Local-only HTTP service binds `127.0.0.1` to an ephemeral port. No remote fallback. Exact allowlist of browser files; random per-launch request token and origin checks; no third-party CSS, fonts, libraries or scripts. Your typed messages are not persisted as a chat transcript by this app.
 - Browser expression states are selected by simple keyword rules and speech-process activity; they **do not indicate actual emotions, perceptual understanding, or human presence**.
 
 ## Known limits
 
-- Microphone dictation is one-shot, requiring a manual Send. Not continuous voice conversation, wake-word recognition, or lip-synchronized animation.
+- A microphone can now transcribe one phrase for review. This is NOT continuous hands-free chat, wake-word listening, or robust hands-free operation.
 - Local Windows speaker output and live Ollama latency **have not yet been tested on your actual Windows desktop**. Python unit tests and a browser UI simulation do not substitute for the hardware test.
 - The visual demo shows scripted sample replies, clearly labeled. Research decisions require independent review. Never use SIGNAL to clear a Panic Box alarm.
 - This software is a single-user engineering prototype, not a hardened, multi-user or internet-exposed service. Keep confidential evidence out of it until permissions, storage protection, and retention rules are implemented.
@@ -50,6 +52,6 @@ From the extracted folder in Command Prompt:
 py -3 -m unittest -v test_signal_core test_mtc_evidence test_signal_mtc_integration test_signal_voice test_signal_desktop test_signal_listen
 ```
 
-**Development verification:** 49 automated tests passed (previous 39 + 8 push-to-talk tests + 2 loopback endpoint tests). Browser UI elements, demo text flow, expression switching and voice-toggle controls passed a simulated browser test with no JavaScript errors. The production local HTTP service was separately exercised by Python HTTP tests. WAV/audio waveform playback and actual Windows audio hardware were not tested as part of this version.
+**Development verification:** 49 automated tests passed (previous 39 + 8 push-to-talk engine tests + 2 new loopback endpoint tests). Browser UI elements, demo text flow, expression switching and voice-toggle controls passed a simulated browser test with no JavaScript errors. The production local HTTP service was separately exercised by Python HTTP tests. WAV/audio waveform playback and actual Windows audio hardware were not tested as part of this version.
 
 **Recommended next acceptance test on your desktop:** Demo opens → voice plays → stop interrupts speech → live Ollama answers → load MTC session → confirm actual log summary; then evaluate expression timing and accessibility before merging GitHub changes.

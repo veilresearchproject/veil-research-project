@@ -14,15 +14,21 @@
   };
   let currentExpression = 'neutral', answering = false, voiceOn = false, speaking = false;
   let listening = false, listenRequestPending = false;
+  const motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const speechFrames = [0,1,2,3,2,1];
+  let speechFrameIndex=0, previewMotion=false;
+  let currentImage='';
   let lastExpression = 'neutral', lastActivityTime = Date.now();
   const pose = (name, speakingNow = false) => {
     if (!(name in descriptions)) name = 'neutral';
-    if (currentExpression !== name) {
-      currentExpression = name;
-      face.src = '/face_assets/' + name + '.webp';
+    currentExpression = name;
+    const imageName = speakingNow && motionAllowed ? 'speech_' + speechFrames[speechFrameIndex] : name;
+    if (currentImage !== imageName) {
+      face.src = '/face_assets/' + imageName + '.webp';
+      currentImage = imageName;
     }
     portrait.dataset.state = speakingNow ? 'speaking' : (answering ? 'thinking' : name);
-    $('expression-label').textContent = speakingNow ? 'SPEAKING' : descriptions[name][0];
+    $('expression-label').textContent = speakingNow ? (previewMotion ? 'MOTION PREVIEW' : 'SPEAKING') : descriptions[name][0];
     $('expression-description').textContent = descriptions[name][1];
   };
   const setActivity = (text) => { activity.textContent = text; lastActivityTime = Date.now(); };
@@ -64,12 +70,12 @@
     $('voice-toggle').textContent = voiceOn ? 'Disable voice' : 'Enable voice';
     $('voice-toggle').setAttribute('aria-pressed',String(voiceOn));
     speaking = Boolean(state.speaking);
-    $('voice-status').textContent = speaking ? 'Speaking locally using Windows speech.' :
-       (voiceOn ? 'Voice enabled. Replies will be spoken on this computer.' : 'Voice starts OFF. Audio uses Windows speech on this PC.');
+    $('voice-status').textContent = previewMotion ? 'Silent character movement preview. No microphone or speech is active.' : (speaking ? 'Speaking locally using Windows speech.' :
+       (voiceOn ? 'Voice enabled. Replies will be spoken on this computer.' : 'Voice starts OFF. Face motion responds to speech activity, not phonemes.'));
     if (state.mtc_loaded) $('mtc-state').textContent = 'Loaded session: '+(state.session_id || 'MTC');
     else $('mtc-state').textContent = 'No session loaded';
     if (listening) { pose('excited'); portrait.dataset.state='listening'; }
-    else pose(lastExpression,speaking);
+    else pose(lastExpression,speaking || previewMotion);
   };
   const refresh = async () => {
     try { const state = await request('/api/status'); syncStatus(state); }
@@ -105,7 +111,7 @@
     send.disabled = answering || active;
     question.disabled = answering || active;
     if (active) { pose('excited'); portrait.dataset.state='listening'; }
-    else pose(lastExpression, speaking);
+    else pose(lastExpression, speaking || previewMotion);
   };
   async function listenOnce() {
     if (listenRequestPending || answering) return;
@@ -150,6 +156,38 @@
       syncStatus(response.status); setActivity(response.reply);
     } catch(err) { addMessage('error',err.message);setActivity('Voice operation unavailable'); }
   }
+  // Speech animation advances only while the local synthesizer reports speaking,
+  // or during an explicitly labeled silent visual preview. No audio is synthesized here.
+  window.setInterval(() => {
+    if (!motionAllowed) return;
+    if (speaking || previewMotion) {
+      speechFrameIndex=(speechFrameIndex+1) % speechFrames.length;
+      pose(lastExpression,true);
+    }
+  }, 180);
+  let previewTimeout=null;
+  $('motion-preview').addEventListener('click',() => {
+    if (!motionAllowed) {
+      setActivity('Facial movement is disabled by your system reduced-motion setting.');
+      return;
+    }
+    if (previewTimeout) window.clearTimeout(previewTimeout);
+    previewMotion = !previewMotion;
+    speechFrameIndex=0;
+    $('motion-preview').setAttribute('aria-pressed',String(previewMotion));
+    $('motion-preview').textContent=previewMotion ? 'Stop preview' : 'Preview face movement';
+    if (previewMotion) {
+      setActivity('Silent facial movement preview (no audio)');
+      previewTimeout=window.setTimeout(() => {
+        previewMotion=false;previewTimeout=null;
+        $('motion-preview').setAttribute('aria-pressed','false');
+        $('motion-preview').textContent='Preview face movement';
+        pose(lastExpression,speaking);
+        setActivity('Ready for research');
+      }, 4500);
+    }
+    pose(lastExpression,speaking || previewMotion);
+  });
   $('voice-toggle').addEventListener('click',()=>voiceCommand(voiceOn?'off':'on'));
   $('voice-stop').addEventListener('click',()=>voiceCommand('stop'));
   $('rate').addEventListener('change',(e)=>voiceCommand('rate',{rate:Number(e.target.value)}));
