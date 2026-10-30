@@ -1,4 +1,4 @@
-"""SIGNAL Local Core v0.3. Python stdlib; loopback-only Ollama + opt-in Windows voice."""
+"""SIGNAL local core: loopback Ollama, opt-in voice and bounded streaming replies."""
 import argparse
 import json
 import os
@@ -69,6 +69,10 @@ class Memories:
         return True
 
 
+MAX_STREAM_CHARS = 6000
+MAX_STREAM_LINE = 65536
+
+
 class LocalModel:
     def __init__(self, model=MODEL):
         self.model = model
@@ -92,6 +96,53 @@ class LocalModel:
             raise RuntimeError('Unexpected local model response') from exc
 
 
+    def stream_answer(self, messages):
+        """Yield bounded local Ollama token deltas; incomplete streams fail closed.
+
+        Streaming data is for presentation only until the terminal done frame.
+        This method never contacts a cloud endpoint or writes conversation history.
+        """
+        payload = json.dumps({'model': self.model, 'messages': messages,
+                              'stream': True, 'options': {'num_ctx': 4096, 'num_predict': 650}}).encode()
+        req = request.Request(LOCAL_URL, payload, {'Content-Type': 'application/json'})
+        received = 0
+        completed = False
+        try:
+            with request.urlopen(req, timeout=90) as response:
+                while True:
+                    raw = response.readline(MAX_STREAM_LINE + 1)
+                    if not raw:
+                        break
+                    if len(raw) > MAX_STREAM_LINE:
+                        raise RuntimeError('Local model streaming frame is too large')
+                    try:
+                        frame = json.loads(raw.decode('utf-8'))
+                    except (UnicodeError, ValueError) as exc:
+                        raise RuntimeError('Invalid local Ollama streaming frame') from exc
+                    if not isinstance(frame, dict):
+                        raise RuntimeError('Invalid local Ollama streaming frame')
+                    if frame.get('error'):
+                        raise RuntimeError('Local Ollama reported a generation error')
+                    message = frame.get('message', {})
+                    if not isinstance(message, dict):
+                        raise RuntimeError('Unexpected local model response')
+                    delta = message.get('content', '')
+                    if not isinstance(delta, str):
+                        raise RuntimeError('Unexpected local model response')
+                    if delta:
+                        received += len(delta)
+                        if received > MAX_STREAM_CHARS:
+                            raise RuntimeError('Local model exceeded the reply length limit')
+                        yield delta
+                    if frame.get('done') is True:
+                        completed = True
+                        break
+        except (error.URLError, TimeoutError, OSError) as exc:
+            raise RuntimeError('Local Ollama stream interrupted. No cloud fallback.') from exc
+        if not completed or received == 0:
+            raise RuntimeError('Local Ollama reply incomplete; not saved as a conversation turn')
+
+
 class Assistant:
     def __init__(self, model, memories, voice=None):
         self.model = model
@@ -101,7 +152,7 @@ class Assistant:
         self.loaded_mtc = None  # Only local structured log facts, temporary and opt-in.
         self.loaded_review = None  # Bounded scanner output, explicitly imported for this session.
 
-    def ask(self, prompt):
+    def _messages(self, prompt):
         prompt = prompt.strip()
         if not 0 < len(prompt) <= 4000:
             raise ValueError('Input must be between 1 and 4000 characters')
@@ -112,9 +163,12 @@ class Assistant:
         if self.loaded_review is not None:
             import signal_review_import
             context += ('\n' + signal_review_import.conversation_summary(self.loaded_review))
-        messages = [{'role': 'system', 'content': context}] + self.history[-16:] + [
+        return [{'role': 'system', 'content': context}] + self.history[-16:] + [
             {'role': 'user', 'content': prompt}]
-        reply = self.model.answer(messages)
+
+    def ask(self, prompt):
+        prompt = prompt.strip()
+        reply = self.model.answer(self._messages(prompt))
         self.history = (self.history + [{'role': 'user', 'content': prompt},
                                        {'role': 'assistant', 'content': reply}])[-16:]
         try:
@@ -123,6 +177,41 @@ class Assistant:
             self.voice.disable()
             return reply + "\n[Local speech disabled: " + str(exc) + "]"
         return reply
+
+    def stream_ask(self, prompt, cancel_event=None):
+        """Present partial reply, but commit nothing until Ollama confirms completion.
+
+        A caller closing this iterator mid-generation never saves partial text or
+        triggers speech, preserving a clear operator-controlled conversation record.
+        """
+        prompt = prompt.strip()
+        messages = self._messages(prompt)
+        if not callable(getattr(self.model, 'stream_answer', None)):
+            raise RuntimeError('The current local model does not support streaming')
+        pieces = []
+        for delta in self.model.stream_answer(messages):
+            if cancel_event is not None and cancel_event.is_set():
+                raise RuntimeError('Generation stopped by operator; incomplete reply was not saved')
+            if not isinstance(delta, str):
+                raise RuntimeError('Unexpected local model text')
+            pieces.append(delta)
+            if sum(map(len, pieces)) > MAX_STREAM_CHARS:
+                raise RuntimeError('Local model exceeded the reply length limit')
+            yield {'event': 'delta', 'text': delta}
+        if cancel_event is not None and cancel_event.is_set():
+            raise RuntimeError('Generation stopped by operator; incomplete reply was not saved')
+        reply = ''.join(pieces).strip()
+        if not reply:
+            raise RuntimeError('Local Ollama reply incomplete; not saved as a conversation turn')
+        self.history = (self.history + [{'role': 'user', 'content': prompt},
+                                       {'role': 'assistant', 'content': reply}])[-16:]
+        warning = None
+        try:
+            self.voice.speak(reply)
+        except (RuntimeError, OSError) as exc:
+            self.voice.disable()
+            warning = 'Local speech disabled: ' + str(exc)
+        yield {'event': 'complete', 'reply_length': len(reply), 'voice_warning': warning}
 
     def action(self, line):
         if line == '/help':

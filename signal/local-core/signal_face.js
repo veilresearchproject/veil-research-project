@@ -13,6 +13,7 @@
     reassuring: ['REASSURING', 'Warm • Supportive']
   };
   let currentExpression = 'neutral', answering = false, voiceOn = false, speaking = false;
+  let canStream = false, replyController = null;
   let listening = false, listenRequestPending = false;
   const motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Gentle illustration only: preserve photographic mouth pixels and never fake phoneme alignment.
@@ -52,6 +53,7 @@
     if (detail) { const foot = document.createElement('span'); foot.className = 'message-foot'; foot.textContent = detail; el.append(foot); }
     messages.appendChild(el);
     messages.scrollTop = messages.scrollHeight;
+    return p;
   };
   const request = async (route, data = null) => {
     const opts = {headers:{'X-SIGNAL-Token':token},cache:'no-store'};
@@ -76,6 +78,7 @@
     $('mode').classList.toggle('demo',demo);
     $('mode').textContent = demo ? 'SCRIPTED VISUAL DEMO' : 'LOCAL OLLAMA MODEL';
     $('connection').textContent = demo ? 'No AI model in demo mode' : 'Local model • Windows computer';
+    canStream = Boolean(state.stream_supported) && !demo;
     voiceOn = Boolean(state.voice_enabled);
     $('voice-toggle').textContent = voiceOn ? 'Disable voice' : 'Enable voice';
     $('voice-toggle').setAttribute('aria-pressed',String(voiceOn));
@@ -92,17 +95,89 @@
     try { const state = await request('/api/status'); syncStatus(state); }
     catch (err) { $('connection').textContent='Local service disconnected'; $('voice-status').textContent=err.message; }
   };
+  // A local NDJSON response shows progress as Ollama generates it. All partial
+  // text is visually labeled unverified and is never interpreted as evidence.
+  // Only the final 'complete' event confirms that the core saved a full turn.
+  async function streamMessage(text) {
+    replyController = new AbortController();
+    $('stop-reply').disabled = false;
+    const response = await fetch('/api/chat/stream', {
+      signal:replyController.signal,
+      method:'POST',
+      headers:{'X-SIGNAL-Token':token, 'Content-Type':'application/json'},
+      cache:'no-store', body:JSON.stringify({message:text})
+    });
+    if (!response.ok) {
+      let problem='Local streaming unavailable ('+response.status+')';
+      try {const data=await response.json();problem=data.error || problem;} catch {}
+      throw Error(problem);
+    }
+    if (!response.body || !response.body.getReader) throw Error('Browser does not support progressive responses');
+    const reader=response.body.getReader(), decoder=new TextDecoder();
+    let buffer='', full='', complete=null, partialElement=null;
+    const parse = (line) => {
+      if (!line.trim()) return;
+      const event=JSON.parse(line);
+      if (event.event==='delta') {
+        if (typeof event.text!=='string' || full.length + event.text.length > 6000)
+          throw Error('Unexpected local model response size');
+        full+=event.text;
+        if (!partialElement) partialElement=addMessage('signal','', 'Generating locally • partial, unverified reply');
+        partialElement.textContent=full;
+        messages.scrollTop=messages.scrollHeight;
+        setActivity('SIGNAL is replying locally…');
+      } else if(event.event==='complete') {
+        complete=event;
+      } else if(event.event==='error') {
+        throw Error(event.error || 'Local Ollama generation interrupted');
+      } else throw Error('Unexpected local streaming event');
+    };
+    try {
+      while(true) {
+        const {value,done}=await reader.read();
+        if (done) break;
+        buffer+=decoder.decode(value,{stream:true});
+        if(buffer.length>8000) throw Error('Unexpected local streaming buffer size');
+        let i;
+        while((i=buffer.indexOf('\n'))!==-1) {
+          parse(buffer.slice(0,i)); buffer=buffer.slice(i+1);
+        }
+      }
+      buffer+=decoder.decode();
+      if(buffer.trim()) parse(buffer);
+      if(!complete) throw Error('Reply incomplete; incomplete text was not saved as a turn');
+      if(partialElement) {
+        const foot=partialElement.parentElement.querySelector('.message-foot');
+        if(foot) foot.textContent='Completed local Ollama response • verify research claims';
+      }
+      if(!partialElement) addMessage('signal','(No reply text received)','Local streaming response');
+      if(complete.voice_warning) addMessage('error',complete.voice_warning,'Local Windows speech only');
+      return {reply:full.trim(),status:complete.status};
+    } catch(err) {
+      if(partialElement) {
+        const foot=partialElement.parentElement.querySelector('.message-foot');
+        if(foot) foot.textContent='INCOMPLETE — do not treat this as a completed conversation reply';
+      }
+      if(err.name==='AbortError') throw Error('Reply stopped by operator. Incomplete text is not a completed turn.');
+      throw err;
+    } finally {
+      try {await reader.cancel();} catch {}
+      replyController=null;
+      $('stop-reply').disabled=true;
+    }
+  }
   async function submitMessage(text, origin='chat') {
     if (answering || listening || !text.trim()) return;
     answering=true; send.disabled=true; question.disabled=true;
     addMessage('user',text);
     question.value=''; lastExpression='focused'; pose('focused'); setActivity('Analyzing locally…');
     try {
-      const reply = await request('/api/chat',{message:text});
-      addMessage('signal',reply.reply,reply.mode==='demo'?'Scripted UI demonstration • no generated AI response':'Local Ollama response • verify research claims');
-      lastExpression=chooseExpression(reply.reply);
+      const useStream = canStream && !text.trim().startsWith('/');
+      const reply = useStream ? await streamMessage(text) : await request('/api/chat',{message:text});
+      if (!useStream) addMessage('signal',reply.reply,reply.mode==='demo'?'Scripted UI demonstration • no generated AI response':'Local Ollama response • verify research claims');
+      lastExpression=chooseExpression(reply.reply || '');
       answering=false;
-      syncStatus(reply.status);
+      if(reply.status) syncStatus(reply.status);
       setActivity(origin==='mtc' ? 'MTC log review returned' : 'Response complete');
       if (origin === 'mtc') {refreshNotes();refreshScanner();}
     } catch (err) {
@@ -110,9 +185,18 @@
       addMessage('error',err.message,'Local server error • no cloud fallback');
       setActivity('Unable to respond');
     } finally {
+      replyController=null;
+      $('stop-reply').disabled=true;
       send.disabled=listening; question.disabled=listening; question.focus();
     }
   }
+  $('stop-reply').addEventListener('click',async()=>{
+    if(!answering || !replyController) return;
+    $('stop-reply').disabled=true;
+    try {await request('/api/chat/stop',{});} catch { /* Abort still stops the browser read. */ }
+    replyController.abort();
+    setActivity('Operator stopped the local reply');
+  });
   const micButton = $('mic-button'), micNote = $('mic-note');
   const micState = (active, note, state='idle') => {
     listening = active;

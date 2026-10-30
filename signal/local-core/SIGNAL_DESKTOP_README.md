@@ -74,3 +74,24 @@ After verifying MTC session logs, expand **MTC scanner flags — group and revie
 **New: export investigator review packet** (under the MTC review controls). With a verified MTC session loaded, click *Save structured JSON* or *Save printable report*. The packet includes the read-only log summary, any matching imported scanner review windows, and **all** human notes for that session. JSON has a packet-content SHA-256, and printable HTML includes the fingerprint and explicit limitations. Source WAVs are not hashed or altered, and neither file represents a forensic authentication or automatic finding.
 
 Read `V10_DEVELOPMENT_NOTES.md` for the Windows acceptance checklist. If Ollama does not start or the new interface misbehaves, revert to the archived v0.9 ZIP. This version has no paid API, subscriptions, or automatic remote connections.
+
+## Update — v0.11: Progressive local replies, explicit stop and research-safe completion
+
+When the configured Ollama model supports local streaming, regular chat messages
+arrive incrementally. The interface clearly labels text as **partial and unverified**
+until Ollama returns its terminal completion signal. Completed replies are kept
+in this session's existing 16-message in-memory history; interrupted replies are
+not saved to history and do not trigger speech. Slash commands still use the
+original authenticated non-streaming route. Scripted demo mode never claims live
+AI streaming.
+
+**Stop reply** sends an authorized cancellation signal outside the long-running
+model lock. It also stops receiving new text in the browser. Model-network cleanup
+may take until Ollama produces the next token; this is a best-effort stop and
+not a remote hardware emergency stop. Cancelling a reply is different from
+**Stop speaking**, which interrupts already-running Windows speech output.
+
+The stream is returned as bounded local-only NDJSON. Text is displayed with
+`textContent`, not evaluated as HTML. Same per-launch request token and host/origin
+checks as other endpoints. There is no cloud fallback or automatic logging of
+conversation content. See `V11_DEVELOPMENT_NOTES.md` and run `RUN_SIGNAL_TESTS.bat`.
