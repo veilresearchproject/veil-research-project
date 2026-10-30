@@ -7,6 +7,7 @@ import unittest
 from urllib import request, error
 
 import signal_desktop
+import signal_listen
 
 
 class FakeModel:
@@ -104,6 +105,25 @@ class DesktopServerTests(unittest.TestCase):
         self.assertEqual(status,422)
         status,_,_=self.fetch('/api/voice',{'action':'rate','rate':'fast'})
         self.assertEqual(status,422)
+
+    def test_listen_endpoint_requires_explicit_token(self):
+        status,_,_=self.fetch('/api/listen',{'action':'start'},token=False)
+        self.assertEqual(status,403)
+        status,_,_=self.fetch('/api/listen/status',token=False)
+        self.assertEqual(status,403)
+        status,_,_=self.fetch('/api/listen',{'action':'somethingelse'})
+        self.assertEqual(status,422)
+
+    def test_no_automatic_listening_and_clean_error_on_unsupported_host(self):
+        status,_,body=self.fetch('/api/listen/status')
+        self.assertEqual(status,200)
+        self.assertEqual(json.loads(body)['state'],'idle')
+        if signal_desktop.os.name != 'nt':
+            status,_,body=self.fetch('/api/listen',{'action':'start'})
+            self.assertEqual(status,422)
+            self.assertIn('Windows',json.loads(body)['error'])
+        status,_,body=self.fetch('/api/status')
+        self.assertFalse(json.loads(body)['mic_enabled'])
 
     def test_explicit_demo_is_labeled(self):
         model=signal_desktop.DemoModel()
