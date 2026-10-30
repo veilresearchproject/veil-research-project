@@ -7,6 +7,7 @@ from collections import Counter
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 
 FILES = ('session_result.json', 'session_metadata.json', 'events.jsonl')
@@ -41,6 +42,12 @@ def _object(raw, name):
 def _number(value, label):
     if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
         raise EvidenceError('Invalid numeric field: ' + label)
+    return value
+
+
+def _label(value, field, limit=80):
+    if not isinstance(value, str) or not re.fullmatch(r'[A-Za-z0-9_.-]{1,' + str(limit) + r'}', value):
+        raise EvidenceError('Invalid MTC label: ' + field)
     return value
 
 
@@ -111,9 +118,9 @@ def read_session(folder):
         raise EvidenceError('Session result disagrees with finish event')
     return {
         'source': 'MTC session JSON logs only (audio WAV not inspected)',
-        'session_id': str(meta.get('session_id', 'unknown'))[:80],
-        'software_version': str(meta.get('version', 'unknown'))[:80],
-        'outcome': str(result.get('outcome', 'unknown'))[:40],
+        'session_id': _label(meta.get('session_id'), 'session_id'),
+        'software_version': _label(meta.get('version'), 'version'),
+        'outcome': _label(result.get('outcome'), 'outcome', 40),
         'fault_count': len(result['faults']),
         'recorded_seconds': round(duration, 3),
         'segments_declared': len(segments),
