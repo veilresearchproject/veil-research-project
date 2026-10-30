@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.10. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.11. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -51,6 +51,8 @@ class SessionState:
     def __init__(self, model):
         self.bot = signal_core.Assistant(model, signal_core.Memories(signal_core.default_dir()))
         self.lock = threading.Lock()
+        self.generation_cancel = threading.Event()
+        self.streaming_active = False
         self.mode = 'demo' if isinstance(model, DemoModel) else 'local-ollama'
         self.token = secrets.token_urlsafe(32)
         self.requests = 0
@@ -65,12 +67,14 @@ class SessionState:
                 'mtc_loaded': self.bot.loaded_mtc is not None,
                 'session_id': (self.bot.loaded_mtc or {}).get('session_id'),
                 'review_loaded': self.bot.loaded_review is not None,
+                'stream_supported': self.mode != 'demo' and callable(getattr(self.bot.model, 'stream_answer', None)),
+                'generating': self.streaming_active,
                 'mic_enabled': self.listener.status()['state'] == 'listening', 'hardware_control': False}
 
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.10'
+        server_version = 'SIGNAL-Desktop-v0.11'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -196,7 +200,7 @@ def make_handler(state):
             route = urlsplit(self.path).path
             if not self._authorized():
                 self._json(403, {'error': 'Unauthorized'}); return
-            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check'):
+            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check', '/api/chat/stream', '/api/chat/stop'):
                 self._json(404, {'error': 'Not found'}); return
             try:
                 size = int(self.headers.get('Content-Length', '-1'))
@@ -210,10 +214,59 @@ def make_handler(state):
                     raise ValueError('Expected JSON object')
             except (UnicodeError, ValueError, json.JSONDecodeError):
                 self._json(400, {'error': 'Invalid JSON'}); return
+            # Stop operates outside the model lock so investigators can interrupt
+            # a slow stream. It cannot trigger speech or alter completed history.
+            if route == '/api/chat/stop':
+                active = state.streaming_active
+                if active:
+                    state.generation_cancel.set()
+                self._json(200, {'stop_requested': bool(active)})
+                return
             if not state.lock.acquire(blocking=False):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
             try:
-                if route == '/api/model-check':
+                if route == '/api/chat/stream':
+                    message = data.get('message')
+                    if not isinstance(message, str) or not 0 < len(message.strip()) <= 4000:
+                        raise ValueError('Message must be 1–4,000 characters')
+                    if message.lstrip().startswith('/'):
+                        raise ValueError('Use normal chat to run explicit SIGNAL commands')
+                    if state.mode == 'demo' or not callable(getattr(state.bot.model, 'stream_answer', None)):
+                        raise ValueError('Streaming requires the live local Ollama model')
+                    state.generation_cancel.clear()
+                    state.streaming_active = True
+                    # NDJSON lets the browser render text as it arrives. The stream is
+                    # loopback-only with the same token/origin protection as normal chat.
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/x-ndjson; charset=utf-8')
+                    self.send_header('Cache-Control', 'no-store, no-transform')
+                    self.send_header('Content-Security-Policy', CSP)
+                    self.send_header('X-Content-Type-Options', 'nosniff')
+                    self.send_header('Referrer-Policy', 'no-referrer')
+                    self.send_header('Connection', 'close')
+                    self.end_headers()
+                    self.close_connection = True
+                    generator = state.bot.stream_ask(message.strip(), state.generation_cancel)
+                    try:
+                        for event in generator:
+                            if event.get('event') == 'complete':
+                                event['status'] = state.status()
+                            frame = json.dumps(event, ensure_ascii=False).encode('utf-8') + b'\n'
+                            self.wfile.write(frame)
+                            self.wfile.flush()
+                    except (RuntimeError, ValueError, OSError) as exc:
+                        # HTTP 200 has already been sent. An explicit error frame makes
+                        # partial text visibly incomplete rather than silently accepted.
+                        frame = json.dumps({'event': 'error', 'error': str(exc)[:400]}).encode('utf-8') + b'\n'
+                        try:
+                            self.wfile.write(frame)
+                            self.wfile.flush()
+                        except (BrokenPipeError, ConnectionResetError, OSError):
+                            pass
+                    finally:
+                        generator.close()
+                        state.streaming_active = False
+                elif route == '/api/model-check':
                     if state.mode == 'demo':
                         raise ValueError('Start live SIGNAL desktop, not the scripted face demo, to test Ollama')
                     # Explicit, harmless canned question. No history, memory, loaded reports, voice or mic.
