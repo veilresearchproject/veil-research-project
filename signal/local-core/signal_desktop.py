@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.18. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.19. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -21,6 +21,7 @@ import signal_review_import
 import signal_packet
 import signal_session
 import signal_models
+import signal_note_context
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / 'face_assets'
@@ -92,6 +93,9 @@ class SessionState:
                 'mtc_loaded': self.bot.loaded_mtc is not None,
                 'session_id': (self.bot.loaded_mtc or {}).get('session_id'),
                 'review_loaded': self.bot.loaded_review is not None,
+                'notes_context_loaded': self.bot.loaded_notes is not None,
+                'notes_context_count': (self.bot.loaded_notes or {}).get('included_notes', 0),
+                'notes_context_omitted': (self.bot.loaded_notes or {}).get('omitted_notes', 0),
                 'stream_supported': self.mode != 'demo' and callable(getattr(self.bot.model, 'stream_answer', None)),
                 'generating': progress is not None or self.streaming_active,
                 'request_progress': progress,
@@ -101,7 +105,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.18'
+        server_version = 'SIGNAL-Desktop-v0.19'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -250,7 +254,7 @@ def make_handler(state):
             route = urlsplit(self.path).path
             if not self._authorized():
                 self._json(403, {'error': 'Unauthorized'}); return
-            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check', '/api/chat/stream', '/api/chat/stop', '/api/session', '/api/models'):
+            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check', '/api/chat/stream', '/api/chat/stop', '/api/session', '/api/models', '/api/note-context'):
                 self._json(404, {'error': 'Not found'}); return
             try:
                 size = int(self.headers.get('Content-Length', '-1'))
@@ -308,7 +312,19 @@ def make_handler(state):
                       and 0 < len(message.strip()) <= 4000 and not message.lstrip().startswith('/'))))
                 if tracks_model:
                     state.begin_model_operation('model-check' if route == '/api/model-check' else 'reply')
-                if route == '/api/models':
+                if route == '/api/note-context':
+                    action = data.get('action')
+                    if action == 'include':
+                        snapshot = signal_note_context.load_context(state.review_dir, state.bot.loaded_mtc)
+                        state.bot.loaded_notes = snapshot
+                        message = 'Manual notes included as unverified operator claims for this conversation.'
+                    elif action == 'clear':
+                        state.bot.loaded_notes = None
+                        message = 'Manual note context removed. Saved notebook and chat history are unchanged.'
+                    else:
+                        raise ValueError('Choose include or clear for manual note context')
+                    self._json(200, {'message': message, 'status': state.status()})
+                elif route == '/api/models':
                     if state.mode == 'demo':
                         raise ValueError('Model selection requires live SIGNAL desktop')
                     if state.listener.status()['state'] == 'listening':
@@ -329,6 +345,7 @@ def make_handler(state):
                         state.bot.history = hist
                         state.bot.loaded_mtc = None
                         state.bot.loaded_review = None
+                        state.bot.loaded_notes = None
                         self._json(200, {'message': 'Chat restored. Reload MTC evidence explicitly if needed.',
                                          'history': hist, 'status': state.status()})
                     elif action == 'delete':
@@ -418,6 +435,7 @@ def make_handler(state):
                 elif route == '/api/notes':
                     note = signal_annotations.append_note(state.review_dir, state.bot.loaded_mtc,
                                                           data.get('time_s'), data.get('classification'), data.get('note'))
+                    state.bot.loaded_notes = None  # New notes require a fresh explicit include action.
                     self._json(200, {'entry': note, 'message':'Manual observation saved separately from the original evidence.'})
                 elif route == '/api/listen':
                     action = data.get('action')

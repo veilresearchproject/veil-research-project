@@ -154,6 +154,7 @@ class Assistant:
         self.history = []
         self.loaded_mtc = None  # Only local structured log facts, temporary and opt-in.
         self.loaded_review = None  # Bounded scanner output, explicitly imported for this session.
+        self.loaded_notes = None  # Explicit snapshot of unverified human notebook claims.
 
     def _messages(self, prompt):
         prompt = prompt.strip()
@@ -166,6 +167,9 @@ class Assistant:
         if self.loaded_review is not None:
             import signal_review_import
             context += ('\n' + signal_review_import.conversation_summary(self.loaded_review))
+        if self.loaded_notes is not None:
+            import signal_note_context
+            context += '\n' + signal_note_context.format_context(self.loaded_notes, self.loaded_mtc)
         return [{'role': 'system', 'content': context}] + self.history[-16:] + [
             {'role': 'user', 'content': prompt}]
 
@@ -259,10 +263,12 @@ class Assistant:
             self.history.clear()
             self.loaded_mtc = None
             self.loaded_review = None
+            self.loaded_notes = None
             return 'Conversation and loaded MTC logs cleared; saved memories unchanged.'
         if line == '/mtc-clear':
             self.loaded_mtc = None
             self.loaded_review = None
+            self.loaded_notes = None
             return 'MTC log summary cleared from this conversation.'
         if line.startswith('/mtc '):
             folder = line[5:].strip()
@@ -270,6 +276,7 @@ class Assistant:
                 folder = folder[1:-1]
             self.loaded_mtc = mtc_evidence.read_session(folder)
             self.loaded_review = None  # Prevent previous session's scanner flags from leaking across sessions.
+            self.loaded_notes = None
             return mtc_evidence.format_summary(self.loaded_mtc) + '\nLoaded for this conversation only.'
         if line == '/mtc':
             return 'Usage: /mtc "C:\\path\\to\\session"'

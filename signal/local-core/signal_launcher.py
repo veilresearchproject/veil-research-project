@@ -7,12 +7,12 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.18'
+VERSION = '0.19'
 REQUIRED = (
     'signal_launcher.py', 'signal_desktop.py', 'signal_core.py', 'signal_face.html',
     'signal_face.js', 'signal_face.css', 'signal_check_setup.py', 'signal_voice.py',
     'signal_listen.py', 'signal_diagnostics.py', 'signal_models.py', 'signal_session.py',
-    'signal_annotations.py', 'signal_packet.py', 'signal_review_import.py', 'mtc_evidence.py',
+    'signal_annotations.py', 'signal_note_context.py', 'signal_packet.py', 'signal_review_import.py', 'mtc_evidence.py',
     'test_signal_core.py', 'test_signal_desktop.py', 'test_signal_launcher.py',
     'DESKTOP_TEST_STEPS.md',
 ) + tuple('face_assets/' + name + '.webp' for name in

@@ -1,4 +1,4 @@
-VEIL SIGNAL DESKTOP v0.18 — LOCAL VOICE CHOICES
+VEIL SIGNAL DESKTOP v0.19 — MANUAL REVIEW NOTE CONTEXT
 
 Extract the entire ZIP into a NEW folder. Keep earlier folders as fallbacks.
 Double-click START_HERE.bat. Python 3.10+ with its launcher is required.
@@ -18,9 +18,9 @@ The package check detects missing or changed files; it does not prove authentici
 or test real hardware. If a check fails, extract a fresh copy into a new folder.
 Original MTC recordings and saved conversations are not altered by this launcher.
 
-185 automated Python tests passed here. Actual Windows startup, microphone,
+197 automated Python tests passed here. Actual Windows startup, microphone,
 speaker and model speed still need acceptance on your PC. See
-DESKTOP_TEST_STEPS.md and V18_DEVELOPMENT_NOTES.md.
+DESKTOP_TEST_STEPS.md and V19_DEVELOPMENT_NOTES.md.
 
 NEW: Questions remain available after interrupted local replies. Restore only
 fills the editor; nothing retries automatically. The recovery copy lasts only
@@ -29,3 +29,8 @@ until this tab closes/reloads. Review the conversation before a manual resend.
 NEW IN v0.18: List and choose voices already available to Windows speech.
 Selection does not turn voice on or play a sample. Enable voice and Test voice
 explicitly to compare options. No voice download, cloning or paid service.
+
+NEW IN v0.19: Explicitly include recent MTC notebook notes in conversation as
+unverified operator claims. Adding a note requires including again. Removing note
+context leaves saved notes and source recordings unchanged. Replies can quote
+notes; saving chat can save those completed replies.
