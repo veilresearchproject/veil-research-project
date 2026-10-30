@@ -1,4 +1,4 @@
-# First desktop test — SIGNAL v0.17
+# First desktop test — SIGNAL v0.18
 
 Keep the prior working folder. Extract this ZIP into a new folder first.
 
@@ -21,6 +21,8 @@ Nothing starts until you choose; reopen the menu after an option finishes.
 4. **Check speaker and stop:** click Enable voice, then Test voice. Confirm you
    hear it. Click Stop speaking while it plays. If it finishes before the click,
    repeat the test. Stop speaking leaves voice enabled; Disable voice turns it off.
+   Optionally open Choose an installed Windows voice, list/select one, and repeat
+   Test voice. Selection must not play audio by itself or turn speech on when off.
 5. **Check microphone:** click Start listening, say a short phrase, and verify the
    recognized words appear for review. Nothing should send until you click Send.
    Try another attempt and click Stop listening before speaking. Confirm capture

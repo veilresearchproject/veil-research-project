@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.17. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.18. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -85,7 +85,9 @@ class SessionState:
         voice = self.bot.voice
         proc = voice._process
         progress = self.operation_status()
+        voice_name = getattr(voice, 'selected_voice', None)
         return {'mode': self.mode, 'voice_enabled': voice.enabled,
+                'voice_name': voice_name if isinstance(voice_name, str) else None,
                 'speaking': proc is not None and proc.poll() is None,
                 'mtc_loaded': self.bot.loaded_mtc is not None,
                 'session_id': (self.bot.loaded_mtc or {}).get('session_id'),
@@ -99,7 +101,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.17'
+        server_version = 'SIGNAL-Desktop-v0.18'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -435,17 +437,28 @@ def make_handler(state):
                     self._json(200, {'reply': reply, 'mode': state.mode, 'status': state.status()})
                 else:
                     action = data.get('action')
-                    if action not in ('on', 'off', 'stop', 'test', 'list', 'rate'):
+                    if action not in ('on', 'off', 'stop', 'test', 'list', 'rate', 'select'):
                         raise ValueError('Unknown voice operation')
-                    if action == 'rate':
+                    extra = {}
+                    if action == 'list':
+                        voices = state.bot.voice.list_voices()
+                        extra['voices'] = voices
+                        message = 'Installed Windows voices: ' + (', '.join(voices) or '(none installed)')
+                    elif action == 'select':
+                        if 'name' not in data:
+                            raise ValueError('Choose a voice name or explicit system default')
+                        state.bot.voice.set_voice(data['name'])
+                        message = 'Voice selected for this run. Enable voice and click Test voice when ready.'
+                    elif action == 'rate':
                         rate = data.get('rate')
                         if isinstance(rate, bool) or not isinstance(rate, int):
                             raise ValueError('Voice rate requires an integer')
                         command = '/voice rate ' + str(rate)
+                        message = state.bot.action(command)
                     else:
                         command = '/voice ' + action
-                    message = state.bot.action(command)
-                    self._json(200, {'reply': message, 'status': state.status()})
+                        message = state.bot.action(command)
+                    self._json(200, {'reply': message, 'status': state.status(), **extra})
             except (RuntimeError, ValueError, OSError) as exc:
                 self._json(422, {'error': str(exc)[:500]})
             finally:

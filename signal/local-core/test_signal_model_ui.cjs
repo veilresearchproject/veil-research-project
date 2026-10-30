@@ -17,9 +17,11 @@ const html = fs.readFileSync(path.join(__dirname,'signal_face.html'),'utf8');
 const elements = new Map([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>[m[1],new Element()]));
 const get = id=>{assert(elements.has(id), 'Missing HTML element '+id);return elements.get(id);};
 get('model-select').disabled=true;get('model-select-apply').disabled=true;
+get('voice-select').disabled=true;get('voice-select-apply').disabled=true;
 const calls=[];
 let permit=true, fail=false, changed=true, micFailure=false;
 let chatMode='failure', pendingChatResolve=null;
+let voiceListFailure=false, voiceRejectSelection=false;
 const intervals=[];
 const status={mode:'local-ollama',stream_supported:true,voice_enabled:false,speaking:false,mtc_loaded:false};
 const sandbox={console,Image:class{},TextDecoder,AbortController,
@@ -49,7 +51,19 @@ const sandbox={console,Image:class{},TextDecoder,AbortController,
       if(micFailure)throw Error('Test connection interrupted');
       return {ok:true,json:async()=>({state:action==='start'?'listening':'idle'})};
     }
-    if(route==='/api/voice')return {ok:true,json:async()=>({reply:'Voice is off. Enable it explicitly to play a test.',status})};
+    if(route==='/api/voice') {
+      const data=JSON.parse(opts.body);
+      if(data.action==='list') {
+        if(voiceListFailure)throw Error('Windows voice inventory unavailable');
+        return {ok:true,json:async()=>({voices:['Local David','Local Zira'],status})};
+      }
+      if(data.action==='select') {
+        if(voiceRejectSelection)return {ok:false,status:422,json:async()=>({error:'Voice no longer installed'})};
+        status.voice_name=data.name;
+        return {ok:true,json:async()=>({reply:'Selected for this run. Test explicitly when ready.',status})};
+      }
+      return {ok:true,json:async()=>({reply:'Voice is off. Enable it explicitly to play a test.',status})};
+    }
     if(route==='/api/session')return {ok:true,json:async()=>({history:[{role:'user',content:'Saved test question'},{role:'assistant',content:'Saved test answer'}],status,message:'Saved chat restored.'})};
     assert.equal(route,'/api/models');
     if(fail)return {ok:false,status:422,json:async()=>({error:'Ollama offline'})};
@@ -137,6 +151,32 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,'signal_face.js'),'utf8')
   chatMode='success';
   await submit();
   assert.equal(get('question').value,'');
+  const voiceTestsBefore=calls.filter(c=>c.route==='/api/voice'&&JSON.parse(c.opts.body).action==='test').length;
+  assert(!calls.some(c=>c.route==='/api/voice'&&JSON.parse(c.opts.body).action==='list'),'Voice inventory must be opt-in');
+  await get('voices-refresh').handlers.click();
+  assert.equal(get('voice-select').children.length,3);
+  assert.equal(get('voice-select').disabled,false);
+  get('voice-select').value='Local Zira';
+  await get('voice-select-apply').handlers.click();
+  assert.equal(status.voice_name,'Local Zira');
+  assert.equal(status.voice_enabled,false);
+  assert.match(get('voice-selection-state').textContent,/Local Zira/);
+  assert.equal(calls.filter(c=>c.route==='/api/voice'&&JSON.parse(c.opts.body).action==='test').length,voiceTestsBefore,'Selecting must not play a sample');
+  get('voice-select').value='';
+  await get('voice-select-apply').handlers.click();
+  assert.equal(status.voice_name,null);
+  assert.match(get('voice-selection-state').textContent,/system default/);
+  get('voice-select').value='Local Zira';await get('voice-select-apply').handlers.click();
+  voiceRejectSelection=true;
+  get('voice-select').value='Local David';await get('voice-select-apply').handlers.click();
+  assert.equal(status.voice_name,'Local Zira');
+  assert.match(get('voice-selection-state').textContent,/unchanged/);
+  voiceListFailure=true;
+  await get('voices-refresh').handlers.click();
+  assert.equal(get('voice-select').disabled,true);
+  assert.equal(get('voice-select-apply').disabled,true);
+  assert.equal(status.voice_name,'Local Zira');
+  assert.match(get('voice-selection-state').textContent,/unavailable/);
   assert.equal(get('draft-recovery').hidden,true,'Successful manual retry clears the matching recovery copy');
   chatMode='network';get('question').value='A question interrupted by disconnection';
   await submit();
@@ -189,4 +229,5 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,'signal_face.js'),'utf8')
   console.log('PASS: failed microphone stop/status remain visibly uncertain, retry succeeds, voice test is explicit');
   console.log('PASS: elapsed waiting status, post-cancel busy controls and return to ready');
   console.log('PASS: failed/network/partial-stream question recovery, manual restore, double-click guard, newer-text preservation and confirmed model reset');
+  console.log('PASS: opt-in installed voice list, explicit selection/default, no auto sample and selection/inventory failure preservation');
 })().catch(e=>{console.error(e);process.exitCode=1;});

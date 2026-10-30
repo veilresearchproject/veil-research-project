@@ -58,6 +58,13 @@
           <button id="model-select-apply" type="button" disabled>Use selected model</button>
           <p id="model-selection-state" role="status" aria-live="polite">Not checked. Switching starts a new chat and unloads evidence context. Saved chats and source files stay unchanged.</p>
         </details>
+        <details class="mtc-panel" id="voice-choice"><summary>Choose an installed Windows voice</summary>
+          <p>Choose a voice already on this PC. No download or voice cloning. Selection lasts for this run and does not enable speech or play a sample.</p>
+          <button id="voices-refresh" type="button">List installed voices</button>
+          <label for="voice-select">Windows voice</label><select id="voice-select" disabled><option value="">System default</option></select>
+          <button id="voice-select-apply" type="button" disabled>Use selected voice</button>
+          <p id="voice-selection-state" role="status" aria-live="polite">System default. To hear a sample, enable voice and click Test voice.</p>
+        </details>
         <details class="mtc-panel"><summary>Load a local MTC evidence log</summary><p>Read-only: session_result.json, session_metadata.json and events.jsonl. The WAV files stay untouched.</p><form id="mtc-form"><label for="mtc-path">MTC session folder on this PC</label><div class="input-line"><input id="mtc-path" type="text" placeholder="C:\MTC_Oct27\MTC_20261027_..." spellcheck="false"><button type="submit">Load logs</button></div></form><span id="mtc-state" class="mtc-status">No session loaded</span></details>
         <details class="mtc-panel" id="scanner-review"><summary>MTC scanner flags — group and review</summary>
           <p>Load the <code>review_summary.json</code> created by our separate local WAV scanner. SIGNAL reads the summary only, groups overlapping alert windows and lets you select a time to annotate below. This does not rescan or play the WAV files.</p>
