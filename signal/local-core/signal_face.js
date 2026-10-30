@@ -15,6 +15,17 @@
   let currentExpression = 'neutral', answering = false, voiceOn = false, speaking = false;
   let canStream = false, replyController = null, serverGenerating = false;
   let listening = false, listenRequestPending = false;
+  let recoveryQuestion = null;
+  const clearRecovery = () => {
+    recoveryQuestion = null;
+    $('draft-recovery').hidden = true;
+    $('draft-recovery-note').textContent = '';
+  };
+  const keepRecovery = (text) => {
+    recoveryQuestion = text.slice(0, 4000);
+    $('draft-recovery').hidden = false;
+    $('draft-recovery-note').textContent = 'Your last interrupted question is kept in this tab only. Restore it to edit; nothing is resent automatically. Closing or reloading this tab removes the recovery copy.';
+  };
   const motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Gentle illustration only: preserve photographic mouth pixels and never fake phoneme alignment.
   // Small, irregular rests are less distracting than a six-frame mechanical loop.
@@ -83,6 +94,7 @@
     send.disabled = answering || listening || serverGenerating;
     question.disabled = answering || listening || serverGenerating;
     $('mic-button').disabled = (answering || serverGenerating) && !listening;
+    $('draft-restore').disabled = answering || listening || serverGenerating;
     const progress = state.request_progress;
     if (serverGenerating) {
       const seconds = progress ? Math.floor(progress.elapsed_ms / 1000) : 0;
@@ -184,11 +196,13 @@
     if (answering || listening || serverGenerating || !text.trim()) return;
     answering=true; send.disabled=true; question.disabled=true;
     addMessage('user',text);
-    question.value=''; lastExpression='focused'; pose('focused'); setActivity('Analyzing locally…');
+    question.value=text; lastExpression='focused'; pose('focused'); setActivity('Analyzing locally…');
     try {
       const useStream = canStream && !text.trim().startsWith('/');
       const reply = useStream ? await streamMessage(text) : await request('/api/chat',{message:text});
       if (!useStream) addMessage('signal',reply.reply,reply.mode==='demo'?'Scripted UI demonstration • no generated AI response':'Local Ollama response • verify research claims');
+      if (question.value === text) question.value = '';
+      if (recoveryQuestion === text) clearRecovery();
       lastExpression=chooseExpression(reply.reply || '');
       answering=false;
       if(reply.status) syncStatus(reply.status);
@@ -197,6 +211,7 @@
     } catch (err) {
       answering=false; lastExpression='concentrating'; pose(lastExpression);
       addMessage('error',err.message,'Local server error • no cloud fallback');
+      keepRecovery(text);
       setActivity('Unable to respond');
     } finally {
       replyController=null;
@@ -259,7 +274,16 @@
     } catch(err) { micState(true,'Microphone status unavailable; it may still be listening. Use Stop listening. '+err.message, 'listening'); }
   }
   window.setInterval(pollListen,500);
-  $('chat-form').addEventListener('submit',(e)=>{e.preventDefault();submitMessage(question.value)});
+  $('chat-form').addEventListener('submit',(e)=>{e.preventDefault();return submitMessage(question.value)});
+  $('draft-restore').addEventListener('click', () => {
+    if (!recoveryQuestion || answering || listening || serverGenerating) return;
+    if (question.value && question.value !== recoveryQuestion &&
+        !window.confirm('Replace the question currently being edited with the last interrupted question? Nothing will be sent.')) return;
+    question.value = recoveryQuestion;
+    question.focus();
+    setActivity('Question restored for editing. Click Send only when ready.');
+  });
+  $('draft-dismiss').addEventListener('click', clearRecovery);
   question.addEventListener('keydown',(e)=>{if(e.key==='Enter' && !e.shiftKey){e.preventDefault();submitMessage(question.value)}});
   document.querySelectorAll('.suggestion').forEach(b=>b.addEventListener('click',()=>{question.value=b.dataset.prompt;question.focus()}));
   async function voiceCommand(action, extra = {}) {
@@ -349,10 +373,11 @@
   });
   $('session-restore').addEventListener('click',async()=>{
     if(!snapshotReady()) {snapshotStatus.textContent='Finish any reply before restoring.';return;}
-    if(!window.confirm('Replace the active conversation with the saved local chat? This does NOT restore MTC logs or scanner flags.'))return;
+    if(!window.confirm('Replace the active conversation and unsent question with the saved local chat? This does NOT restore MTC logs or scanner flags.'))return;
     try {
       const result=await request('/api/session',{action:'restore'});
       messages.replaceChildren();
+      question.value = ''; clearRecovery();
       addMessage('signal','Previous conversation restored by operator. MTC evidence must be loaded again.', 'Local continuity only • not fresh evidence');
       for(const item of result.history) addMessage(item.role === 'user' ? 'user' : 'signal', item.content, 'Restored conversation • previously completed');
       if(result.status)syncStatus(result.status);
@@ -440,12 +465,13 @@
       modelSelectionState.textContent = 'Finish the reply, listening, or speech before switching models.'; return;
     }
     if (!modelSelect.value) return;
-    if (!window.confirm('Use ' + modelSelect.value + ' for this run? Switching to a different model clears the active chat and unloads MTC/scanner context. Saved snapshots and original files are unchanged.')) return;
+    if (!window.confirm('Use ' + modelSelect.value + ' for this run? Switching to a different model clears the active chat and unsent question and unloads MTC/scanner context. Saved snapshots and original files are unchanged.')) return;
     modelApply.disabled = true;
     try {
       const result = await request('/api/models', {model:modelSelect.value, confirm_reset:true});
       if (result.changed) {
         messages.replaceChildren();
+        question.value = ''; clearRecovery();
         addMessage('signal', 'Local model selected: ' + result.selected + '. Start a new conversation or explicitly restore a saved chat.', 'Model change • evidence must be reloaded');
         clearScannerDisplay('No MTC session or scanner report loaded. Reload evidence explicitly.');
         reviewList.replaceChildren();

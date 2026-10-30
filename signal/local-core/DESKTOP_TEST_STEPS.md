@@ -1,4 +1,4 @@
-# First desktop test — SIGNAL v0.16
+# First desktop test — SIGNAL v0.17
 
 Keep the prior working folder. Extract this ZIP into a new folder first.
 
@@ -30,6 +30,8 @@ Nothing starts until you choose; reopen the menu after an option finishes.
    reply is pending, Disable voice and confirm no new speech starts for that reply.
    If you use Stop reply, partial text must remain marked incomplete. If local
    cleanup continues, Send should stay disabled until SIGNAL reports idle.
+   The interrupted question should stay available for editing. Restore last
+   interrupted question must only fill the editor, without sending it again.
 7. **Check continuity if wanted:** save a completed short conversation, close the
    application, reopen, and explicitly restore it. It must not restore automatically.
    Saved chat is context only; MTC logs and scanner reports must be loaded separately.
