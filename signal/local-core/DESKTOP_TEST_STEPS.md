@@ -1,6 +1,10 @@
-# First desktop test — SIGNAL v0.15
+# First desktop test — SIGNAL v0.16
 
 Keep the prior working folder. Extract this ZIP into a new folder first.
+
+Double-click **START_HERE.bat**. The checked menu is the new main entry point.
+Choose 3 for setup, 2 for the live assistant, or 5 to display this checklist.
+Nothing starts until you choose; reopen the menu after an option finishes.
 
 1. **Check setup:** double-click `CHECK_SIGNAL_SETUP.bat`. This checks local
    capabilities; it does not speak, listen or download a model. Note any missing
