@@ -1,4 +1,4 @@
-VEIL SIGNAL Desktop Face Alpha v0.4
+VEIL SIGNAL Desktop Face Alpha v0.5
 =================================
 
 1. Extract ALL ZIP files to a normal Windows folder.
@@ -11,3 +11,5 @@ VEIL SIGNAL Desktop Face Alpha v0.4
 Everything stays local; no paid API, no microphone and no device-control functions.
 The live Ollama model and Windows audio need checking on your actual PC.
 See SIGNAL_DESKTOP_README.md for complete instructions.
+
+NEW v0.5: Start listening records one short phrase via offline Windows speech recognition (if available). Text must be reviewed and manually sent; no always-on microphone. See MICROPHONE_PRIVACY.md.
