@@ -1,0 +1,162 @@
+{
+  "version": "1.9.7",
+  "status": "tested SwiftShader WebGL + Canvas mobile simulation; not photorealistic",
+  "inputLibraryBaseline": "v1.8 actual complete ZIP",
+  "inputPreviousCheckpoint": "v1.9.6 architectural",
+  "jsSyntax": {
+    "scripts": 8,
+    "passed": 8
+  },
+  "pbrLive": {
+    "texturePairs": 7,
+    "atlases": 2,
+    "atlasesLoadedWebGL": 2,
+    "triplanarUV": true,
+    "glbAuthoredUVUsedInBrowser": false
+  },
+  "glb": {
+    "version": 2,
+    "bytes": 1303148,
+    "meshPrimitives": 80,
+    "uvMappedPrimitives": 80,
+    "materials": 22,
+    "textures": 44,
+    "bufferViews": 192,
+    "accessors": 180,
+    "structuralPass": true
+  },
+  "webglBrowser": {
+    "mode": "webgl",
+    "viewport": {
+      "width": 1120,
+      "height": 760
+    },
+    "renderer": "webgl",
+    "stopCount": 13,
+    "stopsVisited": [
+      "Exterior / Building Overview",
+      "Reception / Main Entrance",
+      "Guest Briefing / Media",
+      "Main Experiment Hall",
+      "Six-Plane Light Cage",
+      "Temperature Curtain",
+      "MTC Acoustic Zone",
+      "ECHO / EM Test Zone",
+      "Flexible Experiment Room \u00b7 GB-001",
+      "Workshop / Fabrication",
+      "Covered Van Loading",
+      "Staircase / Command Overlook",
+      "Command Center \u00b7 2nd floor"
+    ],
+    "toggleBefore": {
+      "roof": true,
+      "section": false,
+      "night": false
+    },
+    "toggleAfter": {
+      "roof": false,
+      "section": true,
+      "night": true
+    },
+    "toggleRestored": true,
+    "embeddedGalleryImage": {
+      "complete": true,
+      "width": 1200,
+      "source": "data:image/webp;base64,U"
+    },
+    "pbr": {
+      "mode": "real atlas textures sampled by WebGL",
+      "materialNames": [
+        "brushed_alloy",
+        "anti_static_floor",
+        "clear_acrylic",
+        "diffused_led",
+        "optical_lens",
+        "acoustic_weave",
+        "matte_paint"
+      ],
+      "loaded": 2,
+      "expected": 2,
+      "atlasSize": [
+        952,
+        136
+      ],
+      "uvMode": "world-space triplanar; separate GLB has authored UVs"
+    },
+    "pageErrors": [],
+    "consoleErrors": [],
+    "screenshot": "/mnt/data/VEIL_v197_webgl_GB001_actual.png",
+    "mobileDrawer": null
+  },
+  "softwareBrowser": {
+    "mode": "software",
+    "viewport": {
+      "width": 412,
+      "height": 850
+    },
+    "renderer": "software",
+    "stopCount": 13,
+    "stopsVisited": [
+      "Exterior / Building Overview",
+      "Reception / Main Entrance",
+      "Guest Briefing / Media",
+      "Main Experiment Hall",
+      "Six-Plane Light Cage",
+      "Temperature Curtain",
+      "MTC Acoustic Zone",
+      "ECHO / EM Test Zone",
+      "Flexible Experiment Room \u00b7 GB-001",
+      "Workshop / Fabrication",
+      "Covered Van Loading",
+      "Staircase / Command Overlook",
+      "Command Center \u00b7 2nd floor"
+    ],
+    "toggleBefore": {
+      "roof": true,
+      "section": false,
+      "night": false
+    },
+    "toggleAfter": {
+      "roof": false,
+      "section": true,
+      "night": true
+    },
+    "toggleRestored": true,
+    "embeddedGalleryImage": {
+      "complete": true,
+      "width": 1200,
+      "source": "data:image/webp;base64,U"
+    },
+    "pbr": null,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "screenshot": "/mnt/data/VEIL_v197_software_GB001_actual.png",
+    "mobileDrawer": {
+      "text": "\u2715 Close locations",
+      "visible": true
+    }
+  },
+  "sameCameraVisualDifferences": {
+    "GB-001 material study": {
+      "pixelsChangedOver20RGB_percent": 3.85,
+      "meanMaxChannelDifference": 2.62
+    },
+    "SIGNAL Command Room glazing": {
+      "pixelsChangedOver20RGB_percent": 19.37,
+      "meanMaxChannelDifference": 12.24
+    }
+  },
+  "zipCRC": true,
+  "standalone": {
+    "imagesEmbedded": 9,
+    "externalConceptImagePaths": 0
+  },
+  "limitations": [
+    "SwiftShader virtual display is NOT hardware GPU",
+    "Samsung Galaxy S25 touch, battery and thermal performance NOT tested",
+    "v1.8 UV mapped GLB not dynamically loaded into HTML",
+    "Glass chamber still visually too opaque and requires further refinement",
+    "No physical research center exists; all diagnostic displays SIMULATED",
+    "Not photorealistic"
+  ]
+}
