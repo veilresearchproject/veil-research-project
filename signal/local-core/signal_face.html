@@ -12,7 +12,7 @@
   <div class="shell">
     <header class="masthead">
       <div class="brandmark" aria-hidden="true">V<span>·</span></div>
-      <div class="identity"><span class="eyebrow">VEIL RESEARCH PROJECT / LOCAL LAB PROTOTYPE</span><h1>SIGNAL <small>alpha 0.6</small></h1></div>
+      <div class="identity"><span class="eyebrow">VEIL RESEARCH PROJECT / LOCAL LAB PROTOTYPE</span><h1>SIGNAL <small>alpha 0.8</small></h1></div>
       <div class="top-status"><span id="mode" class="mode">INITIALIZING</span><span id="connection" class="connection">Local interface</span></div>
     </header>
     <main class="dashboard">
@@ -26,10 +26,10 @@
         <div class="face-caption"><span class="muted">CURRENT EXPRESSION</span><strong id="expression-description">Calm • Approachable</strong></div>
         <div class="voice-controls" aria-label="SIGNAL voice controls">
           <button id="voice-toggle" class="primary" type="button" aria-pressed="false">Enable voice</button>
-          <button id="voice-stop" type="button">Stop speaking</button><button id="motion-preview" type="button" title="Silent preview of illustrative mouth motion">Preview face movement</button>
+          <button id="voice-stop" type="button">Stop speaking</button><button id="motion-preview" type="button" aria-pressed="false" title="Silent preview of illustrative mouth motion">Preview face movement</button><button id="motion-toggle" type="button" aria-pressed="true" title="Turn the illustrative mouth motion off without disabling speech">Motion: subtle</button>
           <label class="speed">Speed <select id="rate" aria-label="Speaking rate"><option value="-2">Slow</option><option value="-1">Relaxed</option><option value="0" selected>Natural</option><option value="1">Lively</option><option value="2">Fast</option></select></label>
         </div>
-        <div class="short-note"><span class="pulse-dot"></span><span id="voice-status">Voice starts OFF. Face motion is an illustrative response to speech activity, not phoneme lip-sync.</span></div>
+        <div class="short-note"><span class="pulse-dot"></span><span id="voice-status">Voice starts OFF. Mouth motion is a subtle illustration, not speech lip-sync. Turn it off anytime.</span></div>
       </section>
       <section class="conversation-panel" aria-label="SIGNAL conversation">
         <div class="section-head"><div><span class="eyebrow">RESEARCH ASSISTANT</span><h2>Conversation</h2></div><span id="activity" class="activity" aria-live="polite">Ready to begin</span></div>
@@ -38,7 +38,9 @@
         </div>
         <div class="quick-actions"><button type="button" class="suggestion" data-prompt="What can the October MTC session logs establish, and what remains unverified?">MTC evidence limits</button><button type="button" class="suggestion" data-prompt="Help me plan a controlled test of a strange sound, starting with ordinary causes.">Plan an experiment</button></div>
         <form id="chat-form" class="composer"><label for="question">Ask SIGNAL</label><div class="input-line"><textarea id="question" name="question" rows="2" maxlength="4000" placeholder="Ask about evidence, experiments, or the next VEIL step…"></textarea><button id="mic-button" type="button" title="Listen once, locally" aria-pressed="false">🎙 Start listening</button><button id="send" type="submit" class="primary">Send</button></div><span id="mic-note" class="input-hint" role="status">Microphone is OFF. Click Start listening to capture one phrase locally; review the text before sending.</span><span class="input-hint">Enter sends • Shift+Enter adds a line • Conversation stays on this computer</span></form>
+        <details class="mtc-panel" id="diagnostics-panel"><summary>Local readiness check — Ollama, voice and microphone</summary><p>Check installed capabilities without recording, speaking, downloading models, or using a cloud service.</p><button type="button" id="check-setup">Check local setup</button><div id="diagnostics-results" role="status" aria-live="polite">Not checked. Ollama will be tested only when you click the button.</div></details>
         <details class="mtc-panel"><summary>Load a local MTC evidence log</summary><p>Read-only: session_result.json, session_metadata.json and events.jsonl. The WAV files stay untouched.</p><form id="mtc-form"><label for="mtc-path">MTC session folder on this PC</label><div class="input-line"><input id="mtc-path" type="text" placeholder="C:\MTC_Oct27\MTC_20261027_..." spellcheck="false"><button type="submit">Load logs</button></div></form><span id="mtc-state" class="mtc-status">No session loaded</span></details>
+        <details class="mtc-panel" id="review-notebook"><summary>Investigator observation notebook</summary><p>Manual labels only. Notes are stored separately in your Windows user profile; original WAV files and MTC JSON logs are never edited. “Unexplained” means cause not identified, not paranormal.</p><form id="note-form"><label for="review-time">Time since session start (seconds)</label><div class="input-line"><input type="number" id="review-time" min="0" step="0.001" required placeholder="e.g. 31.250"><select id="review-label" aria-label="Investigator classification"><option value="known_source">Known source</option><option value="needs_review">Needs review</option><option value="unexplained">Cause not identified</option><option value="instrument_issue">Instrument issue</option></select></div><label for="review-text">Your observation (up to 400 characters)</label><textarea id="review-text" maxlength="400" rows="2" required placeholder="e.g. Two alerts refer to the same door closing. Confirmed by operator."></textarea><button type="submit">Save observation locally</button></form><span class="mtc-status" id="review-state">Load a verified MTC session before saving observations.</span><div id="review-list" class="review-list" aria-live="polite"></div></details>
       </section>
     </main>
     <footer><span>VEIL / EVIDENCE BEFORE EXPLANATION</span><span>Local-only test interface · Illustrative speaking motion · One-shot microphone · No lab control</span></footer>
