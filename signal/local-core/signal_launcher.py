@@ -7,7 +7,7 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parent
-VERSION = '0.16'
+VERSION = '0.17'
 REQUIRED = (
     'signal_launcher.py', 'signal_desktop.py', 'signal_core.py', 'signal_face.html',
     'signal_face.js', 'signal_face.css', 'signal_check_setup.py', 'signal_voice.py',

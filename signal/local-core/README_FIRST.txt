@@ -1,4 +1,4 @@
-VEIL SIGNAL DESKTOP v0.16 — START HERE
+VEIL SIGNAL DESKTOP v0.17 — QUESTION RECOVERY
 
 Extract the entire ZIP into a NEW folder. Keep earlier folders as fallbacks.
 Double-click START_HERE.bat. Python 3.10+ with its launcher is required.
@@ -20,4 +20,8 @@ Original MTC recordings and saved conversations are not altered by this launcher
 
 176 automated Python tests passed here. Actual Windows startup, microphone,
 speaker and model speed still need acceptance on your PC. See
-DESKTOP_TEST_STEPS.md and V16_DEVELOPMENT_NOTES.md.
+DESKTOP_TEST_STEPS.md and V17_DEVELOPMENT_NOTES.md.
+
+NEW: Questions remain available after interrupted local replies. Restore only
+fills the editor; nothing retries automatically. The recovery copy lasts only
+until this tab closes/reloads. Review the conversation before a manual resend.

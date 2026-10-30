@@ -159,3 +159,11 @@ the demo, live assistant, setup check, automated tests and desktop checklist.
 Nothing installs, downloads or activates audio automatically. For source builds,
 `build_signal_release.py` generates the byte manifest and deterministic Windows
 ZIP. Read `V16_DEVELOPMENT_NOTES.md` for validation and hardware limits.
+
+
+## Update — v0.17: Interrupted-question recovery
+
+Submitting no longer immediately clears the editor. Failure or interruption keeps
+a tab-local recovery copy. Restore fills the editor without sending, and successful
+manual retry clears the matching copy. Confirmed model/chat resets clear old draft
+context. See `V17_DEVELOPMENT_NOTES.md`; no automatic retry or disk storage is added.

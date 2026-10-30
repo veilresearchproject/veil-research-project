@@ -6,11 +6,12 @@ const path = require('node:path');
 class Element {
   constructor() { this.children=[];this.handlers={};this.dataset={};this.value='';this.textContent='';this.disabled=false;this.classList={toggle(){}}; }
   addEventListener(event, fn) {this.handlers[event]=fn;}
-  append(...items) {this.children.push(...items);}
+  append(...items) {for(const item of items){item.parentElement=this;this.children.push(item);}}
   appendChild(item) {this.append(item);}
   replaceChildren(...items) {this.children=[...items];}
   setAttribute() {}
   focus() {}
+  querySelector(selector) {return this.children.find(c=>c.className===selector.slice(1)) || null;}
 }
 const html = fs.readFileSync(path.join(__dirname,'signal_face.html'),'utf8');
 const elements = new Map([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>[m[1],new Element()]));
@@ -18,6 +19,7 @@ const get = id=>{assert(elements.has(id), 'Missing HTML element '+id);return ele
 get('model-select').disabled=true;get('model-select-apply').disabled=true;
 const calls=[];
 let permit=true, fail=false, changed=true, micFailure=false;
+let chatMode='failure', pendingChatResolve=null;
 const intervals=[];
 const status={mode:'local-ollama',stream_supported:true,voice_enabled:false,speaking:false,mtc_loaded:false};
 const sandbox={console,Image:class{},TextDecoder,AbortController,
@@ -27,6 +29,17 @@ const sandbox={console,Image:class{},TextDecoder,AbortController,
     calls.push({route,opts});
     assert.equal(opts.headers['X-SIGNAL-Token'],'test-token');
     if(route==='/api/status') return {ok:true,json:async()=>status};
+    if(route==='/api/chat') {
+      if(chatMode==='network')throw Error('Connection interrupted');
+      if(chatMode==='pending')return new Promise(resolve=>{pendingChatResolve=resolve;});
+      if(chatMode==='failure')return {ok:false,status:422,json:async()=>({error:'Local model unavailable'})};
+      return {ok:true,json:async()=>({reply:'A complete test answer.',mode:'local-ollama',status})};
+    }
+    if(route==='/api/chat/stream') {
+      const chunks=[Buffer.from('{"event":"delta","text":"Partial reply"}\n'),
+                    Buffer.from('{"event":"error","error":"Synthetic stream failure"}\n')];
+      return {ok:true,body:{getReader:()=>({read:async()=>chunks.length?{value:chunks.shift(),done:false}:{done:true},cancel:async()=>{}})}};
+    }
     if(route==='/api/listen/status') {
       if(micFailure)throw Error('Test connection interrupted');
       return {ok:true,json:async()=>({state:'listening'})};
@@ -37,6 +50,7 @@ const sandbox={console,Image:class{},TextDecoder,AbortController,
       return {ok:true,json:async()=>({state:action==='start'?'listening':'idle'})};
     }
     if(route==='/api/voice')return {ok:true,json:async()=>({reply:'Voice is off. Enable it explicitly to play a test.',status})};
+    if(route==='/api/session')return {ok:true,json:async()=>({history:[{role:'user',content:'Saved test question'},{role:'assistant',content:'Saved test answer'}],status,message:'Saved chat restored.'})};
     assert.equal(route,'/api/models');
     if(fail)return {ok:false,status:422,json:async()=>({error:'Ollama offline'})};
     if(opts.method==='POST')return {ok:true,json:async()=>({changed,selected:'tiny:1b',status,message:'Model selected for this run.'})};
@@ -103,7 +117,76 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,'signal_face.js'),'utf8')
   assert.equal(get('send').disabled,false);
   assert.equal(get('question').disabled,false);
   assert.match(get('reply-status').textContent,/No local model request/);
+  status.stream_supported=false;
+  await intervals.find(fn=>fn.name==='refresh')();
+  const submit=()=>get('chat-form').handlers.submit({preventDefault(){}});
+  const chatCalls=()=>calls.filter(c=>c.route==='/api/chat'||c.route==='/api/chat/stream').length;
+  get('question').value='Keep this question after failure';
+  const initialCalls=chatCalls();
+  await submit();
+  assert.equal(chatCalls(),initialCalls+1,'Failure must not automatically retry');
+  assert.equal(get('question').value,'Keep this question after failure');
+  assert.equal(get('draft-recovery').hidden,false);
+  get('question').value='A newer unsent question';permit=false;
+  await get('draft-restore').handlers.click();
+  assert.equal(get('question').value,'A newer unsent question','Cancel preserves the newer unsent text');
+  permit=true;
+  await get('draft-restore').handlers.click();
+  assert.equal(get('question').value,'Keep this question after failure');
+  assert.equal(chatCalls(),initialCalls+1,'Restoring must never send');
+  chatMode='success';
+  await submit();
+  assert.equal(get('question').value,'');
+  assert.equal(get('draft-recovery').hidden,true,'Successful manual retry clears the matching recovery copy');
+  chatMode='network';get('question').value='A question interrupted by disconnection';
+  await submit();
+  assert.equal(get('question').value,'A question interrupted by disconnection');
+  await get('draft-dismiss').handlers.click();
+  assert.equal(get('draft-recovery').hidden,true);
+  assert.equal(get('question').value,'A question interrupted by disconnection','Dismiss leaves the editor untouched');
+  chatMode='pending';get('question').value='Only send this once';
+  const pending=submit();
+  const during=chatCalls();
+  await submit();
+  assert.equal(chatCalls(),during,'A second click while pending must not submit twice');
+  get('question').value='New text selected while the old request was pending';
+  pendingChatResolve({ok:true,json:async()=>({reply:'A completed response.',mode:'local-ollama',status})});
+  await pending;
+  assert.equal(get('question').value,'New text selected while the old request was pending','Success must not erase newer editor text');
+  status.stream_supported=true;
+  await intervals.find(fn=>fn.name==='refresh')();
+  get('question').value='Keep this interrupted stream question';
+  const beforeStream=chatCalls();await submit();
+  assert.equal(chatCalls(),beforeStream+1);
+  assert.equal(get('question').value,'Keep this interrupted stream question');
+  assert.equal(get('draft-recovery').hidden,false);
+  const lastPartial=get('messages').children.filter(el=>el.className==='message signal').at(-1);
+  assert.match(lastPartial.querySelector('.message-foot').textContent,/INCOMPLETE/);
+  status.generating=true;status.request_progress={kind:'reply',elapsed_ms:10,stop_requested:true};
+  await intervals.find(fn=>fn.name==='refresh')();
+  get('question').value='Do not replace this while busy';
+  await get('draft-restore').handlers.click();
+  assert.equal(get('question').value,'Do not replace this while busy');
+  status.generating=false;status.request_progress=null;
+  await intervals.find(fn=>fn.name==='refresh')();
+  fail=false;changed=true;
+  await get('models-refresh').handlers.click();
+  get('model-select').value='tiny:1b';
+  await get('model-select-apply').handlers.click();
+  assert.equal(get('draft-recovery').hidden,true,'A confirmed model reset clears recovery context');
+  assert.equal(get('question').value,'');
+  get('question').value='Another interrupted question';
+  await submit();
+  assert.equal(get('draft-recovery').hidden,false);
+  permit=false;
+  await get('session-restore').handlers.click();
+  assert.equal(get('draft-recovery').hidden,false,'Cancelled restore preserves the draft');
+  permit=true;
+  await get('session-restore').handlers.click();
+  assert.equal(get('draft-recovery').hidden,true,'Confirmed chat restore clears the old recovery context');
+  assert.equal(get('question').value,'');
   console.log('PASS: model chooser opt-in, cancellation, reset, same-model preservation and unavailable inventory');
   console.log('PASS: failed microphone stop/status remain visibly uncertain, retry succeeds, voice test is explicit');
   console.log('PASS: elapsed waiting status, post-cancel busy controls and return to ready');
+  console.log('PASS: failed/network/partial-stream question recovery, manual restore, double-click guard, newer-text preservation and confirmed model reset');
 })().catch(e=>{console.error(e);process.exitCode=1;});

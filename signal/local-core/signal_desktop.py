@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.16. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.17. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -99,7 +99,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.16'
+        server_version = 'SIGNAL-Desktop-v0.17'
         sys_version = ''
 
         def log_message(self, format, *args):
