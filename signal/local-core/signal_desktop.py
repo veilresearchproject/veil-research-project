@@ -1,6 +1,6 @@
-"""SIGNAL face desktop alpha. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.5. Loopback HTTP only; standard-library Python.
 
-Extends signal_core.Assistant and WindowsVoice; no microphone, cloud or devices.
+Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
 import argparse
 import json
@@ -13,6 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit
 
 import signal_core
+import signal_listen
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / 'face_assets'
@@ -47,6 +48,7 @@ class SessionState:
         self.mode = 'demo' if isinstance(model, DemoModel) else 'local-ollama'
         self.token = secrets.token_urlsafe(32)
         self.requests = 0
+        self.listener = signal_listen.PushToTalk()
 
     def status(self):
         voice = self.bot.voice
@@ -55,12 +57,12 @@ class SessionState:
                 'speaking': proc is not None and proc.poll() is None,
                 'mtc_loaded': self.bot.loaded_mtc is not None,
                 'session_id': (self.bot.loaded_mtc or {}).get('session_id'),
-                'mic_enabled': False, 'hardware_control': False}
+                'mic_enabled': self.listener.status()['state'] == 'listening', 'hardware_control': False}
 
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-alpha'
+        server_version = 'SIGNAL-Desktop-v0.5'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -99,6 +101,11 @@ def make_handler(state):
                 self._json(403, {'error': 'Loopback host only'})
                 return
             route = urlsplit(self.path).path
+            if route == '/api/listen/status':
+                if not self._authorized():
+                    self._json(403, {'error': 'Unauthorized'}); return
+                self._json(200, state.listener.status(consume=True))
+                return
             if route == '/api/status':
                 if not self._authorized():
                     self._json(403, {'error': 'Unauthorized'}); return
@@ -121,7 +128,7 @@ def make_handler(state):
             route = urlsplit(self.path).path
             if not self._authorized():
                 self._json(403, {'error': 'Unauthorized'}); return
-            if route not in ('/api/chat', '/api/voice'):
+            if route not in ('/api/chat', '/api/voice', '/api/listen'):
                 self._json(404, {'error': 'Not found'}); return
             try:
                 size = int(self.headers.get('Content-Length', '-1'))
@@ -138,7 +145,15 @@ def make_handler(state):
             if not state.lock.acquire(blocking=False):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
             try:
-                if route == '/api/chat':
+                if route == '/api/listen':
+                    action = data.get('action')
+                    if action == 'start':
+                        self._json(200, state.listener.start())
+                    elif action == 'stop':
+                        self._json(200, state.listener.stop())
+                    else:
+                        raise ValueError('Use start or stop for push-to-talk')
+                elif route == '/api/chat':
                     message = data.get('message')
                     if not isinstance(message, str) or not 0 < len(message.strip()) <= 4000:
                         raise ValueError('Message must be 1–4,000 characters')
@@ -183,7 +198,7 @@ def main():
     url = f'http://127.0.0.1:{server.server_port}/'
     print('SIGNAL desktop alpha | LOCAL ONLY |', state.mode)
     print('Open this address:', url)
-    print('Press Ctrl+C to close the server. No microphone or device control.')
+    print('Press Ctrl+C to close. Microphone only during explicit push-to-talk; no device control.')
     if not args.no_browser:
         webbrowser.open(url)
     try:
@@ -191,6 +206,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
+        state.listener.stop()
         state.bot.voice.disable()
         server.server_close()
         print('SIGNAL desktop stopped.')
