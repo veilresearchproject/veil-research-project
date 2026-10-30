@@ -319,6 +319,41 @@
     $('mtc-state').textContent='Verifying local log files…';
     submitMessage('/mtc "'+path.replace(/"/g,'')+'"','mtc');
   });
+  // v0.12: deliberately opt-in, local-only completed conversation snapshot.
+  // Saving/reloading never incorporates MTC evidence or investigator notebook entries.
+  const snapshotStatus = $('session-state');
+  const snapshotReady = () => !answering && !listening && !speaking;
+  $('session-save').addEventListener('click',async()=>{
+    if(!snapshotReady()) {snapshotStatus.textContent='Finish the current response or speech before saving.';return;}
+    try {
+      const result=await request('/api/session',{action:'save'});
+      snapshotStatus.textContent=result.message+' '+result.turns+' exchanges, saved '+result.saved_utc+'.';
+    } catch(e) {snapshotStatus.textContent='Not saved: '+e.message;}
+  });
+  $('session-restore').addEventListener('click',async()=>{
+    if(!snapshotReady()) {snapshotStatus.textContent='Finish any reply before restoring.';return;}
+    if(!window.confirm('Replace the active conversation with the saved local chat? This does NOT restore MTC logs or scanner flags.'))return;
+    try {
+      const result=await request('/api/session',{action:'restore'});
+      messages.replaceChildren();
+      addMessage('signal','Previous conversation restored by operator. MTC evidence must be loaded again.', 'Local continuity only • not fresh evidence');
+      for(const item of result.history) addMessage(item.role === 'user' ? 'user' : 'signal', item.content, 'Restored conversation • previously completed');
+      if(result.status)syncStatus(result.status);
+      clearScannerDisplay('No MTC session or scanner report loaded. Restore never imports evidence.');
+      reviewList.replaceChildren();
+      reviewState.textContent='Load an MTC session to review its notes.';
+      lastExpression='reassuring';pose(lastExpression);
+      snapshotStatus.textContent=result.message;
+    } catch(e) {snapshotStatus.textContent='Restore failed; current conversation preserved: '+e.message;}
+  });
+  $('session-delete').addEventListener('click',async()=>{
+    if(!snapshotReady()) {snapshotStatus.textContent='Finish the current reply before deleting saved history.';return;}
+    if(!window.confirm('Delete the locally saved conversation snapshot? The current chat stays open.'))return;
+    try {
+      const result=await request('/api/session',{action:'delete'});
+      snapshotStatus.textContent=result.message;
+    } catch(e) {snapshotStatus.textContent='Delete failed: '+e.message;}
+  });
   // v0.8: diagnostics run only when operator clicks Check; no background network probes.
   const diagOutput = $('diagnostics-results');
   const diagButton = $('check-setup');

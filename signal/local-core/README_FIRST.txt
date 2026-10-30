@@ -1,21 +1,26 @@
-VEIL SIGNAL DESKTOP v0.11 — LOCAL RESEARCH ASSISTANT
+VEIL SIGNAL DESKTOP v0.12 — CONTINUITY MILESTONE
 
-1. Extract the archive into a NEW folder (do not overwrite v0.10).
-2. Double-click START_SIGNAL_FACE_DEMO.bat to see the approved face without Ollama.
-3. Before a live conversation, run CHECK_SIGNAL_SETUP.bat; then start Ollama
-   and double-click START_SIGNAL_DESKTOP.bat.
-4. Choose Test Ollama conversation for a short silent connectivity test.
-5. In the live interface, standard questions stream into the conversation as
-   the local model writes them. Click Stop reply to interrupt an unfinished answer.
-   The stopped partial answer is not saved as a complete conversation turn.
-6. Slash commands, MTC log loading and evidence packet exports still work
-   through the same existing controls.
+You can keep v0.11 installed. This ZIP is a separate, tested prototype.
 
-Voice and microphone start OFF. Streaming text is UNVERIFIED model content,
-not a claim SIGNAL listened to evidence. Your WAV recordings and MTC logs stay
-untouched. This alpha does not have accurate mouth-to-speech synchronization.
+1. Extract v0.12 into a NEW folder (do NOT overwrite v0.11).
+2. Double-click START_SIGNAL_FACE_DEMO.bat to test the interface without Ollama.
+3. Ask SIGNAL a question. Open "Conversation continuity" and click Save current conversation.
+4. Close the application, then relaunch the demo. Open Conversation continuity,
+   click Restore saved conversation, and approve replacement of the active chat.
+5. The restored chat is context only. Reload MTC evidence logs and scanner reports separately.
+6. You can Delete saved conversation without deleting the current chat.
+7. For a real Ollama test run CHECK_SIGNAL_SETUP.bat; start local Ollama,
+   launch START_SIGNAL_DESKTOP.bat, and use Test Ollama conversation.
 
-No paid services or Work credits are required. No physical device control.
-Local model HTTP protocol verified against a mock Ollama endpoint.
-Real Windows/Ollama, mic and speaker verification is still required.
-See V11_DEVELOPMENT_NOTES.md for implementation limits and test details.
+Nothing is saved automatically. A snapshot stores up to eight completed user/SIGNAL
+exchanges, NOT evidence, microphone audio, manual research notes, passwords, or cloud data.
+It is a plain local JSON file in your Windows user profile, NOT ENCRYPTED. Do not save secrets.
+
+If SIGNAL is generating a reply, wait or press Stop reply before saving/restoring.
+Original MTC WAVs/logs and the VEIL website are untouched. No cloud AI or paid API.
+Voice and microphone default OFF; speaking animation is not real lip sync.
+
+Verification: RUN_SIGNAL_TESTS.bat. This alpha still needs a real Windows microphone,
+speaker and Ollama acceptance test.
+
+See SIGNAL_DESKTOP_README.md and V12_DEVELOPMENT_NOTES.md for details.
