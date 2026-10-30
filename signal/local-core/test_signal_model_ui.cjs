@@ -17,15 +17,26 @@ const elements = new Map([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>[m[1],new 
 const get = id=>{assert(elements.has(id), 'Missing HTML element '+id);return elements.get(id);};
 get('model-select').disabled=true;get('model-select-apply').disabled=true;
 const calls=[];
-let permit=true, fail=false, changed=true;
+let permit=true, fail=false, changed=true, micFailure=false;
+const intervals=[];
 const status={mode:'local-ollama',stream_supported:true,voice_enabled:false,speaking:false,mtc_loaded:false};
 const sandbox={console,Image:class{},TextDecoder,AbortController,
   document:{getElementById:get,querySelector:()=>({content:'test-token'}),querySelectorAll:()=>[],createElement:()=>new Element()},
-  window:{matchMedia:()=>({matches:true}),setInterval(){},setTimeout(){},clearTimeout(){},confirm:()=>permit},
+  window:{matchMedia:()=>({matches:true}),setInterval(fn){intervals.push(fn);},setTimeout(){},clearTimeout(){},confirm:()=>permit},
   fetch:async(route,opts)=>{
     calls.push({route,opts});
     assert.equal(opts.headers['X-SIGNAL-Token'],'test-token');
     if(route==='/api/status') return {ok:true,json:async()=>status};
+    if(route==='/api/listen/status') {
+      if(micFailure)throw Error('Test connection interrupted');
+      return {ok:true,json:async()=>({state:'listening'})};
+    }
+    if(route==='/api/listen') {
+      const action=JSON.parse(opts.body).action;
+      if(micFailure)throw Error('Test connection interrupted');
+      return {ok:true,json:async()=>({state:action==='start'?'listening':'idle'})};
+    }
+    if(route==='/api/voice')return {ok:true,json:async()=>({reply:'Voice is off. Enable it explicitly to play a test.',status})};
     assert.equal(route,'/api/models');
     if(fail)return {ok:false,status:422,json:async()=>({error:'Ollama offline'})};
     if(opts.method==='POST')return {ok:true,json:async()=>({changed,selected:'tiny:1b',status,message:'Model selected for this run.'})};
@@ -60,5 +71,23 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,'signal_face.js'),'utf8')
   assert.equal(get('model-select').disabled,true);
   assert.equal(get('model-select-apply').disabled,true);
   assert.match(get('model-selection-state').textContent,/offline/);
+  await get('mic-button').handlers.click();
+  assert.equal(get('mic-button').textContent,'■ Stop listening');
+  micFailure=true;
+  await get('mic-button').handlers.click();
+  assert.equal(get('mic-button').textContent,'■ Stop listening','Failed stop must retain active mic controls');
+  assert.match(get('mic-note').textContent,/Could not confirm/);
+  await intervals.find(fn=>fn.name==='pollListen')();
+  assert.equal(get('mic-button').textContent,'■ Stop listening');
+  assert.match(get('mic-note').textContent,/may still be listening/);
+  micFailure=false;
+  await get('mic-button').handlers.click();
+  assert.equal(get('mic-button').textContent,'🎙 Start listening');
+  assert.match(get('mic-note').textContent,/Microphone OFF/);
+  await get('voice-test').handlers.click();
+  assert.equal(calls.at(-1).route,'/api/voice');
+  assert.equal(JSON.parse(calls.at(-1).opts.body).action,'test');
+  assert(!calls.some(c=>c.route==='/api/chat'),'Microphone simulation must not auto-submit chat');
   console.log('PASS: model chooser opt-in, cancellation, reset, same-model preservation and unavailable inventory');
+  console.log('PASS: failed microphone stop/status remain visibly uncertain, retry succeeds, voice test is explicit');
 })().catch(e=>{console.error(e);process.exitCode=1;});

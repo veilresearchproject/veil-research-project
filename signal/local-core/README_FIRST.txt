@@ -1,20 +1,23 @@
-VEIL SIGNAL DESKTOP v0.13 — INSTALLED MODEL CHOOSER
+VEIL SIGNAL DESKTOP v0.14 — DESKTOP AUDIO TEST BUILD
 
-Extract into a NEW folder; keep v0.12 as a fallback.
+Extract into a NEW folder. Keep earlier versions as fallbacks.
 
-1. START_SIGNAL_FACE_DEMO.bat opens the scripted face demonstration (no AI).
-2. For actual conversation, start local Ollama and run START_SIGNAL_DESKTOP.bat.
-3. Open Choose an installed local model, then List installed models.
-4. Choose a model already on this PC, click Use selected model, and confirm.
-5. Run Test Ollama conversation under Local readiness check to see reply speed.
+Read DESKTOP_TEST_STEPS.md for the short first-test sequence.
 
-Nothing is downloaded. Model selection lasts for this run only. Switching to a
-different model starts a new chat and unloads research context. Save a conversation
-explicitly first if you want to keep it. Saved chats, notes and original WAVs/logs
-are unchanged. Evidence must be loaded again independently.
+1. CHECK_SIGNAL_SETUP.bat checks installed local capabilities without audio capture.
+2. Start local Ollama, then START_SIGNAL_DESKTOP.bat for real conversation.
+3. Choose an installed local model if needed; test its response time.
+4. Enable voice, then Test voice. Try Stop speaking and Disable voice.
+5. Start listening for one phrase. Review recognized text before clicking Send.
 
-Optional voice and microphone start OFF. This is a local Windows alpha; actual
-Windows audio and Ollama speed still require testing on your desktop.
+Stop speaking, Disable voice and Stop listening now remain accessible during a
+slow model call. A failed microphone stop/status check does not claim the mic is
+off. Disable voice suppresses speech for a reply still being generated; Stop
+speaking stops current speech only. Stop reply is a separate best-effort control.
 
-RUN_SIGNAL_TESTS.bat runs the Python tests. See V13_DEVELOPMENT_NOTES.md for
-verification, limits and instructions. No paid API or automatic cloud fallback.
+Microphone and voice start OFF. Model selection does not download anything and
+lasts for this run. Switching models starts a new chat; saved conversations,
+notes and original evidence files remain unchanged. No paid API or cloud fallback.
+
+156 automated Python tests passed here. Actual Windows microphone, speaker and
+Ollama speed still need acceptance on your desktop. See V14_DEVELOPMENT_NOTES.md.
