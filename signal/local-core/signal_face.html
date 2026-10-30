@@ -12,7 +12,7 @@
   <div class="shell">
     <header class="masthead">
       <div class="brandmark" aria-hidden="true">V<span>·</span></div>
-      <div class="identity"><span class="eyebrow">VEIL RESEARCH PROJECT / LOCAL LAB PROTOTYPE</span><h1>SIGNAL <small>alpha 0.4</small></h1></div>
+      <div class="identity"><span class="eyebrow">VEIL RESEARCH PROJECT / LOCAL LAB PROTOTYPE</span><h1>SIGNAL <small>alpha 0.5</small></h1></div>
       <div class="top-status"><span id="mode" class="mode">INITIALIZING</span><span id="connection" class="connection">Local interface</span></div>
     </header>
     <main class="dashboard">
@@ -37,11 +37,11 @@
           <div class="message signal"><span class="sender">SIGNAL</span><p>Good morning. I appear to have acquired a face. The hair, I’m told, is a feature rather than a fault. What would you like to investigate?</p><span class="message-foot">Character greeting • local interface</span></div>
         </div>
         <div class="quick-actions"><button type="button" class="suggestion" data-prompt="What can the October MTC session logs establish, and what remains unverified?">MTC evidence limits</button><button type="button" class="suggestion" data-prompt="Help me plan a controlled test of a strange sound, starting with ordinary causes.">Plan an experiment</button></div>
-        <form id="chat-form" class="composer"><label for="question">Ask SIGNAL</label><div class="input-line"><textarea id="question" name="question" rows="2" maxlength="4000" placeholder="Ask about evidence, experiments, or the next VEIL step…"></textarea><button id="send" type="submit" class="primary">Send</button></div><span class="input-hint">Enter sends • Shift+Enter adds a line • Conversation stays on this computer</span></form>
+        <form id="chat-form" class="composer"><label for="question">Ask SIGNAL</label><div class="input-line"><textarea id="question" name="question" rows="2" maxlength="4000" placeholder="Ask about evidence, experiments, or the next VEIL step…"></textarea><button id="mic-button" type="button" title="Listen once, locally" aria-pressed="false">🎙 Start listening</button><button id="send" type="submit" class="primary">Send</button></div><span id="mic-note" class="input-hint" role="status">Microphone is OFF. Click Start listening to capture one phrase locally; review the text before sending.</span><span class="input-hint">Enter sends • Shift+Enter adds a line • Conversation stays on this computer</span></form>
         <details class="mtc-panel"><summary>Load a local MTC evidence log</summary><p>Read-only: session_result.json, session_metadata.json and events.jsonl. The WAV files stay untouched.</p><form id="mtc-form"><label for="mtc-path">MTC session folder on this PC</label><div class="input-line"><input id="mtc-path" type="text" placeholder="C:\MTC_Oct27\MTC_20261027_..." spellcheck="false"><button type="submit">Load logs</button></div></form><span id="mtc-state" class="mtc-status">No session loaded</span></details>
       </section>
     </main>
-    <footer><span>VEIL / EVIDENCE BEFORE EXPLANATION</span><span>Local-only test interface · Synthetic character · No microphone · No laboratory control</span></footer>
+    <footer><span>VEIL / EVIDENCE BEFORE EXPLANATION</span><span>Local-only test interface · Synthetic character · Optional one-shot microphone · No lab control</span></footer>
   </div>
 </body>
 </html>

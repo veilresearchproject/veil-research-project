@@ -13,6 +13,7 @@
     reassuring: ['REASSURING', 'Warm • Supportive']
   };
   let currentExpression = 'neutral', answering = false, voiceOn = false, speaking = false;
+  let listening = false, listenRequestPending = false;
   let lastExpression = 'neutral', lastActivityTime = Date.now();
   const pose = (name, speakingNow = false) => {
     if (!(name in descriptions)) name = 'neutral';
@@ -67,14 +68,15 @@
        (voiceOn ? 'Voice enabled. Replies will be spoken on this computer.' : 'Voice starts OFF. Audio uses Windows speech on this PC.');
     if (state.mtc_loaded) $('mtc-state').textContent = 'Loaded session: '+(state.session_id || 'MTC');
     else $('mtc-state').textContent = 'No session loaded';
-    pose(lastExpression,speaking);
+    if (listening) { pose('excited'); portrait.dataset.state='listening'; }
+    else pose(lastExpression,speaking);
   };
   const refresh = async () => {
     try { const state = await request('/api/status'); syncStatus(state); }
     catch (err) { $('connection').textContent='Local service disconnected'; $('voice-status').textContent=err.message; }
   };
   async function submitMessage(text, origin='chat') {
-    if (answering || !text.trim()) return;
+    if (answering || listening || !text.trim()) return;
     answering=true; send.disabled=true; question.disabled=true;
     addMessage('user',text);
     question.value=''; lastExpression='focused'; pose('focused'); setActivity('Analyzing locally…');
@@ -90,9 +92,55 @@
       addMessage('error',err.message,'Local server error • no cloud fallback');
       setActivity('Unable to respond');
     } finally {
-      send.disabled=false; question.disabled=false; question.focus();
+      send.disabled=listening; question.disabled=listening; question.focus();
     }
   }
+  const micButton = $('mic-button'), micNote = $('mic-note');
+  const micState = (active, note, state='idle') => {
+    listening = active;
+    micButton.textContent = active ? '■ Stop listening' : '🎙 Start listening';
+    micButton.setAttribute('aria-pressed', String(active));
+    micNote.textContent = note;
+    micNote.dataset.state = state;
+    send.disabled = answering || active;
+    question.disabled = answering || active;
+    if (active) { pose('excited'); portrait.dataset.state='listening'; }
+    else pose(lastExpression, speaking);
+  };
+  async function listenOnce() {
+    if (listenRequestPending || answering) return;
+    listenRequestPending=true;
+    try {
+      if (listening) {
+        await request('/api/listen', {action:'stop'});
+        micState(false,'Microphone OFF. No sound was saved.');
+      } else {
+        // Avoid locally synthesized SIGNAL speech being picked up as investigator input.
+        if (speaking) await request('/api/voice',{action:'stop'});
+        await request('/api/listen', {action:'start'});
+        micState(true,'Listening locally for one phrase (up to 12 seconds). Click Stop to cancel.', 'listening');
+      }
+    } catch (err) {
+      micState(false,'Microphone unavailable: '+err.message);
+    } finally { listenRequestPending=false; }
+  }
+  micButton.addEventListener('click',listenOnce);
+  async function pollListen() {
+    if (!listening || listenRequestPending) return;
+    try {
+      const result=await request('/api/listen/status');
+      if (result.state==='listening') return;
+      if (result.state==='ready' && typeof result.transcript==='string' && result.transcript.trim()) {
+        // Never auto-submit; operator must inspect/approve recognition text.
+        question.value=result.transcript.slice(0,700);
+        micState(false,'Microphone OFF. Review the recognized text, then click Send.');
+        question.focus();
+      } else if (result.state==='empty' || result.state==='error') {
+        micState(false,'Microphone OFF. '+(result.message || 'No phrase recognized. Try again or type.'));
+      } else micState(false,'Microphone OFF.');
+    } catch(err) { micState(false,'Mic status unavailable: '+err.message); }
+  }
+  window.setInterval(pollListen,500);
   $('chat-form').addEventListener('submit',(e)=>{e.preventDefault();submitMessage(question.value)});
   question.addEventListener('keydown',(e)=>{if(e.key==='Enter' && !e.shiftKey){e.preventDefault();submitMessage(question.value)}});
   document.querySelectorAll('.suggestion').forEach(b=>b.addEventListener('click',()=>{question.value=b.dataset.prompt;question.focus()}));
