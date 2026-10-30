@@ -16,5 +16,6 @@ not a claim SIGNAL listened to evidence. Your WAV recordings and MTC logs stay
 untouched. This alpha does not have accurate mouth-to-speech synchronization.
 
 No paid services or Work credits are required. No physical device control.
+Local model HTTP protocol verified against a mock Ollama endpoint.
 Real Windows/Ollama, mic and speaker verification is still required.
 See V11_DEVELOPMENT_NOTES.md for implementation limits and test details.

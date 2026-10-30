@@ -50,3 +50,12 @@ review notes stay separate. No feature can issue Panic Box ALL CLEAR.
 8. Report any errors before considering a merge of the stacked development PRs.
 
 No Work credits, API fees or package installs are needed for these development changes.
+
+## Additional end-to-end local-network verification
+
+Two tests run SIGNAL's real local HTTP server and its unmodified
+`LocalModel` client against an Ollama-compatible **mock HTTP service** bound to
+`127.0.0.1`. They verify incremental JSON framing, response completion,
+no cloud fallback, and the separate non-streaming connectivity check.
+This closes a gap between mocked method tests and actual socket parsing, but
+still **does not verify actual Ollama or Windows audio hardware**.
