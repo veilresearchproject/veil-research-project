@@ -125,3 +125,11 @@ not permit saving during an incomplete generation.
 **Verification:** 137 tests passed in three consecutive full-suite runs; an isolated
 Chromium UI simulation tested save, restore and delete with mocked replies. Windows/Ollama,
 Windows speech, and local microphone hardware are still unverified on the user's PC.
+
+
+## Update — v0.13: Choose an installed local model
+
+Use **Choose an installed local model** to list and select an eligible Ollama model
+already on this PC. Selection lasts for this run; it does not download anything.
+A confirmed change starts a new chat and unloads research context. Saved files
+are unchanged. See `V13_DEVELOPMENT_NOTES.md` for acceptance tests and limits.

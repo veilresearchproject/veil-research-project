@@ -1,26 +1,20 @@
-VEIL SIGNAL DESKTOP v0.12 — CONTINUITY MILESTONE
+VEIL SIGNAL DESKTOP v0.13 — INSTALLED MODEL CHOOSER
 
-You can keep v0.11 installed. This ZIP is a separate, tested prototype.
+Extract into a NEW folder; keep v0.12 as a fallback.
 
-1. Extract v0.12 into a NEW folder (do NOT overwrite v0.11).
-2. Double-click START_SIGNAL_FACE_DEMO.bat to test the interface without Ollama.
-3. Ask SIGNAL a question. Open "Conversation continuity" and click Save current conversation.
-4. Close the application, then relaunch the demo. Open Conversation continuity,
-   click Restore saved conversation, and approve replacement of the active chat.
-5. The restored chat is context only. Reload MTC evidence logs and scanner reports separately.
-6. You can Delete saved conversation without deleting the current chat.
-7. For a real Ollama test run CHECK_SIGNAL_SETUP.bat; start local Ollama,
-   launch START_SIGNAL_DESKTOP.bat, and use Test Ollama conversation.
+1. START_SIGNAL_FACE_DEMO.bat opens the scripted face demonstration (no AI).
+2. For actual conversation, start local Ollama and run START_SIGNAL_DESKTOP.bat.
+3. Open Choose an installed local model, then List installed models.
+4. Choose a model already on this PC, click Use selected model, and confirm.
+5. Run Test Ollama conversation under Local readiness check to see reply speed.
 
-Nothing is saved automatically. A snapshot stores up to eight completed user/SIGNAL
-exchanges, NOT evidence, microphone audio, manual research notes, passwords, or cloud data.
-It is a plain local JSON file in your Windows user profile, NOT ENCRYPTED. Do not save secrets.
+Nothing is downloaded. Model selection lasts for this run only. Switching to a
+different model starts a new chat and unloads research context. Save a conversation
+explicitly first if you want to keep it. Saved chats, notes and original WAVs/logs
+are unchanged. Evidence must be loaded again independently.
 
-If SIGNAL is generating a reply, wait or press Stop reply before saving/restoring.
-Original MTC WAVs/logs and the VEIL website are untouched. No cloud AI or paid API.
-Voice and microphone default OFF; speaking animation is not real lip sync.
+Optional voice and microphone start OFF. This is a local Windows alpha; actual
+Windows audio and Ollama speed still require testing on your desktop.
 
-Verification: RUN_SIGNAL_TESTS.bat. This alpha still needs a real Windows microphone,
-speaker and Ollama acceptance test.
-
-See SIGNAL_DESKTOP_README.md and V12_DEVELOPMENT_NOTES.md for details.
+RUN_SIGNAL_TESTS.bat runs the Python tests. See V13_DEVELOPMENT_NOTES.md for
+verification, limits and instructions. No paid API or automatic cloud fallback.
