@@ -142,3 +142,11 @@ model reply. Windows speech-process updates are synchronized. A failed microphon
 stop/status request leaves a visible uncertain state and a retry control. A new
 Test voice button uses the existing opt-in local speech test. Read
 `DESKTOP_TEST_STEPS.md` and `V14_DEVELOPMENT_NOTES.md` before real-PC acceptance.
+
+
+## Update — v0.15: Waiting status and cleanup feedback
+
+Local replies and model tests now show elapsed waiting time. After an interrupted
+stream, input remains disabled until the server reports cleanup finished. Timeout
+messages distinguish slow responses from an unavailable server. See
+`V15_DEVELOPMENT_NOTES.md`; elapsed time is not a completion estimate.

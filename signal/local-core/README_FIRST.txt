@@ -1,4 +1,4 @@
-VEIL SIGNAL DESKTOP v0.14 — DESKTOP AUDIO TEST BUILD
+VEIL SIGNAL DESKTOP v0.15 — LOCAL WAITING STATUS
 
 Extract into a NEW folder. Keep earlier versions as fallbacks.
 
@@ -19,5 +19,9 @@ Microphone and voice start OFF. Model selection does not download anything and
 lasts for this run. Switching models starts a new chat; saved conversations,
 notes and original evidence files remain unchanged. No paid API or cloud fallback.
 
-156 automated Python tests passed here. Actual Windows microphone, speaker and
-Ollama speed still need acceptance on your desktop. See V14_DEVELOPMENT_NOTES.md.
+164 automated Python tests passed here. Actual Windows microphone, speaker and
+Ollama speed still need acceptance on your desktop. See V15_DEVELOPMENT_NOTES.md.
+
+NEW IN v0.15: Elapsed waiting time is shown for local replies and model tests.
+After Stop reply, Send stays disabled while backend cleanup is still running.
+Timeout messages suggest a smaller installed model without downloading anything.

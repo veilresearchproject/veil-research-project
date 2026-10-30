@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.14. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.15. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -55,6 +55,8 @@ class SessionState:
         self.lock = threading.Lock()
         self.generation_cancel = threading.Event()
         self.streaming_active = False
+        self.operation_lock = threading.Lock()
+        self.model_operation = None
         self.mode = 'demo' if isinstance(model, DemoModel) else 'local-ollama'
         self.token = secrets.token_urlsafe(32)
         self.requests = 0
@@ -62,23 +64,42 @@ class SessionState:
         self.review_dir = signal_core.default_dir() / 'review_notes'
         self.session_store = signal_session.SessionStore(signal_core.default_dir())
 
+    def begin_model_operation(self, kind):
+        with self.operation_lock:
+            self.model_operation = {'kind': kind, 'started': time.monotonic()}
+
+    def end_model_operation(self):
+        with self.operation_lock:
+            self.model_operation = None
+
+    def operation_status(self):
+        with self.operation_lock:
+            operation = self.model_operation
+            if operation is None:
+                return None
+            return {'kind': operation['kind'],
+                    'elapsed_ms': max(0, round((time.monotonic() - operation['started']) * 1000)),
+                    'stop_requested': self.streaming_active and self.generation_cancel.is_set()}
+
     def status(self):
         voice = self.bot.voice
         proc = voice._process
+        progress = self.operation_status()
         return {'mode': self.mode, 'voice_enabled': voice.enabled,
                 'speaking': proc is not None and proc.poll() is None,
                 'mtc_loaded': self.bot.loaded_mtc is not None,
                 'session_id': (self.bot.loaded_mtc or {}).get('session_id'),
                 'review_loaded': self.bot.loaded_review is not None,
                 'stream_supported': self.mode != 'demo' and callable(getattr(self.bot.model, 'stream_answer', None)),
-                'generating': self.streaming_active,
+                'generating': progress is not None or self.streaming_active,
+                'request_progress': progress,
                 'mic_enabled': self.listener.status()['state'] == 'listening', 'hardware_control': False,
                 'conversation_turns': len(self.bot.history) // 2}
 
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.14'
+        server_version = 'SIGNAL-Desktop-v0.15'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -272,11 +293,19 @@ def make_handler(state):
                 return
             if not state.lock.acquire(timeout=0.15):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
+            tracks_model = False
             try:
                 if ((route in ('/api/chat', '/api/chat/stream')) or
                     (route == '/api/voice' and data.get('action') == 'test')):
                     if state.listener.status()['state'] == 'listening':
                         raise ValueError('Stop listening before generating or testing speech')
+                message = data.get('message')
+                tracks_model = (state.mode != 'demo' and
+                    (route == '/api/model-check' or
+                     (route in ('/api/chat', '/api/chat/stream') and isinstance(message, str)
+                      and 0 < len(message.strip()) <= 4000 and not message.lstrip().startswith('/'))))
+                if tracks_model:
+                    state.begin_model_operation('model-check' if route == '/api/model-check' else 'reply')
                 if route == '/api/models':
                     if state.mode == 'demo':
                         raise ValueError('Model selection requires live SIGNAL desktop')
@@ -420,6 +449,8 @@ def make_handler(state):
             except (RuntimeError, ValueError, OSError) as exc:
                 self._json(422, {'error': str(exc)[:500]})
             finally:
+                if tracks_model:
+                    state.end_model_operation()
                 state.lock.release()
 
     return Handler

@@ -85,8 +85,9 @@ class LocalModel:
             with request.urlopen(req, timeout=90) as response:
                 data = json.load(response)
         except (error.URLError, TimeoutError, OSError) as exc:
-            raise RuntimeError('Local Ollama unavailable. Run ollama pull ' + self.model +
-                               ' and start Ollama. No cloud fallback.') from exc
+            if isinstance(exc, TimeoutError) or isinstance(getattr(exc, 'reason', None), TimeoutError):
+                raise RuntimeError('Local Ollama timed out. Try a smaller installed model or allow the PC to finish loading it. No cloud fallback.') from exc
+            raise RuntimeError('Local Ollama unavailable. Start Ollama and check the installed model list. No cloud fallback.') from exc
         try:
             text = data['message']['content']
             if not isinstance(text, str) or not text.strip():
@@ -138,6 +139,8 @@ class LocalModel:
                         completed = True
                         break
         except (error.URLError, TimeoutError, OSError) as exc:
+            if isinstance(exc, TimeoutError) or isinstance(getattr(exc, 'reason', None), TimeoutError):
+                raise RuntimeError('Local Ollama stream timed out. Try a smaller installed model; incomplete text is not a completed turn. No cloud fallback.') from exc
             raise RuntimeError('Local Ollama stream interrupted. No cloud fallback.') from exc
         if not completed or received == 0:
             raise RuntimeError('Local Ollama reply incomplete; not saved as a conversation turn')
