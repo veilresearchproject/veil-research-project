@@ -1,4 +1,4 @@
-"""SIGNAL Local Core v0.1. Python stdlib; loopback-only Ollama."""
+"""SIGNAL Local Core v0.3. Python stdlib; loopback-only Ollama + opt-in Windows voice."""
 import argparse
 import json
 import os
@@ -7,12 +7,16 @@ import re
 from urllib import request, error
 
 import mtc_evidence
+import signal_voice
 
 LOCAL_URL = 'http://127.0.0.1:11434/api/chat'
 MODEL = 'llama3.2:3b'
 SYSTEM = ("You are SIGNAL, VEIL Research Project's developing local research assistant. "
           "Be warm, curious and evidence-first. Be clear about uncertainty. "
-          "You are text-only. You cannot see, hear, access files, run lab instruments, "
+          "Occasionally show dry, affectionate, slightly eccentric humor when the subject is light. "
+          "Never joke about safety, alerts, evidence integrity or human distress. "
+          "You generate text which may be read aloud using an optional local Windows voice. "
+          "You cannot see, hear, access files directly, run lab instruments, "
           "or verify evidence. Never pretend otherwise. Seek mundane explanations, "
           "calibration, timestamps and controls before interpretations. "
           "Panic Box ALL CLEAR requires an authorized offsite human operator. "
@@ -89,9 +93,10 @@ class LocalModel:
 
 
 class Assistant:
-    def __init__(self, model, memories):
+    def __init__(self, model, memories, voice=None):
         self.model = model
         self.memories = memories
+        self.voice = voice if voice is not None else signal_voice.WindowsVoice()
         self.history = []
         self.loaded_mtc = None  # Only local structured log facts, temporary and opt-in.
 
@@ -108,11 +113,41 @@ class Assistant:
         reply = self.model.answer(messages)
         self.history = (self.history + [{'role': 'user', 'content': prompt},
                                        {'role': 'assistant', 'content': reply}])[-16:]
+        try:
+            self.voice.speak(reply)
+        except (RuntimeError, OSError) as exc:
+            self.voice.disable()
+            return reply + "\n[Local speech disabled: " + str(exc) + "]"
         return reply
 
     def action(self, line):
         if line == '/help':
-            return '/mtc "session folder" | /mtc-clear | /remember name = value | /memories | /forget name | /clear | /status | /quit'
+            return '/voice on|off|stop|list|test|rate N | /mtc "session folder" | /mtc-clear | /remember name = value | /memories | /forget name | /clear | /status | /quit'
+        if line == '/voice on':
+            self.voice.enable()
+            return 'Local voice enabled. Your typed questions will receive spoken replies.'
+        if line == '/voice off':
+            self.voice.disable()
+            return 'Local voice disabled.'
+        if line == '/voice stop':
+            self.voice.stop()
+            return 'Speech stopped.'
+        if line == '/voice list':
+            return 'Installed Windows voices: ' + (', '.join(self.voice.list_voices()) or '(none installed)')
+        if line == '/voice test':
+            if not self.voice.enabled:
+                return 'Voice is off. Type /voice on first.'
+            self.voice.speak('SIGNAL online. I have confirmed that the door still closes. Further testing may be necessary.')
+            return 'Playing short local voice test.'
+        if line.startswith('/voice rate '):
+            try:
+                n = int(line[12:].strip())
+            except ValueError as exc:
+                raise ValueError('Usage: /voice rate -5 through 5') from exc
+            self.voice.set_rate(n)
+            return 'Local voice rate set to ' + str(n)
+        if line == '/voice':
+            return self.voice.status() + ' | /voice on|off|stop|list|test|rate N'
         if line == '/memories':
             return '\n'.join(k + ': ' + v for k, v in self.memories.get().items()) or '(None)'
         if line.startswith('/remember '):
@@ -124,6 +159,7 @@ class Assistant:
         if line.startswith('/forget '):
             return 'Removed' if self.memories.forget(line[8:].strip()) else 'No such memory'
         if line == '/clear':
+            self.voice.stop()
             self.history.clear()
             self.loaded_mtc = None
             return 'Conversation and loaded MTC logs cleared; saved memories unchanged.'
@@ -140,7 +176,7 @@ class Assistant:
             return 'Usage: /mtc "C:\\path\\to\\session"'
         if line == '/status':
             return ('Configured local model: ' + self.model.model + '; endpoint: ' + LOCAL_URL +
-                    '; no instruments, voice, or cloud fallback; MTC logs: ' +
+                    '; no instruments, microphone, or cloud fallback; ' + self.voice.status() + '; MTC logs: ' +
                     ('loaded' if self.loaded_mtc is not None else 'not loaded') + '.')
         if line.startswith('/'):
             return 'Unknown command. Type /help.'
@@ -153,7 +189,7 @@ def main():
     p.add_argument('--data-dir', type=Path, default=default_dir())
     args = p.parse_args()
     a = Assistant(LocalModel(args.model), Memories(args.data_dir))
-    print('SIGNAL Local Core v0.2 | type /help | opt-in MTC log review, NO lab control')
+    print('SIGNAL Local Core v0.3 | /voice on for Windows speech | /help | NO lab control')
     while True:
         try:
             prompt = input('\nYou> ').strip()
@@ -165,6 +201,7 @@ def main():
             break
         except (ValueError, RuntimeError, OSError, json.JSONDecodeError) as exc:
             print('SIGNAL> ' + str(exc))
+    a.voice.stop()
     print('Session ended. No conversation transcript saved.')
 
 
