@@ -261,6 +261,20 @@
     } catch (err) { diagOutput.textContent = 'Readiness check failed: ' + err.message; }
     finally { diagButton.disabled = false; }
   });
+  // v0.10: one-click opt-in local model smoke test; does not enter chat history.
+  $('model-check').addEventListener('click', async () => {
+    const button = $('model-check'), output = $('model-check-results');
+    button.disabled=true;
+    output.textContent='Testing local Ollama with a fixed evidence-limits question…';
+    try {
+      const check = await request('/api/model-check', {});
+      output.textContent = 'Local model ' + check.model + ' responded in ' +
+        (check.elapsed_ms / 1000).toFixed(1) + ' seconds.\n' +
+        'Response (not independently verified): ' + check.reply_preview + '\n' + check.limitations;
+      setActivity('Local Ollama conversation check completed');
+    } catch(err) {output.textContent='Local Ollama check failed: '+err.message;}
+    finally{button.disabled=false;}
+  });
   // v0.9: opt-in, read-only acoustic scanner summary, not WAV/EVP analysis.
   const scannerState = $('scanner-state'), scannerList = $('scanner-list');
   function clearScannerDisplay(message) {
@@ -357,6 +371,37 @@
     } catch(err) {reviewState.textContent = 'Unable to save note: ' + err.message;}
   });
   $('review-notebook').addEventListener('toggle', () => {if ($('review-notebook').open) refreshNotes();});
+  // v0.10: explicit read-only packet export. Auth stays in custom loopback header.
+  async function exportPacket(kind) {
+    const state = $('packet-state');
+    const button = $(kind === 'json' ? 'export-json' : 'export-html');
+    button.disabled = true;
+    state.textContent = 'Preparing local research record (original evidence is unchanged)…';
+    try {
+      const response = await fetch('/api/export?format=' + kind,
+        {headers:{'X-SIGNAL-Token':token}, cache:'no-store'});
+      if (!response.ok) {
+        let problem = 'Export returned error ' + response.status;
+        try {const info=await response.json(); problem=info.error || problem;} catch {};
+        throw Error(problem);
+      }
+      const disposition = response.headers.get('Content-Disposition') || '';
+      const match = disposition.match(/filename="(SIGNAL_MTC_[A-Za-z0-9_.-]+\.(?:json|html))"/);
+      if (!match) throw Error('Unexpected local export filename');
+      const blob = await response.blob();
+      if (blob.size > 1800000) throw Error('Review packet exceeds export size limit');
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.href = url; link.download = match[1];
+      document.body.appendChild(link); link.click(); link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 2000);
+      state.textContent = 'Saved ' + match[1] + ' to your browser downloads. The original evidence was not modified.';
+      setActivity('Review packet exported');
+    } catch (err) {state.textContent = 'Packet export unavailable: ' + err.message;}
+    finally {button.disabled = false;}
+  }
+  $('export-json').addEventListener('click',()=>exportPacket('json'));
+  $('export-html').addEventListener('click',()=>exportPacket('html'));
   // Poll the local Windows speech process, allowing the visual state to return to idle
   // after the utterance finishes. This is expressive animation, not phoneme lip sync.
   window.setInterval(refresh,750);
