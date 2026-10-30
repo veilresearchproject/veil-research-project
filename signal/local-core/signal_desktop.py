@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.5. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.6. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -18,10 +18,11 @@ import signal_listen
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / 'face_assets'
 FACES = ('neutral', 'focused', 'amused', 'excited', 'concentrating', 'reassuring')
+SPEECH_POSES = tuple(f'speech_{i}' for i in range(4))
 STATIC = {'/': (ROOT / 'signal_face.html', 'text/html; charset=utf-8'),
           '/signal_face.css': (ROOT / 'signal_face.css', 'text/css; charset=utf-8'),
           '/signal_face.js': (ROOT / 'signal_face.js', 'text/javascript; charset=utf-8')}
-STATIC.update({f'/face_assets/{name}.webp': (ASSETS / f'{name}.webp', 'image/webp') for name in FACES})
+STATIC.update({f'/face_assets/{name}.webp': (ASSETS / f'{name}.webp', 'image/webp') for name in FACES + SPEECH_POSES})
 CSP = "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 
 
@@ -62,7 +63,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.5'
+        server_version = 'SIGNAL-Desktop-v0.6'
         sys_version = ''
 
         def log_message(self, format, *args):
