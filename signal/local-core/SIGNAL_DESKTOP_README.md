@@ -150,3 +150,12 @@ Local replies and model tests now show elapsed waiting time. After an interrupte
 stream, input remains disabled until the server reports cleanup finished. Timeout
 messages distinguish slow responses from an unavailable server. See
 `V15_DEVELOPMENT_NOTES.md`; elapsed time is not a completion estimate.
+
+
+## Update — v0.16: Checked Start Here menu
+
+Extract the full release and double-click `START_HERE.bat`. A checked menu offers
+the demo, live assistant, setup check, automated tests and desktop checklist.
+Nothing installs, downloads or activates audio automatically. For source builds,
+`build_signal_release.py` generates the byte manifest and deterministic Windows
+ZIP. Read `V16_DEVELOPMENT_NOTES.md` for validation and hardware limits.
