@@ -13,7 +13,7 @@
     reassuring: ['REASSURING', 'Warm • Supportive']
   };
   let currentExpression = 'neutral', answering = false, voiceOn = false, speaking = false;
-  let canStream = false, replyController = null;
+  let canStream = false, replyController = null, serverGenerating = false;
   let listening = false, listenRequestPending = false;
   const motionAllowed = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Gentle illustration only: preserve photographic mouth pixels and never fake phoneme alignment.
@@ -79,6 +79,20 @@
     $('mode').textContent = demo ? 'SCRIPTED VISUAL DEMO' : 'LOCAL OLLAMA MODEL';
     $('connection').textContent = demo ? 'No AI model in demo mode' : 'Local model • Windows computer';
     canStream = Boolean(state.stream_supported) && !demo;
+    serverGenerating = Boolean(state.generating);
+    send.disabled = answering || listening || serverGenerating;
+    question.disabled = answering || listening || serverGenerating;
+    $('mic-button').disabled = (answering || serverGenerating) && !listening;
+    const progress = state.request_progress;
+    if (serverGenerating) {
+      const seconds = progress ? Math.floor(progress.elapsed_ms / 1000) : 0;
+      $('reply-status').textContent = progress && progress.stop_requested ?
+        'Stop requested. Local model cleanup is still running (' + seconds + ' seconds). Wait before sending another question.' :
+        'Local ' + (progress && progress.kind === 'model-check' ? 'model test' : 'reply') +
+        ' in progress: ' + seconds + ' seconds. First model loading can be slow.';
+    } else {
+      $('reply-status').textContent = 'No local model request is running.';
+    }
     voiceOn = Boolean(state.voice_enabled);
     $('voice-toggle').textContent = voiceOn ? 'Disable voice' : 'Enable voice';
     $('voice-toggle').setAttribute('aria-pressed',String(voiceOn));
@@ -167,7 +181,7 @@
     }
   }
   async function submitMessage(text, origin='chat') {
-    if (answering || listening || !text.trim()) return;
+    if (answering || listening || serverGenerating || !text.trim()) return;
     answering=true; send.disabled=true; question.disabled=true;
     addMessage('user',text);
     question.value=''; lastExpression='focused'; pose('focused'); setActivity('Analyzing locally…');
@@ -187,7 +201,8 @@
     } finally {
       replyController=null;
       $('stop-reply').disabled=true;
-      send.disabled=listening; question.disabled=listening; question.focus();
+      send.disabled=listening || serverGenerating; question.disabled=listening || serverGenerating;
+      if (!question.disabled) question.focus();
     }
   }
   $('stop-reply').addEventListener('click',async()=>{
@@ -204,13 +219,13 @@
     micButton.setAttribute('aria-pressed', String(active));
     micNote.textContent = note;
     micNote.dataset.state = state;
-    send.disabled = answering || active;
-    question.disabled = answering || active;
+    send.disabled = answering || active || serverGenerating;
+    question.disabled = answering || active || serverGenerating;
     if (active) { pose('excited'); portrait.dataset.state='listening'; }
     else pose(previewMotion ? 'neutral' : lastExpression, speaking || previewMotion);
   };
   async function listenOnce() {
-    if (listenRequestPending || (answering && !listening)) return;
+    if (listenRequestPending || ((answering || serverGenerating) && !listening)) return;
     listenRequestPending=true;
     try {
       if (listening) {
@@ -324,7 +339,7 @@
   // v0.12: deliberately opt-in, local-only completed conversation snapshot.
   // Saving/reloading never incorporates MTC evidence or investigator notebook entries.
   const snapshotStatus = $('session-state');
-  const snapshotReady = () => !answering && !listening && !speaking;
+  const snapshotReady = () => !answering && !listening && !speaking && !serverGenerating;
   $('session-save').addEventListener('click',async()=>{
     if(!snapshotReady()) {snapshotStatus.textContent='Finish the current response or speech before saving.';return;}
     try {
