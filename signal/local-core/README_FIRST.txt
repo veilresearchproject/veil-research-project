@@ -1,20 +1,16 @@
-VEIL SIGNAL Desktop v0.9 — Review Scanner Bridge
+VEIL SIGNAL DESKTOP v0.10 — LOCAL RESEARCH ASSISTANT
 
-Extract the entire ZIP before running any .bat file. Do not overwrite your older SIGNAL releases.
+1. Extract this ZIP into a NEW folder, separate from SIGNAL v0.9.
+2. Use START_SIGNAL_FACE_DEMO.bat to see the approved character without Ollama.
+3. For actual local AI conversation, use CHECK_SIGNAL_SETUP.bat, start Ollama,
+   then use START_SIGNAL_DESKTOP.bat.
+4. Click "Test Ollama conversation" in Local readiness check only when
+   Ollama is running. It does NOT activate the mic or Windows speech.
+5. For an MTC review packet, load session logs; optionally load matching
+   scanner flags and add investigator notes; click Save structured JSON
+   or Save printable report. Open the HTML in your browser to print.
 
-1. Double-click CHECK_SIGNAL_SETUP.bat (local diagnostics, no model installation).
-2. For a visual-only test, double-click START_SIGNAL_FACE_DEMO.bat (scripted demo, NOT AI).
-3. For real conversations: start local Ollama; then double-click START_SIGNAL_DESKTOP.bat.
-   Ollama model expected by default: llama3.2:3b. Download only when you choose.
-4. First load MTC evidence logs using the session directory in SIGNAL.
-5. Under "MTC scanner flags" click "Find latest matching report" to load your
-   already-generated VEIL Local Audio Review summary (no 500 MB WAV upload).
-6. Click "Note this time" to prefill the investigator notebook. Listen to the
-   actual audio in the separate MTC waveform viewer before classifying anything.
-
-Original WAV files, event logs and scanner summary are not changed.
-Scanned sound spikes are NOT confirmed voices, EVP or paranormal evidence.
-The HTML speaking face remains illustrative, not synchronized phoneme animation.
-
-Regression: py -3 -m unittest discover -v
-Details: V09_DEVELOPMENT_NOTES.md
+Voice and mic default OFF. WAV files and source MTC logs remain untouched.
+Scanner flags are not EVP detection or proven causes. No cloud fallback.
+No real Windows hardware test was performed in this development environment.
+See V10_DEVELOPMENT_NOTES.md for tests, scope, limits, and setup checklist.

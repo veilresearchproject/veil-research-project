@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.9. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.10. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import secrets
 import threading
+import time
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit
@@ -17,6 +18,7 @@ import signal_listen
 import signal_diagnostics
 import signal_annotations
 import signal_review_import
+import signal_packet
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / 'face_assets'
@@ -68,7 +70,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.9'
+        server_version = 'SIGNAL-Desktop-v0.10'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -131,6 +133,44 @@ def make_handler(state):
                 result = state.bot.loaded_review
                 self._json(200, {'review': result})
                 return
+            if route == '/api/export':
+                if not self._authorized():
+                    self._json(403, {'error': 'Unauthorized'}); return
+                # No files written; browser must explicitly request local export.
+                from urllib.parse import parse_qs
+                requested = parse_qs(urlsplit(self.path).query)
+                kind = requested.get('format', ['json'])
+                if len(kind) != 1 or kind[0] not in ('json', 'html'):
+                    self._json(422, {'error': 'Choose JSON or printable HTML'}); return
+                if not state.lock.acquire(blocking=False):
+                    self._json(409, {'error': 'SIGNAL is processing another request'}); return
+                try:
+                    packet = signal_packet.build_packet(state.bot.loaded_mtc, state.bot.loaded_review,
+                                                        state.review_dir)
+                    payload = (signal_packet.html_bytes(packet) if kind[0] == 'html'
+                               else signal_packet.json_bytes(packet))
+                    if len(payload) > signal_packet.MAX_PACKET:
+                        raise signal_packet.PacketError('Packet exceeds safe export limit')
+                    extension = 'html' if kind[0] == 'html' else 'json'
+                    mime = ('text/html; charset=utf-8' if extension == 'html'
+                            else 'application/json; charset=utf-8')
+                    self.send_response(200)
+                    self.send_header('Content-Type', mime)
+                    self.send_header('Content-Length', str(len(payload)))
+                    self.send_header('Content-Disposition',
+                                     f'attachment; filename="SIGNAL_MTC_{packet["session_id"]}_review.{extension}"')
+                    self.send_header('Cache-Control', 'no-store')
+                    self.send_header('X-Content-Type-Options', 'nosniff')
+                    self.send_header('Content-Security-Policy', CSP)
+                    self.send_header('Referrer-Policy', 'no-referrer')
+                    self.end_headers()
+                    self.wfile.write(payload)
+                except (signal_packet.PacketError, signal_annotations.ReviewError,
+                        ValueError, OSError) as exc:
+                    self._json(422, {'error': str(exc)[:400]})
+                finally:
+                    state.lock.release()
+                return
             if route == '/api/notes':
                 if not self._authorized():
                     self._json(403, {'error': 'Unauthorized'}); return
@@ -156,7 +196,7 @@ def make_handler(state):
             route = urlsplit(self.path).path
             if not self._authorized():
                 self._json(403, {'error': 'Unauthorized'}); return
-            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review'):
+            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes', '/api/review', '/api/model-check'):
                 self._json(404, {'error': 'Not found'}); return
             try:
                 size = int(self.headers.get('Content-Length', '-1'))
@@ -173,7 +213,25 @@ def make_handler(state):
             if not state.lock.acquire(blocking=False):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
             try:
-                if route == '/api/review':
+                if route == '/api/model-check':
+                    if state.mode == 'demo':
+                        raise ValueError('Start live SIGNAL desktop, not the scripted face demo, to test Ollama')
+                    # Explicit, harmless canned question. No history, memory, loaded reports, voice or mic.
+                    started = time.monotonic()
+                    result = state.bot.model.answer([
+                        {'role': 'system', 'content': ('You are SIGNAL performing a local connectivity test. '
+                           'Reply briefly and accurately. Do not claim to hear audio or verify a cause.')},
+                        {'role': 'user', 'content': ('In one sentence: can MTC JSON event logs alone '
+                           'prove what was audible in the recording?')}
+                    ])
+                    if not isinstance(result, str) or not result.strip():
+                        raise RuntimeError('Ollama returned an empty response')
+                    self._json(200, {'status':'responded',
+                        'model':str(getattr(state.bot.model,'model','local model'))[:100],
+                        'elapsed_ms':round((time.monotonic()-started)*1000),
+                        'reply_preview':result.strip()[:700],
+                        'limitations':'Connectivity test only; output is unverified model text. No evidence was analyzed.'})
+                elif route == '/api/review':
                     action = data.get('action')
                     if action == 'clear':
                         state.bot.loaded_review = None

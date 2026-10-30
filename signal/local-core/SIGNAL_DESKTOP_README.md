@@ -66,3 +66,11 @@ Run `CHECK_SIGNAL_SETUP.bat` before attempting Ollama. This tests the local mode
 ### v0.9 — local audio scanner bridge
 
 After verifying MTC session logs, expand **MTC scanner flags — group and review**. Use **Find latest matching report** to select the latest compatible existing `~/VEIL_Reviews/*/review_summary.json`, or paste the file path. The imported acoustic candidate time windows are grouped when overlapping. You can select a group to prefill the existing notebook, but you still need to listen in the **separate** MTC waveform viewer and identify possible ordinary causes. See `V09_DEVELOPMENT_NOTES.md`.
+
+## Update — v0.10 (October 30, 2026)
+
+**New: one-click local Ollama model check** (under *Local readiness check*). It sends a fixed short evidence-limits question only after you click the button. The test does not start the microphone or speech, change chat history, or access MTC evidence.
+
+**New: export investigator review packet** (under the MTC review controls). With a verified MTC session loaded, click *Save structured JSON* or *Save printable report*. The packet includes the read-only log summary, any matching imported scanner review windows, and **all** human notes for that session. JSON has a packet-content SHA-256, and printable HTML includes the fingerprint and explicit limitations. Source WAVs are not hashed or altered, and neither file represents a forensic authentication or automatic finding.
+
+Read `V10_DEVELOPMENT_NOTES.md` for the Windows acceptance checklist. If Ollama does not start or the new interface misbehaves, revert to the archived v0.9 ZIP. This version has no paid API, subscriptions, or automatic remote connections.

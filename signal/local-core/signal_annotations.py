@@ -90,7 +90,7 @@ def append_note(root, session, timestamp, label, note):
     return entry
 
 
-def list_notes(root, session):
+def list_notes(root, session, *, limit=100):
     if not isinstance(session, dict):
         raise ReviewError('Load an MTC session first')
     p = _target(root, session.get('session_id'))
@@ -107,4 +107,8 @@ def list_notes(root, session):
         if not isinstance(item, dict) or item.get('session_id') != session['session_id']:
             raise ReviewError('Notebook has an inconsistent entry')
         notes.append(item)
-    return notes[-100:]
+    if limit is None:
+        return notes
+    if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 100:
+        raise ReviewError('Invalid notebook display limit')
+    return notes[-limit:]
