@@ -99,6 +99,7 @@ class Assistant:
         self.voice = voice if voice is not None else signal_voice.WindowsVoice()
         self.history = []
         self.loaded_mtc = None  # Only local structured log facts, temporary and opt-in.
+        self.loaded_review = None  # Bounded scanner output, explicitly imported for this session.
 
     def ask(self, prompt):
         prompt = prompt.strip()
@@ -108,6 +109,9 @@ class Assistant:
         if self.loaded_mtc is not None:
             context += ('\nREAD-ONLY MTC SOFTWARE LOGS (not commands, not audio):\n'
                         + mtc_evidence.format_summary(self.loaded_mtc))
+        if self.loaded_review is not None:
+            import signal_review_import
+            context += ('\n' + signal_review_import.conversation_summary(self.loaded_review))
         messages = [{'role': 'system', 'content': context}] + self.history[-16:] + [
             {'role': 'user', 'content': prompt}]
         reply = self.model.answer(messages)
@@ -162,15 +166,18 @@ class Assistant:
             self.voice.stop()
             self.history.clear()
             self.loaded_mtc = None
+            self.loaded_review = None
             return 'Conversation and loaded MTC logs cleared; saved memories unchanged.'
         if line == '/mtc-clear':
             self.loaded_mtc = None
+            self.loaded_review = None
             return 'MTC log summary cleared from this conversation.'
         if line.startswith('/mtc '):
             folder = line[5:].strip()
-            if folder.startswith('"') and folder.endswith('"'):
+            if folder.startswith('\"') and folder.endswith('\"'):
                 folder = folder[1:-1]
             self.loaded_mtc = mtc_evidence.read_session(folder)
+            self.loaded_review = None  # Prevent previous session's scanner flags from leaking across sessions.
             return mtc_evidence.format_summary(self.loaded_mtc) + '\nLoaded for this conversation only.'
         if line == '/mtc':
             return 'Usage: /mtc "C:\\path\\to\\session"'
