@@ -1,4 +1,4 @@
-# First desktop test — SIGNAL v0.18
+# First desktop test — SIGNAL v0.19
 
 Keep the prior working folder. Extract this ZIP into a new folder first.
 
@@ -40,6 +40,11 @@ Nothing starts until you choose; reopen the menu after an option finishes.
 
 Record **pass / fail / not tested** for each step and the exact onscreen error when
 something fails. A failure does not require reinstalling or deleting evidence.
+For an optional MTC notes check, load a session, save one manual observation, and
+click Include notes in conversation. Confirm the count/attribution label, then ask
+what the operator reported. Treat the model's answer as unverified. Saving another
+note should clear active note context until you include again. Remove note context
+must leave the notebook and original recording files unchanged.
 Keep the console window open long enough to capture its error information.
 
 Close the local server command window when finished. Leave original MTC recordings

@@ -22,6 +22,7 @@ const calls=[];
 let permit=true, fail=false, changed=true, micFailure=false;
 let chatMode='failure', pendingChatResolve=null;
 let voiceListFailure=false, voiceRejectSelection=false;
+let noteContextFailure=false;
 const intervals=[];
 const status={mode:'local-ollama',stream_supported:true,voice_enabled:false,speaking:false,mtc_loaded:false};
 const sandbox={console,Image:class{},TextDecoder,AbortController,
@@ -31,6 +32,12 @@ const sandbox={console,Image:class{},TextDecoder,AbortController,
     calls.push({route,opts});
     assert.equal(opts.headers['X-SIGNAL-Token'],'test-token');
     if(route==='/api/status') return {ok:true,json:async()=>status};
+    if(route==='/api/note-context') {
+      if(noteContextFailure)return {ok:false,status:422,json:async()=>({error:'Notebook validation failed'})};
+      status.notes_context_loaded=JSON.parse(opts.body).action==='include';
+      status.notes_context_count=status.notes_context_loaded?2:0;status.notes_context_omitted=0;
+      return {ok:true,json:async()=>({message:'Manual note context updated by operator.',status})};
+    }
     if(route==='/api/chat') {
       if(chatMode==='network')throw Error('Connection interrupted');
       if(chatMode==='pending')return new Promise(resolve=>{pendingChatResolve=resolve;});
@@ -151,6 +158,19 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,'signal_face.js'),'utf8')
   chatMode='success';
   await submit();
   assert.equal(get('question').value,'');
+  const beforeNotesChat=chatCalls();
+  await get('note-context-include').handlers.click();
+  assert.equal(status.notes_context_loaded,true);
+  assert.match(get('note-context-state').textContent,/2 manual notes included as unverified/);
+  assert.equal(chatCalls(),beforeNotesChat,'Including notes must not query the model');
+  await get('note-context-clear').handlers.click();
+  assert.equal(status.notes_context_loaded,false);
+  assert.match(get('note-context-state').textContent,/not included/);
+  await get('note-context-include').handlers.click();
+  noteContextFailure=true;
+  await get('note-context-include').handlers.click();
+  assert.equal(status.notes_context_loaded,true);
+  assert.match(get('note-context-state').textContent,/unchanged/);
   const voiceTestsBefore=calls.filter(c=>c.route==='/api/voice'&&JSON.parse(c.opts.body).action==='test').length;
   assert(!calls.some(c=>c.route==='/api/voice'&&JSON.parse(c.opts.body).action==='list'),'Voice inventory must be opt-in');
   await get('voices-refresh').handlers.click();
@@ -230,4 +250,5 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,'signal_face.js'),'utf8')
   console.log('PASS: elapsed waiting status, post-cancel busy controls and return to ready');
   console.log('PASS: failed/network/partial-stream question recovery, manual restore, double-click guard, newer-text preservation and confirmed model reset');
   console.log('PASS: opt-in installed voice list, explicit selection/default, no auto sample and selection/inventory failure preservation');
+  console.log('PASS: explicit manual-note context include/clear, attribution labels, no model call and validation failure preservation');
 })().catch(e=>{console.error(e);process.exitCode=1;});

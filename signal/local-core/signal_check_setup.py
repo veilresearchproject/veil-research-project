@@ -5,7 +5,7 @@ import signal_diagnostics
 
 
 def main():
-    print('SIGNAL v0.18 LOCAL READINESS CHECK — no downloads, speech or microphone capture')
+    print('SIGNAL v0.19 LOCAL READINESS CHECK — no downloads, speech or microphone capture')
     r = signal_diagnostics.run_checks(signal_core.MODEL, signal_core.signal_voice.WindowsVoice())
     for label, key in [('Ollama local model', 'ollama'), ('Windows speech output', 'voice'), ('Offline speech input', 'microphone')]:
         item = r[key]

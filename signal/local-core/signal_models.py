@@ -52,4 +52,5 @@ def select_model(bot, name, confirmed, inventory=None):
     bot.history = []
     bot.loaded_mtc = None
     bot.loaded_review = None
+    bot.loaded_notes = None
     return True

@@ -114,6 +114,10 @@
        (voiceOn ? 'Voice enabled: ' + voiceLabel + '. Replies will be spoken on this computer.' : 'Voice is OFF. Selected: ' + voiceLabel + '.'));
     if (state.mtc_loaded) $('mtc-state').textContent = 'Loaded session: '+(state.session_id || 'MTC');
     else $('mtc-state').textContent = 'No session loaded';
+    $('note-context-state').textContent = state.notes_context_loaded ?
+      state.notes_context_count + ' manual notes included as unverified operator claims. ' +
+        (state.notes_context_omitted || 0) + ' older notes omitted from conversation context.' :
+      'Manual notes are not included in conversation. Include them explicitly after saving or changing sessions.';
     if (listening) { pose('excited'); portrait.dataset.state='listening'; }
     else pose(previewMotion ? 'neutral' : lastExpression, speaking || previewMotion);
     ensureMotion();
@@ -613,6 +617,18 @@
     } catch(err) {reviewState.textContent = 'Unable to save note: ' + err.message;}
   });
   $('review-notebook').addEventListener('toggle', () => {if ($('review-notebook').open) refreshNotes();});
+  async function noteContextAction(action) {
+    const output=$('note-context-state');
+    if(answering || serverGenerating || listening) {output.textContent='Finish the current reply or microphone attempt first.';return;}
+    const button=$(action==='include'?'note-context-include':'note-context-clear');button.disabled=true;
+    try {
+      const result=await request('/api/note-context',{action});
+      syncStatus(result.status);setActivity(result.message);
+    } catch(err) {output.textContent='Manual note context unchanged: '+err.message;}
+    finally {button.disabled=false;}
+  }
+  $('note-context-include').addEventListener('click',()=>noteContextAction('include'));
+  $('note-context-clear').addEventListener('click',()=>noteContextAction('clear'));
   // v0.10: explicit read-only packet export. Auth stays in custom loopback header.
   async function exportPacket(kind) {
     const state = $('packet-state');

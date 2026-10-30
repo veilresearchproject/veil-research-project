@@ -175,3 +175,12 @@ Choose an installed voice in the desktop interface or return to System default.
 Selection lasts for the current run, never enables speech or auto-plays a sample,
 and preserves the old choice on invalid input. See `VOICE_OUTPUT.md` and
 `V18_DEVELOPMENT_NOTES.md`; actual Windows selection/playback still need testing.
+
+
+## Update — v0.19: Explicit manual review notes in conversation
+
+Include a bounded snapshot of recent notebook observations after loading the
+matching MTC session. Notes are labeled unverified operator claims, separate from
+logs and scanner flags. A new note invalidates active context until included again.
+Removing context leaves saved records unchanged. Chat replies may quote notes and
+can be saved if you explicitly save chat. See `V19_DEVELOPMENT_NOTES.md`.
