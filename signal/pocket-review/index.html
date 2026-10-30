@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>SIGNAL Pocket Review | VEIL</title>
+<style>
+:root {color-scheme:dark; font-family:system-ui,-apple-system,'Segoe UI',sans-serif; background:#0b121b; color:#eef4f8}
+* {box-sizing:border-box}
+body {margin:0; min-height:100vh; background:radial-gradient(circle at top right,#203648 0,#0b121b 52%);line-height:1.5}
+main {max-width:760px;margin:auto;padding:20px 16px 64px}
+header {display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.logo {width:48px;height:48px;border:1px solid #4dd8c0;border-radius:12px;display:grid;place-items:center;color:#6df6d5;font-size:24px;font-weight:800}
+h1 {font-size:clamp(1.6rem,6vw,2.1rem);line-height:1.12;margin:0}
+.kicker {letter-spacing:.12em;text-transform:uppercase;font-size:.68rem;color:#9fb5c4;font-weight:750}
+.tag {display:inline-block;border:1px solid #b3a063;border-radius:99px;color:#ffe4a0;padding:4px 10px;font-size:.75rem;font-weight:700;margin-top:8px}
+.card {background:#152432;border:1px solid #355166;border-radius:16px;padding:17px;margin:14px 0;box-shadow:0 10px 24px #0003}
+strong {color:#fff}
+p {margin:8px 0 12px;color:#d1dee7}
+button,.pick {border:1px solid #5c8d9e;background:#213e50;color:#fff;border-radius:11px;min-height:46px;padding:10px 14px;font:inherit;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+button:focus-visible,.pick:focus-within,input:focus-visible {outline:3px solid #ffd479;outline-offset:3px}
+button.primary,.pick.primary {background:#0f7069;border-color:#64d9c3}
+button:active {transform:translateY(1px)}
+.controls {display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.pick input {position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.small {font-size:.87rem;color:#b8cbd7}
+#status {border-left:4px solid #d9b66a;padding:10px 12px;background:#28313b;border-radius:6px;color:#f6e6c6}
+#status.error {border-left-color:#ff7979;color:#ffe3e3}
+#status.ready {border-left-color:#6be0b5;color:#d3f8e7}
+.summary {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat {background:#0e1b27;border-radius:10px;padding:12px;min-width:0}
+.stat span {display:block;color:#b3c7d5;font-size:.8rem}
+.stat strong {display:block;font-size:1.2rem;overflow-wrap:anywhere}
+#results[hidden],#empty[hidden] {display:none}
+.window {background:#0e1c29;border:1px solid #355468;border-radius:12px;padding:14px;margin:10px 0}
+.window h3 {margin:0 0 6px;font-size:1rem}
+.window p {margin:4px 0}
+.time {width:100%;background:#08131d;color:#d6fff1;border:1px solid #5a8c8d;border-radius:8px;padding:10px;font:600 1rem ui-monospace,Consolas,monospace}
+.note {padding:12px;border-radius:10px;background:#302b21;border:1px solid #6d5e3b;color:#f7e4ba}
+footer {color:#9eb6c5;font-size:.82rem;margin-top:24px}
+@media (min-width:600px) {.summary {grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="logo" aria-hidden="true">V·</div><div><div class="kicker">VEIL Research Project / Offline prototype</div><h1>SIGNAL Pocket Review</h1><span class="tag">READ-ONLY · NO AI · NO UPLOAD</span></div></header>
+<section class="card" aria-labelledby="intro"><h2 id="intro">Review scanner flags on your phone</h2>
+<p>Select a <code>review_summary.json</code> file produced by the VEIL MTC local audio scanner. The file is read inside this page, on this device. Nothing is sent to a server or saved by this page.</p>
+<div class="controls"><label class="pick primary">Choose scanner report<input id="report-file" type="file" accept=".json,application/json" aria-label="Choose local review_summary.json"></label><button id="demo" type="button">Try synthetic demo</button><button id="clear" type="button">Clear review</button></div>
+<div id="status" role="status" aria-live="polite">No report loaded. Microphone, camera and networking are not used.</div></section>
+<section id="results" class="card" hidden aria-label="Scanner review results"><h2>Candidate review windows</h2>
+<p class="note" id="provenance">UNVERIFIED: This viewer checks report structure only. It cannot confirm the MTC session, audio integrity, source, voice, EVP, or a paranormal cause.</p>
+<div id="summary" class="summary" aria-label="Report summary"></div>
+<p class="small">Overlapping or touching scanner flags are grouped for convenience; original candidate indices are retained. Scores are scanner values, not confidence of speech or an anomaly's cause.</p>
+<div id="windows" aria-live="polite"></div></section>
+<section id="empty" class="card"><h2>What this is — and isn't</h2><p>This is a deliberately limited offline phone viewer, not a live connection to SIGNAL on your PC. It cannot play source WAV files, identify voices, command VEIL instruments, or certify evidence. A human must review candidate audio against ordinary explanations and controls.</p></section>
+<footer>VEIL Research Project · Development preview · No third-party scripts, trackers, cloud APIs or network requests. Opening this file from a phone's local storage has not yet been verified on a Samsung Galaxy S25.</footer>
+</main>
+<script id="logic">
+'use strict';
+const MAX_BYTES = 2000000;
+const MAX_CANDIDATES = 200;
+const MAX_DURATION = 48 * 3600;
+function number(value, name) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error('Invalid number: ' + name);
+  return value;
+}
+function boundedString(value, name, max) {
+  if (typeof value !== 'string' || value.length > max || /[\x00-\x1f]/.test(value)) throw new Error('Invalid text: ' + name);
+  return value;
+}
+function validateReport(data) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Expected a scanner JSON object');
+  if (data.tool !== 'VEIL MTC local audio review' || !['0.2','0.3'].includes(String(data.version))) throw new Error('Unsupported scanner tool/version');
+  const session = boundedString(data.session_id, 'session_id', 128);
+  if (!session) throw new Error('Missing session ID');
+  const duration = number(data.duration_seconds, 'duration_seconds');
+  if (!(duration > 0 && duration <= MAX_DURATION)) throw new Error('Duration out of range');
+  if (!Number.isInteger(data.segments) || data.segments < 1 || data.segments > 10000) throw new Error('Invalid segment count');
+  if (!Array.isArray(data.candidates) || data.candidates.length > MAX_CANDIDATES) throw new Error('Invalid candidate count');
+  if (data.warnings !== undefined) {
+    if (!Array.isArray(data.warnings) || data.warnings.length > 25) throw new Error('Invalid warnings');
+    data.warnings.forEach((w) => boundedString(w, 'warning', 250));
+  }
+  const candidates = data.candidates.map((c, i) => {
+    if (!c || typeof c !== 'object' || Array.isArray(c)) throw new Error('Invalid candidate object');
+    const start = number(c.start, 'start');
+    const end = number(c.end, 'end');
+    const score = number(c.score, 'score');
+    if (!(start >= 0 && start < end && end <= duration + 0.1)) throw new Error('Candidate time range outside recording');
+    boundedString(c.reason === undefined ? '' : c.reason, 'reason', 100);
+    boundedString(c.phase === undefined ? '' : c.phase, 'phase', 30);
+    return {start, end:Math.min(end,duration), score, index:i+1};
+  });
+  return {session, duration, segments:data.segments, candidates};
+}
+function groupCandidates(candidates) {
+  const ordered = candidates.slice().sort((a,b) => a.start-b.start || a.end-b.end || a.index-b.index);
+  const groups = [];
+  for (const item of ordered) {
+    const last = groups[groups.length-1];
+    if (last && item.start <= last.end + 0.001) {
+      last.end = Math.max(last.end,item.end);
+      last.indices.push(item.index);
+      last.score = Math.max(last.score,item.score);
+    } else {
+      groups.push({start:item.start,end:item.end,indices:[item.index],score:item.score});
+    }
+  }
+  return groups;
+}
+function timestamp(seconds) {
+  const minutes = Math.floor(seconds/60);
+  return String(minutes).padStart(2,'0') + ':' + (seconds%60).toFixed(3).padStart(6,'0');
+}
+function showReview(report, synthetic) {
+  const groups = groupCandidates(report.candidates);
+  const stats = document.getElementById('summary');
+  const list = document.getElementById('windows');
+  stats.replaceChildren(); list.replaceChildren();
+  const values = [['Session',report.session],['Duration',timestamp(report.duration)],['Scanner flags',String(report.candidates.length)],['Review windows',String(groups.length)]];
+  for (const [label,value] of values) {
+    const box=document.createElement('div');box.className='stat';
+    const name=document.createElement('span');name.textContent=label;
+    const val=document.createElement('strong');val.textContent=value;
+    box.append(name,val);stats.append(box);
+  }
+  for (let i=0;i<groups.length;i++) {
+    const g=groups[i];const item=document.createElement('article');item.className='window';
+    const title=document.createElement('h3');title.textContent='Review window R-'+String(i+1).padStart(3,'0');
+    const info=document.createElement('p');info.textContent='Time '+timestamp(g.start)+' – '+timestamp(g.end)+' · '+g.indices.length+' flag(s) · peak score '+g.score.toFixed(2);
+    const idx=document.createElement('p');idx.className='small';idx.textContent='Original scanner indices: '+g.indices.join(', ');
+    const label=document.createElement('label');label.className='small';label.textContent='Tap to select start time (seconds):';
+    const field=document.createElement('input');field.className='time';field.readOnly=true;field.value=g.start.toFixed(3);field.setAttribute('aria-label','Start seconds for review window '+(i+1));
+    field.addEventListener('click',()=>field.select());
+    item.append(title,info,idx,label,field);list.append(item);
+  }
+  if (!groups.length) {const p=document.createElement('p');p.textContent='Scanner reported no candidate windows. This is not evidence that nothing occurred.';list.append(p);}
+  document.getElementById('results').hidden=false;
+  document.getElementById('empty').hidden=true;
+  document.getElementById('provenance').textContent=synthetic ? 'SYNTHETIC DEMO: Invented scanner flags for interface testing. Not a real VEIL session or research result.' : 'UNVERIFIED SCANNER OUTPUT: Report structure passed local checks, but the source session and audio have NOT been verified. Flags do not establish speech, EVP, or a paranormal cause.';
+  setStatus(synthetic ? 'Synthetic demo loaded — invented data only.' : 'Scanner report opened locally. Source evidence remains unverified.',true);
+}
+function setStatus(message,ready=false,error=false) {
+  const el=document.getElementById('status');el.textContent=message;el.className=error?'error':ready?'ready':'';
+}
+function clearReview() {
+  document.getElementById('results').hidden=true;
+  document.getElementById('empty').hidden=false;
+  document.getElementById('summary').replaceChildren();
+  document.getElementById('windows').replaceChildren();
+  document.getElementById('report-file').value='';
+  setStatus('Review cleared from this page. Original files were not changed.');
+}
+if (typeof document !== 'undefined') {
+  document.getElementById('demo').addEventListener('click',()=>{
+    const data={tool:'VEIL MTC local audio review',version:'0.3',session_id:'SYNTHETIC-DEMO-NOT-EVIDENCE',duration_seconds:600,segments:1,candidates:[
+      {start:31.5,end:33,score:9.5,reason:'invented peak',phase:'test'},
+      {start:32,end:34,score:11,reason:'invented overlap',phase:'test'},
+      {start:420,end:421,score:12,reason:'invented level rise',phase:'test'}]};
+    showReview(validateReport(data),true);
+  });
+  document.getElementById('clear').addEventListener('click',clearReview);
+  document.getElementById('report-file').addEventListener('change',async (event)=>{
+    const file=event.target.files && event.target.files[0];
+    if (!file) return;
+    clearReview();
+    try {
+      if (file.name !== 'review_summary.json') throw new Error('Select a file named review_summary.json');
+      if (file.size < 20 || file.size > MAX_BYTES) throw new Error('Report exceeds size limit or is empty');
+      const text=await file.text();
+      const data=JSON.parse(text);
+      showReview(validateReport(data),false);
+    } catch (err) {
+      setStatus('Could not load report: '+(err instanceof Error ? err.message : 'Unknown error'),false,true);
+    }
+  });
+}
+</script>
+</body>
+</html>
