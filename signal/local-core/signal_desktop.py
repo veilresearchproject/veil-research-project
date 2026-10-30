@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.6. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.8. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -14,6 +14,8 @@ from urllib.parse import urlsplit
 
 import signal_core
 import signal_listen
+import signal_diagnostics
+import signal_annotations
 
 ROOT = Path(__file__).resolve().parent
 ASSETS = ROOT / 'face_assets'
@@ -50,6 +52,7 @@ class SessionState:
         self.token = secrets.token_urlsafe(32)
         self.requests = 0
         self.listener = signal_listen.PushToTalk()
+        self.review_dir = signal_core.default_dir() / 'review_notes'
 
     def status(self):
         voice = self.bot.voice
@@ -63,7 +66,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.6'
+        server_version = 'SIGNAL-Desktop-v0.8'
         sys_version = ''
 
         def log_message(self, format, *args):
@@ -112,6 +115,22 @@ def make_handler(state):
                     self._json(403, {'error': 'Unauthorized'}); return
                 self._json(200, state.status())
                 return
+            if route == '/api/diagnostics':
+                if not self._authorized():
+                    self._json(403, {'error': 'Unauthorized'}); return
+                if state.mode == 'demo':
+                    self._json(200, {'mode':'scripted-demo', 'message':'Visual demo only. Start SIGNAL live desktop to run local Ollama setup checks.'})
+                else:
+                    self._json(200, signal_diagnostics.run_checks(state.bot.model.model, state.bot.voice))
+                return
+            if route == '/api/notes':
+                if not self._authorized():
+                    self._json(403, {'error': 'Unauthorized'}); return
+                try:
+                    self._json(200, {'notes': signal_annotations.list_notes(state.review_dir, state.bot.loaded_mtc)})
+                except (signal_annotations.ReviewError, OSError) as exc:
+                    self._json(422, {'error': str(exc)[:300]})
+                return
             item = STATIC.get(route)
             if not item:
                 self._json(404, {'error': 'Not found'}); return
@@ -129,7 +148,7 @@ def make_handler(state):
             route = urlsplit(self.path).path
             if not self._authorized():
                 self._json(403, {'error': 'Unauthorized'}); return
-            if route not in ('/api/chat', '/api/voice', '/api/listen'):
+            if route not in ('/api/chat', '/api/voice', '/api/listen', '/api/notes'):
                 self._json(404, {'error': 'Not found'}); return
             try:
                 size = int(self.headers.get('Content-Length', '-1'))
@@ -146,7 +165,11 @@ def make_handler(state):
             if not state.lock.acquire(blocking=False):
                 self._json(409, {'error': 'SIGNAL is still processing another request'}); return
             try:
-                if route == '/api/listen':
+                if route == '/api/notes':
+                    note = signal_annotations.append_note(state.review_dir, state.bot.loaded_mtc,
+                                                          data.get('time_s'), data.get('classification'), data.get('note'))
+                    self._json(200, {'entry': note, 'message':'Manual observation saved separately from the original evidence.'})
+                elif route == '/api/listen':
                     action = data.get('action')
                     if action == 'start':
                         self._json(200, state.listener.start())

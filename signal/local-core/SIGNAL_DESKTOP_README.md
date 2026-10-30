@@ -1,4 +1,4 @@
-## Update — v0.6 (October 30, 2026)
+## Update — v0.7 (October 30, 2026)
 
 The existing desktop now supports subtle speaking-activity facial movement and a silent Preview face movement control. Mouth poses are illustrative and not accurate phoneme lip sync. System Reduce Motion accessibility settings are respected. For details, see MOTION_ANIMATION.md.
 
@@ -55,3 +55,10 @@ py -3 -m unittest -v test_signal_core test_mtc_evidence test_signal_mtc_integrat
 **Development verification:** 49 automated tests passed (previous 39 + 8 push-to-talk engine tests + 2 new loopback endpoint tests). Browser UI elements, demo text flow, expression switching and voice-toggle controls passed a simulated browser test with no JavaScript errors. The production local HTTP service was separately exercised by Python HTTP tests. WAV/audio waveform playback and actual Windows audio hardware were not tested as part of this version.
 
 **Recommended next acceptance test on your desktop:** Demo opens → voice plays → stop interrupts speech → live Ollama answers → load MTC session → confirm actual log summary; then evaluate expression timing and accessibility before merging GitHub changes.
+
+## v0.7 facial motion refinement
+The artificial dark mouth slit and rapid full-face cycling were removed. Use Motion: subtle / Motion: still under the portrait. Our next real-world step is to launch Ollama and verify voice playback with this visual interface.
+
+## v0.8 — Local setup check and manual MTC review notebook
+
+Run `CHECK_SIGNAL_SETUP.bat` before attempting Ollama. This tests the local model list and Windows speech component availability without activating the microphone. See `V08_DEVELOPMENT_NOTES.md` for detailed validation and limitations. The interface adds a **Local readiness check** and a separate **Investigator observation notebook** for manually classified MTC timestamps. Notes never overwrite raw evidence.
