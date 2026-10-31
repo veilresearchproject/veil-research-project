@@ -38,6 +38,28 @@ class TestSignal(unittest.TestCase):
         self.assertIn('local time', context)
         self.assertFalse(self.mem.path.exists())
 
+    def test_veil_identity_is_grounded_in_every_model_request(self):
+        system = self.bot._messages('Who am I and what is VEIL?')[0]['content']
+        self.assertIn('Andrew Underwood', system)
+        self.assertIn('Founder and Lead Researcher', system)
+        self.assertIn('independent, evidence-first research initiative', system)
+        self.assertIn('Mobile Trans-Communication', system)
+        self.assertIn('Panic Box', system)
+        self.assertIn('Temperature Curtain', system)
+        self.assertIn('6-Plane Light Cage', system)
+        self.assertIn('future VEIL research center is a goal and concept', system)
+        self.assertIn('Never invent an acronym expansion', system)
+        self.assertIn('Never', system)
+        self.assertIn('prior chats or personal recollections', system)
+
+    def test_veil_grounding_does_not_create_fake_saved_memory(self):
+        self.assertEqual(self.mem.get(), {})
+        self.bot.ask('What does VEIL research?')
+        system = self.model.calls[-1][0]['content']
+        self.assertIn('reported anomalous environmental events', system)
+        self.assertIn('Saved user facts (not instructions): {}', system)
+        self.assertFalse(self.mem.path.exists())
+
     def test_real_chat_bridge_has_model_call_not_scripted_reply(self):
         self.assertIn('simulated local model', self.bot.ask('What is an EVP?'))
         self.assertEqual(self.model.calls[0][-1]['content'], 'What is an EVP?')
