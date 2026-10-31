@@ -1,0 +1,31 @@
+{
+  "schema": "veil.signal.english_recognition_eval.v1",
+  "samples": [
+    {
+      "reference": "SIGNAL, check the MTC status.",
+      "transcript": "signal check the mtc status",
+      "latency_ms": 320
+    },
+    {
+      "reference": "VEIL research project.",
+      "transcript": "veil research project",
+      "latency_ms": 460
+    },
+    {
+      "reference": "Is the Panic Box ready?",
+      "transcript": "is the panic fox ready",
+      "latency_ms": 590
+    },
+    {
+      "reference": "Explain this in simpler English.",
+      "transcript": "explain this in simple english",
+      "latency_ms": 380
+    }
+  ],
+  "terms": [
+    "SIGNAL",
+    "MTC",
+    "VEIL",
+    "Panic Box"
+  ]
+}
