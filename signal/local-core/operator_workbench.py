@@ -16,6 +16,8 @@ MAX_INPUT = 65536
 def prepare_workbench(subject, observations, telemetry, speaking_ms=None, reduced_motion=False):
     if not isinstance(observations, list) or not isinstance(telemetry, list) or len(telemetry) > 50:
         raise ValueError('Expected bounded notes and telemetry lists')
+    if speaking_ms is not None and (type(speaking_ms) is not int or speaking_ms < 0):
+        raise ValueError('Speaking duration must be a nonnegative integer')
     review = review_mtc_observations(observations)
     events = [instrument_summary(parse_instrument_event(event)) for event in telemetry]
     return {
@@ -41,9 +43,15 @@ def main(argv=None):
     p.add_argument('--speaking-ms', type=int)
     p.add_argument('--reduced-motion', action='store_true')
     args = p.parse_args(argv)
+    if not args.input.is_file() or args.input.is_symlink():
+        p.error('Expected a regular, non-symlink fixture file')
     if args.input.stat().st_size > MAX_INPUT:
         p.error('Fixture too large')
-    data = json.loads(args.input.read_text(encoding='utf-8'))
+    with args.input.open('rb') as handle:
+        raw = handle.read(MAX_INPUT + 1)
+    if len(raw) > MAX_INPUT:
+        p.error('Fixture too large')
+    data = json.loads(raw)
     if not isinstance(data, dict) or set(data) != {'observations','telemetry'}:
         p.error('Fixture needs exactly observations and telemetry arrays')
     report = prepare_workbench(args.subject, data['observations'], data['telemetry'],
