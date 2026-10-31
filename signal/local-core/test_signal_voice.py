@@ -53,12 +53,19 @@ class VoiceTests(unittest.TestCase):
         proc.wait.assert_called_once()
         self.assertIsNone(v._process)
 
-    def test_text_is_bounded_and_markup_removed(self):
+    def test_complete_normal_reply_with_markup_removed(self):
         out = signal_voice.speech_text('Hello **researcher**\n\n' + ('x' * 2000))
-        self.assertTrue(out.startswith('Hello researcher '))
-        self.assertLess(len(out), 700)
-        self.assertIn('rest is on the screen', out)
+        self.assertEqual(out, 'Hello researcher ' + ('x' * 2000))
+        self.assertNotIn('rest is on the screen', out)
         self.assertEqual(signal_voice.speech_text(''), '')
+
+    def test_oversized_external_speech_is_still_bounded(self):
+        out = signal_voice.speech_text('First sentence. ' + ('x' * 8000))
+        self.assertLessEqual(len(out), signal_voice._MAX_SPOKEN + 35)
+        self.assertIn('The rest is on the screen.', out)
+
+    def test_spoken_length_matches_local_model_output_limit(self):
+        self.assertEqual(signal_voice._MAX_SPOKEN, signal_core.MAX_STREAM_CHARS)
 
     def test_rate_validation(self):
         v = signal_voice.WindowsVoice()
