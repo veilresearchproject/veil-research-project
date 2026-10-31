@@ -30,6 +30,14 @@ class WorkbenchTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             prepare_workbench('safety', [], [item])
 
+    def test_reject_negative_speaking_duration(self):
+        with self.assertRaises(ValueError):
+            prepare_workbench('casual', [], [], -1)
+
+    def test_reject_boolean_speaking_duration(self):
+        with self.assertRaises(ValueError):
+            prepare_workbench('casual', [], [], True)
+
     def test_reject_too_many_packets(self):
         with self.assertRaises(ValueError):
             prepare_workbench('research', [], [telemetry()] * 51)
