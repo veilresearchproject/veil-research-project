@@ -1,0 +1,163 @@
+{
+  "version": "1.9.8",
+  "date": "2026-10-31",
+  "source": "Verified Library v1.9.7 ZIP, PR #46 (draft, unmerged), v1.8 original ZIP and PR #45 inspected",
+  "meaningfulFixes": [
+    "Rebind indexed BOXES VBO at the start of every WebGL frame; stale curved/acrylic VBO was obscuring the GB-001 chamber",
+    "Sort 8 real transparent acrylic triangles far-to-near per camera frame and reduce face-on alpha from 0.15 to 0.035",
+    "Move MTC and SIGNAL Command Center spawn cameras out of physical furniture collision volumes",
+    "Mobile tap-to-step with swept 0.2-unit collision substeps and hold-release correction independent of low frame rates",
+    "50px mobile direction targets; allow elevated exterior overview movement"
+  ],
+  "tests": {
+    "desktop_webgl": {
+      "renderer": "webgl",
+      "stops": 13,
+      "pbrAtlasesLoaded": 2,
+      "acrylicTriangles": 8,
+      "acrylicSortedFrames": 19,
+      "glError": 0,
+      "pageErrors": [],
+      "controlsBefore": {
+        "roof": true,
+        "section": false,
+        "night": false
+      },
+      "controlsAfter": {
+        "roof": false,
+        "section": true,
+        "night": true
+      }
+    },
+    "mobile_webgl": {
+      "renderer": "webgl",
+      "viewport": [
+        412,
+        850
+      ],
+      "touchTaps": [
+        {
+          "stop": 13,
+          "before": [
+            0,
+            5.92,
+            -14.8
+          ],
+          "after": [
+            1.459474386344002e-06,
+            5.92,
+            -15.349999999998062
+          ],
+          "tapMovement": 0.55
+        },
+        {
+          "stop": 7,
+          "before": [
+            -22.3,
+            1.72,
+            -4.8
+          ],
+          "after": [
+            -22.3,
+            1.72,
+            -4.249999999999999
+          ],
+          "tapMovement": 0.55
+        },
+        {
+          "stop": 1,
+          "before": [
+            40,
+            17,
+            -63
+          ],
+          "after": [
+            39.68492289694474,
+            17,
+            -62.549193590184984
+          ],
+          "tapMovement": 0.55
+        }
+      ],
+      "holdDistance": 2.951,
+      "holdBefore": [
+        0,
+        5.92,
+        -14.8
+      ],
+      "holdAfter": [
+        7.832017203283927e-06,
+        5.92,
+        -17.751479999989307
+      ],
+      "touchTargetWidth": 50,
+      "stops": 13,
+      "glError": 0,
+      "pageErrors": [],
+      "navTelemetry": {
+        "pointerDown": 4,
+        "tapSteps": 3,
+        "heldReleases": 1,
+        "lastAction": "KeyW",
+        "lastDistance": 2.636479999999702
+      }
+    },
+    "mobile_canvas": {
+      "renderer": "software Canvas2D",
+      "viewport": [
+        412,
+        850
+      ],
+      "stops": 13,
+      "tapMovement": 0.55,
+      "before": [
+        0,
+        5.92,
+        -14.8
+      ],
+      "after": [
+        1.459474386344002e-06,
+        5.92,
+        -15.349999999998062
+      ],
+      "pageErrors": []
+    },
+    "scripts": 8,
+    "allJsSyntaxPass": true,
+    "glb": {
+      "unchanged": true,
+      "bytes": 1303148,
+      "meshCount": 80,
+      "materialCount": 22,
+      "imageCount": 44,
+      "sha256": "9246db3aa0c60db2dca2b0d5179bbd5dec148d468ec45289241bd6a3217f90f1"
+    },
+    "same_camera_webgl": {
+      "before": "v1.9.7",
+      "after": "v1.9.8",
+      "viewport": [
+        1440,
+        900
+      ],
+      "camera": [
+        -23.8,
+        1.72,
+        13.85
+      ],
+      "yaw": 0.035,
+      "pitch": 0,
+      "stop": 9,
+      "rgbDifferenceThreshold20_pct": 22.1,
+      "notPhotorealismScore": true
+    }
+  },
+  "limitations": [
+    "Software SwiftShader WebGL and emulated mobile touch, not physical Samsung Galaxy S25 hardware",
+    "The renderer uses triplanar texture atlas; authored GLB UV coordinates are not yet loaded by HTML",
+    "Acrylic is approximate alpha blending, not optical refraction",
+    "Architectural rendering remains stylized, NOT photorealistic",
+    "VEIL has no constructed research center; all diagnostic screens SIMULATED"
+  ],
+  "changesToLiveSite": false,
+  "merged": false
+}
