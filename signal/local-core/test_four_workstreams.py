@@ -55,6 +55,22 @@ class FourWorkstreamTests(unittest.TestCase):
         data['measurements']['send_alert'] = True
         with self.assertRaises(ValueError):
             parse_instrument_event(data)
+    def test_reject_unhashable_instrument_type(self):
+        data = event()
+        data['instrument_type'] = []
+        with self.assertRaises(ValueError):
+            parse_instrument_event(data)
+
+    def test_reject_impossible_calendar_date(self):
+        data = event()
+        data['timestamp_utc'] = '2026-02-30T14:00:00Z'
+        with self.assertRaises(ValueError):
+            parse_instrument_event(data)
+
+    def test_reject_boolean_face_time(self):
+        with self.assertRaises(ValueError):
+            speaking_pose(True, True)
+
     def test_reject_oversized_input(self):
         with self.assertRaises(ValueError):
             parse_instrument_event(' ' * 9000)
