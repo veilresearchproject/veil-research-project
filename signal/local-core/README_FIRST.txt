@@ -1,4 +1,4 @@
-VEIL SIGNAL DESKTOP v0.19 — MANUAL REVIEW NOTE CONTEXT
+VEIL SIGNAL DESKTOP v0.20 — DESKTOP ACCEPTANCE / CHARACTER POLISH
 
 Extract the entire ZIP into a NEW folder. Keep earlier folders as fallbacks.
 Double-click START_HERE.bat. Python 3.10+ with its launcher is required.
@@ -18,9 +18,9 @@ The package check detects missing or changed files; it does not prove authentici
 or test real hardware. If a check fails, extract a fresh copy into a new folder.
 Original MTC recordings and saved conversations are not altered by this launcher.
 
-197 automated Python tests passed here. Actual Windows startup, microphone,
+Previous v0.19 automated checks passed. v0.20 adds regression checks for version and persona. Actual Windows startup, microphone,
 speaker and model speed still need acceptance on your PC. See
-DESKTOP_TEST_STEPS.md and V19_DEVELOPMENT_NOTES.md.
+DESKTOP_TEST_STEPS.md and V20_DEVELOPMENT_NOTES.md.
 
 NEW: Questions remain available after interrupted local replies. Restore only
 fills the editor; nothing retries automatically. The recovery copy lasts only

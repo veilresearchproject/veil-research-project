@@ -86,6 +86,8 @@
   };
   const syncStatus = (state) => {
     const demo = state.mode === 'demo';
+    if (typeof state.version === 'string' && /^\d+\.\d+$/.test(state.version))
+      $('app-version').textContent = 'alpha ' + state.version;
     $('mode').classList.toggle('demo',demo);
     $('mode').textContent = demo ? 'SCRIPTED VISUAL DEMO' : 'LOCAL OLLAMA MODEL';
     $('connection').textContent = demo ? 'No AI model in demo mode' : 'Local model • Windows computer';
