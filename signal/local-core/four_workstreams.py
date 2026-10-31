@@ -4,6 +4,7 @@ Pure functions only: no recording access, no model calls, no hardware commands.
 Designed for explicit operator-controlled integration into the local desktop.
 """
 from dataclasses import dataclass
+from datetime import datetime
 from math import isfinite
 import json
 import re
@@ -32,7 +33,7 @@ def speaking_pose(elapsed_ms, speaking, reduced_motion=False):
     """Deterministic speaking face state; does not claim lip/phoneme alignment."""
     if not speaking or reduced_motion:
         return 'neutral'
-    if not isinstance(elapsed_ms, (int, float)) or not isfinite(elapsed_ms) or elapsed_ms < 0:
+    if isinstance(elapsed_ms, bool) or not isinstance(elapsed_ms, (int, float)) or not isfinite(elapsed_ms) or elapsed_ms < 0:
         raise ValueError('Invalid elapsed time')
     return ('mouth-small', 'mouth-wide', 'mouth-small', 'neutral')[int(elapsed_ms // 140) % 4]
 
@@ -79,12 +80,16 @@ def parse_instrument_event(payload):
     if not isinstance(payload, dict) or set(payload) != {'instrument_type', 'device_id', 'timestamp_utc', 'measurements'}:
         raise ValueError('Invalid event shape')
     typ, device, stamp, values = [payload[k] for k in ('instrument_type','device_id','timestamp_utc','measurements')]
-    if typ not in INSTRUMENT_TYPES:
+    if not isinstance(typ, str) or typ not in INSTRUMENT_TYPES:
         raise ValueError('Unknown instrument')
     if not isinstance(device, str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,40}', device):
         raise ValueError('Invalid device ID')
     if not isinstance(stamp, str) or not re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z', stamp):
         raise ValueError('Expected UTC timestamp')
+    try:
+        datetime.fromisoformat(stamp.replace('Z', '+00:00'))
+    except ValueError as exc:
+        raise ValueError('Invalid calendar timestamp') from exc
     if not isinstance(values, dict) or not values or not set(values) <= SENSOR_KEYS:
         raise ValueError('Unexpected sensor keys')
     for key, value in values.items():
