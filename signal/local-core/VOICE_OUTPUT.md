@@ -28,8 +28,10 @@ START_VOICE_TEST.bat remains a separate local test.
 ## Data and validation
 
 Speech text and the chosen name travel as JSON through a local UTF-8 stdin pipe
-into a fixed PowerShell script. They are not evaluated as code. Spoken text is
-bounded to roughly 650 characters; the full model response stays on screen.
+into a fixed PowerShell script. They are not evaluated as code. Normal completed SIGNAL responses are spoken in full up to the existing 6,000-character
+model-output ceiling; longer direct speech inputs remain bounded. The operator can
+interrupt speech with Stop speaking, but pause/resume and true sentence-level
+streaming are not yet implemented. The full response remains on screen.
 
 The voice can read inaccurate model output. Spoken claims about MTC logs do not
 establish what was audible or what caused a sound. This is not custom SIGNAL
