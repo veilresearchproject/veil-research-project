@@ -11,7 +11,7 @@ import subprocess
 import threading
 from functools import wraps
 
-_MAX_SPOKEN = 650
+_MAX_SPOKEN = 6000  # Mirrors the maximum completed local-model reply; stop remains operator-controlled.
 # The voice runs on Windows with locally-installed voices; no network calls.
 _SPEAK_SCRIPT = r'''
 $ErrorActionPreference = 'Stop'
@@ -40,7 +40,7 @@ finally { $v.Dispose() }
 
 
 def speech_text(value):
-    """Bound the spoken portion; avoid raw formatting or long uninterruptible speeches."""
+    """Speak complete normal SIGNAL replies; retain a hard limit on arbitrary input."""
     if not isinstance(value, str):
         raise ValueError('Speech requires text')
     text = re.sub(r'[\x00-\x1f\x7f]+', ' ', value).strip()
