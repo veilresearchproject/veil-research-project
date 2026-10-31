@@ -26,6 +26,18 @@ class TestSignal(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    def test_persona_instructions_remain_candid_and_evidence_first(self):
+        context = self.bot._messages('Hi')[0]['content']
+        self.assertIn('slightly eccentric scientist', context)
+        self.assertIn('founder is Andrew', context)
+        self.assertIn('Distinguish any theatrical character remarks', context)
+        self.assertIn('cannot see, hear', context)
+        self.assertIn('offsite human operator', context)
+        self.assertIn('Never joke about safety', context)
+        self.assertIn('not a finished autonomous system', context)
+        self.assertIn('local time', context)
+        self.assertFalse(self.mem.path.exists())
+
     def test_real_chat_bridge_has_model_call_not_scripted_reply(self):
         self.assertIn('simulated local model', self.bot.ask('What is an EVP?'))
         self.assertEqual(self.model.calls[0][-1]['content'], 'What is an EVP?')

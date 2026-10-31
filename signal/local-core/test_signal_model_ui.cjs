@@ -24,7 +24,7 @@ let chatMode='failure', pendingChatResolve=null;
 let voiceListFailure=false, voiceRejectSelection=false;
 let noteContextFailure=false;
 const intervals=[];
-const status={mode:'local-ollama',stream_supported:true,voice_enabled:false,speaking:false,mtc_loaded:false};
+const status={mode:'local-ollama',version:'0.20',stream_supported:true,voice_enabled:false,speaking:false,mtc_loaded:false};
 const sandbox={console,Image:class{},TextDecoder,AbortController,
   document:{getElementById:get,querySelector:()=>({content:'test-token'}),querySelectorAll:()=>[],createElement:()=>new Element()},
   window:{matchMedia:()=>({matches:true}),setInterval(fn){intervals.push(fn);},setTimeout(){},clearTimeout(){},confirm:()=>permit},
@@ -80,6 +80,8 @@ const sandbox={console,Image:class{},TextDecoder,AbortController,
 vm.runInNewContext(fs.readFileSync(path.join(__dirname,'signal_face.js'),'utf8'),sandbox);
 (async()=>{
   await new Promise(setImmediate);
+  assert.equal(get('app-version').textContent,'alpha 0.20','Displayed release version follows local server status');
+  assert.doesNotMatch(html,/Good morning/,'Greeting must work regardless of local clock');
   assert(!calls.some(c=>c.route==='/api/models'),'Inventory must be opt-in');
   await get('models-refresh').handlers.click();
   assert.equal(get('model-select').children.length,2);

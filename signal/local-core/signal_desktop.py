@@ -1,4 +1,4 @@
-"""SIGNAL face desktop alpha v0.19. Loopback HTTP only; standard-library Python.
+"""SIGNAL face desktop alpha v0.20. Loopback HTTP only; standard-library Python.
 
 Extends signal_core.Assistant; push-to-talk is explicitly opt-in, offline and ephemeral.
 """
@@ -14,6 +14,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit
 
 import signal_core
+import signal_launcher
 import signal_listen
 import signal_diagnostics
 import signal_annotations
@@ -87,7 +88,7 @@ class SessionState:
         proc = voice._process
         progress = self.operation_status()
         voice_name = getattr(voice, 'selected_voice', None)
-        return {'mode': self.mode, 'voice_enabled': voice.enabled,
+        return {'mode': self.mode, 'version': signal_launcher.VERSION, 'voice_enabled': voice.enabled,
                 'voice_name': voice_name if isinstance(voice_name, str) else None,
                 'speaking': proc is not None and proc.poll() is None,
                 'mtc_loaded': self.bot.loaded_mtc is not None,
@@ -105,7 +106,7 @@ class SessionState:
 
 def make_handler(state):
     class Handler(BaseHTTPRequestHandler):
-        server_version = 'SIGNAL-Desktop-v0.19'
+        server_version = 'SIGNAL-Desktop-v' + signal_launcher.VERSION
         sys_version = ''
 
         def log_message(self, format, *args):

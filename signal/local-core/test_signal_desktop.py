@@ -125,6 +125,14 @@ class DesktopServerTests(unittest.TestCase):
         status,_,body=self.fetch('/api/status')
         self.assertFalse(json.loads(body)['mic_enabled'])
 
+    def test_status_exposes_local_release_version(self):
+        status,_,body=self.fetch('/api/status')
+        self.assertEqual(status,200)
+        info=json.loads(body)
+        self.assertEqual(info['version'],signal_desktop.signal_launcher.VERSION)
+        self.assertEqual(info['version'],'0.20')
+        self.assertFalse(info['voice_enabled'])
+
     def test_explicit_demo_is_labeled(self):
         model=signal_desktop.DemoModel()
         self.assertIn('scripted',model.answer([{'content':'hello'}]).lower())
