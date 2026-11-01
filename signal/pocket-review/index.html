@@ -58,7 +58,7 @@ footer {color:#9eb6c5;font-size:.82rem;margin-top:24px}
 <p class="note" id="provenance">UNVERIFIED: This viewer checks report structure only. It cannot confirm the MTC session, audio integrity, source, voice, EVP, or a paranormal cause.</p>
 <div id="summary" class="summary" aria-label="Report summary"></div>
 <p class="small">Overlapping or touching scanner flags are grouped for convenience; original candidate indices are retained. Scores are scanner values, not confidence of speech or an anomaly's cause.</p>
-<div id="review-progress" role="status" aria-live="polite" hidden></div>
+<div id="review-progress" role="status" aria-live="polite" hidden></div><button id="next-unreviewed" type="button">Next unreviewed window</button><p id="navigation-feedback" role="status" aria-live="polite" class="small"></p>
 <div id="windows" aria-live="polite"></div>
 <div class="note"><strong>Optional human triage — not an evidence finding</strong><p>Choose a status and optional short note for each window. Your choices stay in this tab until you explicitly prepare text to copy. No autosave, network transfer, or alteration of the scanner report.</p>
 <button id="prepare-annotations" type="button">Prepare private review JSON</button>
@@ -134,6 +134,32 @@ function countReviewed(statuses) {
   const reviewed=statuses.filter(status => status!=='not_reviewed').length;
   return {reviewed, remaining:statuses.length-reviewed, total:statuses.length};
 }
+function nextUnreviewedIndex(statuses, currentIndex=-1) {
+  if (!Array.isArray(statuses) || !Number.isInteger(currentIndex)) throw new Error('Invalid review navigation');
+  if (statuses.some(status => !REVIEW_STATUSES.includes(status))) throw new Error('Invalid review status');
+  for (let offset=1; offset<=statuses.length; offset++) {
+    const index=(currentIndex+offset+statuses.length)%statuses.length;
+    if (statuses[index]==='not_reviewed') return index;
+  }
+  return -1;
+}
+function goToNextUnreviewed() {
+  if (!activeReview) return;
+  const windows=Array.from(document.querySelectorAll('#windows .window'));
+  const statuses=windows.map(item=>item.querySelector('.review-status').value);
+  const current=document.activeElement && document.activeElement.closest('.window');
+  const currentIndex=windows.indexOf(current);
+  const index=nextUnreviewedIndex(statuses,currentIndex);
+  const feedback=document.getElementById('navigation-feedback');
+  if (index<0) {
+    feedback.textContent='All review windows have a human status. This does not establish an evidence finding.';
+    return;
+  }
+  const selected=windows[index];
+  selected.scrollIntoView({behavior:'auto',block:'start'});
+  selected.querySelector('.review-status').focus({preventScroll:true});
+  feedback.textContent='Moved to review window R-'+String(index+1).padStart(3,'0')+'.';
+}
 function updateReviewProgress() {
   const label=document.getElementById('review-progress');
   if (!activeReview) { label.hidden=true; label.textContent=''; return; }
@@ -176,6 +202,7 @@ function showReview(report, synthetic) {
     item.append(title,info,idx,label,field,statusLabel,select,noteLabel,note);list.append(item);
   }
   if (!groups.length) {const p=document.createElement('p');p.textContent='Scanner reported no candidate windows. This is not evidence that nothing occurred.';list.append(p);}
+  document.getElementById('navigation-feedback').textContent='';
   updateReviewProgress();
   document.getElementById('results').hidden=false;
   document.getElementById('empty').hidden=true;
@@ -256,6 +283,7 @@ function clearReview() {
   document.getElementById('summary').replaceChildren();
   document.getElementById('windows').replaceChildren();
   updateReviewProgress();
+  document.getElementById('navigation-feedback').textContent='';
   document.getElementById('report-file').value='';
   setStatus('Review cleared from this page. Original files were not changed.');
 }
@@ -268,6 +296,7 @@ if (typeof document !== 'undefined') {
     showReview(validateReport(data),true);
   });
   document.getElementById('clear').addEventListener('click',clearReview);
+  document.getElementById('next-unreviewed').addEventListener('click',goToNextUnreviewed);
   document.getElementById('prepare-annotations').addEventListener('click',prepareAnnotations);
   document.getElementById('copy-annotations').addEventListener('click',copyAnnotations);
   document.getElementById('report-file').addEventListener('change',async (event)=>{
