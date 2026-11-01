@@ -1,35 +1,33 @@
-# SIGNAL Local Core 0.1 — free-first Windows proof of concept
+# SIGNAL Local Core v0.3 — VEIL Windows prototype
 
-**Status: Nine local mocked-interface tests passing (October 22, 2026). Not yet run on the user's Windows PC or with an actual local model.**
+**Status:** Thirty automated tests passed in a non-Windows development environment on October 30, 2026. Windows speaker playback, actual Ollama-model performance, and hardware integration are **not** yet validated.
 
-This is SIGNAL's first local language-model conversation engine. It is separate from the scripted public SIGNAL character. It has no laboratory instrument, camera, microphone, or public website connection.
+SIGNAL is evolving as a privacy-conscious, local-first lab assistant. The current program supports local text conversation via the Ollama API (127.0.0.1 only), explicitly saved local memories, **read-only MTC session log review**, and **opt-in Windows text-to-speech output**. It does not listen to a microphone, directly examine the WAV audio, control lab devices, or send data to a cloud inference API.
 
-## Free setup
+## Getting started
 
-1. Install **Python 3.10+** from https://www.python.org/downloads/windows/ . Enable the Python launcher. No additional Python packages are required.
-2. Install **Ollama for Windows** from https://ollama.com/download/windows . Use locally, **not** the Ollama Cloud service. System drivers and storage requirements apply.
-3. Open Command Prompt and run `ollama pull llama3.2:3b` (model roughly 2 GB, installation uses additional storage and a once-only internet download). Review Meta Llama model licensing before any commercial redistribution.
-4. Start Ollama. Double-click `START_SIGNAL.bat` in the same directory as the Python file, or run `py -3 signal_core.py`.
-5. Try `Hello SIGNAL, how should I review an unusual thermal reading?`. Save a memory with `/remember preferred name = Drew`, list with `/memories`, delete with `/forget preferred name`, or clear temporary conversation with `/clear`.
+1. Install Python 3.10+ for Windows (with the Python launcher) if necessary.
+2. First double-click **START_VOICE_TEST.bat** to check the built-in Windows voice *without needing Ollama*.
+3. For AI conversations, install and run local Ollama (see https://ollama.com/download/windows) and download the local model: `ollama pull llama3.2:3b`. The download needs internet access once and disk space; check model licensing.
+4. Double-click **START_SIGNAL.bat**. Use `/help` for commands.
+5. Type `/voice on` for speech output, `/voice stop` or `/voice off` to interrupt or disable it. The voice is off at startup.
+6. To inspect a completed MTC session's logs, use `/mtc "C:\path\to\session"`. This reads only `session_result.json`, `session_metadata.json` and `events.jsonl`; no WAV upload is needed.
 
-## Privacy and safety
+Details: [Windows voice](VOICE_OUTPUT.md) · [MTC log review](MTC_READONLY_ADAPTER.md).
 
-- This Python code sends requests only to `127.0.0.1:11434` (local Ollama API). No remote/cloud fallback, secrets, paid API, or recurring inference charge. **Do not choose cloud models.**
-- Normal chat lasts only in RAM for up to eight exchanges. Only explicitly remembered facts persist as an unencrypted JSON file in `%LOCALAPPDATA%\VEIL\SIGNAL`. Do not store secrets there.
-- Any local language model can hallucinate. Its prompt is not a security boundary. No camera, live evidence, files, instrument actions, panic-box commands, or safety-critical control exists in this version.
-- Nine automated tests use a mocked local HTTP backend; neither a real model nor GPU performance was tested on the user's workstation.
-- Local operation still uses disk, memory, power, and hardware. No promise of cost-free physical operations.
+## Integrity, permissions, and limitations
 
-## Tests
+- Python standard library; no paid API or third-party speech package. Speech is synthesized by Windows System.Speech.
+- Speech synthesis is **output only**, not voice input, identity verification or voice cloning.
+- The program has no camera, instrument, remote control, alarm acknowledgement or Panic Box ALL CLEAR permissions.
+- Memory facts are stored unencrypted on the user's computer and should not hold secrets or sensitive investigation data.
+- MTC session records provide **software logs**, not acoustic proof or a scientific interpretation.
+- Never present the public scripted SIGNAL character as a fully autonomous working assistant.
 
-From this directory: `py -3 -m unittest -v test_signal_core.py`
+## Test suite
 
-## Next steps
+```bat
+py -3 -m unittest -v test_signal_core test_mtc_evidence test_signal_mtc_integration test_signal_voice
+```
 
-1. Perform real Windows local-model smoke test, record hardware and latency results.
-2. Evaluate properly licensed smaller models on the same question set.
-3. Add separately tested offline speech input and optional Windows voice output.
-4. Add **read-only** adapters to MTC sample metadata and sensor CSV evidence, with original file integrity, provenance, and human-reviewed interpretations.
-5. Connect the animated SIGNAL front end only through a secure, authorized boundary after local validation; never publicly expose the Ollama server.
-
-The public SIGNAL website must continue to label scripted experiences as demonstrations.
+This is an engineering prototype. Keep production research recordings untouched while validating the adapter and voice behavior on a Windows PC.
