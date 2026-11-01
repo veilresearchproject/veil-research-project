@@ -1,0 +1,126 @@
+{
+  "version": "1.9.9",
+  "baseline": "v1.9.8 Library verified ZIP, with v1.8 original assets preserved",
+  "changes": [
+    "Correct sRGB-to-linear conversion for vertex colors and PBR base atlas before WebGL illumination",
+    "Replace heuristic key highlight with bounded GGX microfacet D/G/F term",
+    "Add room-bounded approximate indirect bounce in GB-001",
+    "Extend floor contact-shadow footprint uniforms from 8 to 12",
+    "Reduce ambient fill and distance fog to improve spatial contrast"
+  ],
+  "desktopWebGL": {
+    "result": "PASS",
+    "chromium": "software GPU SwiftShader under Xvfb",
+    "viewport": [
+      1440,
+      900
+    ],
+    "guidedStops": 13,
+    "roofSectionNightToggles": "PASS",
+    "PBRAtlases": 2,
+    "webglErrors": 0,
+    "javascriptExceptions": 0
+  },
+  "sameCameraScreenshot": {
+    "room": "GB-001",
+    "camera": {
+      "position": [
+        -23.8,
+        1.72,
+        13.85
+      ],
+      "yaw": 0.035,
+      "pitch": 0,
+      "level": 1,
+      "stop": 8
+    },
+    "viewport": [
+      1440,
+      900
+    ],
+    "before": "GB001_before.png",
+    "after": "GB001_after.png",
+    "comparison": "VEIL_v199_GB001_Actual_Before_After.png",
+    "pixelChangeMeanRGBGreaterThan20Percent": 80.24,
+    "metricMeaning": "pixel difference, not photorealism"
+  },
+  "mobileEmulatedWebGL": {
+    "result": "PASS",
+    "viewport": [
+      412,
+      850
+    ],
+    "device": "Chromium touch emulation, NOT physical Galaxy S25",
+    "stop13ForwardTapUnits": 0.55,
+    "stop13ForwardHold650msUnits": 1.62,
+    "locations": 13,
+    "webglErrors": 0,
+    "javascriptExceptions": 0
+  },
+  "canvasFallback": {
+    "result": "NOT REVERIFIED",
+    "reason": "software Canvas test timed out in this environment; no Canvas-specific renderer code changed from v1.9.8"
+  },
+  "static": {
+    "javascriptSections": 8,
+    "nodeSyntax": "PASS",
+    "glbModels": [
+      {
+        "file": "VEIL_Architectural_Mesh_v14.glb",
+        "meshes": 45,
+        "primitives": 45,
+        "bytes": 160808
+      },
+      {
+        "file": "VEIL_Curved_Instruments_v13.glb",
+        "meshes": 30,
+        "primitives": 30,
+        "bytes": 758600
+      },
+      {
+        "file": "VEIL_GB001_Correlation_v18_PBR.glb",
+        "meshes": 80,
+        "primitives": 80,
+        "bytes": 1303148
+      },
+      {
+        "file": "VEIL_MTC_Acoustic_Interior_v16.glb",
+        "meshes": 79,
+        "primitives": 79,
+        "bytes": 52780
+      },
+      {
+        "file": "VEIL_Research_Center_Visitor_1_0.glb",
+        "meshes": 270,
+        "primitives": 270,
+        "bytes": 635288
+      },
+      {
+        "file": "VEIL_SIGNAL_Command_v17.glb",
+        "meshes": 41,
+        "primitives": 41,
+        "bytes": 391052
+      },
+      {
+        "file": "VEIL_Weather_Envelope_v15.glb",
+        "meshes": 97,
+        "primitives": 97,
+        "bytes": 76856
+      }
+    ],
+    "originalGLBsPreserved": true
+  },
+  "integrity": {
+    "htmlSHA256": "64f4a03e74c76b2ace58114e487340a9ba7c2febad868a42ca11a1ff18996e7a",
+    "sourceSHA256": "c7912ab4bcd3c9950f8ecb3cc9712725b247b79d15e2c31d790257f1aa7936a2",
+    "zipCRC": "PASS",
+    "zipFiles": 92
+  },
+  "limitations": [
+    "Real Galaxy S25 GPU performance not measured",
+    "No authored GLB UV integration into HTML; renderer still triplanar atlas mapping",
+    "Analytical indirect bounce is not raytraced GI",
+    "No physical research center exists; simulated diagnostics only",
+    "Not photorealistic"
+  ]
+}
