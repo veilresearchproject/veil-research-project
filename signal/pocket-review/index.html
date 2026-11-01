@@ -73,6 +73,7 @@ const MAX_CANDIDATES = 200;
 const MAX_DURATION = 48 * 3600;
 const REVIEW_STATUSES = Object.freeze(['not_reviewed','needs_original_audio','ordinary_source_noted','inconclusive']);
 let activeReview = null;
+let exportRevision = 0;
 function number(value, name) {
   if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error('Invalid number: ' + name);
   return value;
@@ -195,6 +196,7 @@ function buildAnnotationExport(report, groups, selections, synthetic) {
     warning:'Human annotations only. Scanner flags and operator judgments are not independently verified evidence.',entries};
 }
 function resetPreparedExport() {
+  exportRevision += 1;
   const panel=document.getElementById('annotation-export');
   if (panel) panel.hidden=true;
   const output=document.getElementById('annotation-output');
@@ -227,9 +229,19 @@ async function copyAnnotations() {
     if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
       throw new Error('Clipboard API unavailable');
     }
-    await navigator.clipboard.writeText(output.value);
+    const revision=exportRevision;
+    const preparedText=output.value;
+    await navigator.clipboard.writeText(preparedText);
+    if (revision!==exportRevision || !activeReview || document.getElementById('annotation-export').hidden) {
+      feedback.textContent='Review changed while copying. Prepare fresh JSON before using it.';
+      return;
+    }
     feedback.textContent='Copied to clipboard. Keep private review notes confidential.';
   } catch (_) {
+    if (!activeReview || document.getElementById('annotation-export').hidden || !output.value) {
+      feedback.textContent='Review changed while copying. Prepare fresh JSON.';
+      return;
+    }
     output.focus(); output.select();
     feedback.textContent='Automatic copy unavailable here. Text selected: long-press and choose Copy.';
   }
