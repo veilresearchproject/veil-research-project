@@ -47,3 +47,48 @@ test('page has no network dependency and labels synthetic/unverified evidence',(
  assert.doesNotMatch(html,/\bfetch\s*\(|\bXMLHttpRequest\b|\bWebSocket\b|<script\s+src=/);
  assert.doesNotMatch(html,/\.innerHTML\s*=/);
 });
+
+test('human annotation export preserves indices and labels provenance',()=>{
+ const report=validate(fixture());const groups=group(report.candidates);
+ const result=ctx.buildAnnotationExport(report,groups,[
+  {status:'needs_original_audio',note:'listen to original WAV'},
+  {status:'inconclusive',note:'review HVAC control'}],false);
+ assert.equal(result.schema,'veil.signal.pocket_review_annotations.v1');
+ assert.equal(result.source,'imported_unverified_scanner_report');
+ assert.equal(result.session_id,'test-001');
+ assert.deepEqual(Array.from(result.entries[0].scanner_candidate_indices),[1,2]);
+ assert.equal(result.entries[0].human_status,'needs_original_audio');
+ assert.equal(result.entries[0].evidence_status,'unverified');
+ assert.equal(result.entries[1].window_id,'R-002');
+});
+test('synthetic source remains explicitly labeled',()=>{
+ const report=validate(fixture());const groups=group(report.candidates);
+ const result=ctx.buildAnnotationExport(report,groups,groups.map(()=>({status:'not_reviewed',note:''})),true);
+ assert.equal(result.source,'synthetic_demo');
+ assert.equal(result.entries.length,2);
+});
+test('empty windows export is valid and explicit',()=>{
+ const data=fixture();data.candidates=[];const report=validate(data);
+ const result=ctx.buildAnnotationExport(report,[],[],false);
+ assert.equal(result.review_windows,0);assert.equal(result.scanner_flags,0);
+ assert.equal(result.entries.length,0);
+});
+test('rejects unknown review statuses and mismatched counts',()=>{
+ const report=validate(fixture());const groups=group(report.candidates);
+ assert.throws(()=>ctx.buildAnnotationExport(report,groups,[],false));
+ assert.throws(()=>ctx.buildAnnotationExport(report,groups,[{status:'paranormal',note:''},{status:'not_reviewed',note:''}],false));
+ assert.throws(()=>ctx.buildAnnotationExport(report,groups,[{status:'not_reviewed',note:''},{status:'not_reviewed',note:''}],'true'));
+});
+test('rejects oversized and control-character notes',()=>{
+ const report=validate(fixture());const groups=group(report.candidates);
+ const selections=[{status:'not_reviewed',note:'x'.repeat(241)},{status:'not_reviewed',note:''}];
+ assert.throws(()=>ctx.buildAnnotationExport(report,groups,selections,false));
+ selections[0].note='bad\nline';assert.throws(()=>ctx.buildAnnotationExport(report,groups,selections,false));
+});
+test('private annotation UI has explicit preparation and no automatic storage',()=>{
+ assert.match(html,/Prepare private review JSON/);
+ assert.match(html,/annotation-output/);
+ assert.match(html,/resetPreparedExport/);
+ assert.doesNotMatch(html,/\blocalStorage\b|\bsessionStorage\b|\bindexedDB\b|navigator\.clipboard|\bBlob\s*\(/);
+ assert.doesNotMatch(html,/\.innerHTML\s*=/);
+});

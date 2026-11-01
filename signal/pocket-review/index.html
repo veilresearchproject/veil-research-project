@@ -20,7 +20,7 @@ h1 {font-size:clamp(1.6rem,6vw,2.1rem);line-height:1.12;margin:0}
 strong {color:#fff}
 p {margin:8px 0 12px;color:#d1dee7}
 button,.pick {border:1px solid #5c8d9e;background:#213e50;color:#fff;border-radius:11px;min-height:46px;padding:10px 14px;font:inherit;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
-button:focus-visible,.pick:focus-within,input:focus-visible {outline:3px solid #ffd479;outline-offset:3px}
+button:focus-visible,.pick:focus-within,input:focus-visible,select:focus-visible,textarea:focus-visible {outline:3px solid #ffd479;outline-offset:3px}
 button.primary,.pick.primary {background:#0f7069;border-color:#64d9c3}
 button:active {transform:translateY(1px)}
 .controls {display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
@@ -39,13 +39,16 @@ button:active {transform:translateY(1px)}
 .window p {margin:4px 0}
 .time {width:100%;background:#08131d;color:#d6fff1;border:1px solid #5a8c8d;border-radius:8px;padding:10px;font:600 1rem ui-monospace,Consolas,monospace}
 .note {padding:12px;border-radius:10px;background:#302b21;border:1px solid #6d5e3b;color:#f7e4ba}
+.review-field {display:block;width:100%;margin-top:10px;padding:10px;background:#0b1722;color:#f4faff;border:1px solid #6b96a8;border-radius:8px;font:inherit;min-height:44px}
+#annotation-output {min-height:220px;resize:vertical;font:0.8rem ui-monospace,Consolas,monospace;overflow-wrap:anywhere}
+#annotation-export[hidden] {display:none}
 footer {color:#9eb6c5;font-size:.82rem;margin-top:24px}
 @media (min-width:600px) {.summary {grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <main>
-<header><div class="logo" aria-hidden="true">V·</div><div><div class="kicker">VEIL Research Project / Offline prototype</div><h1>SIGNAL Pocket Review</h1><span class="tag">READ-ONLY · NO AI · NO UPLOAD</span></div></header>
+<header><div class="logo" aria-hidden="true">V·</div><div><div class="kicker">VEIL Research Project / Offline prototype</div><h1>SIGNAL Pocket Review</h1><span class="tag">READ-ONLY SOURCE · NO AI · NO UPLOAD</span></div></header>
 <section class="card" aria-labelledby="intro"><h2 id="intro">Review scanner flags on your phone</h2>
 <p>Select a <code>review_summary.json</code> file produced by the VEIL MTC local audio scanner. The file is read inside this page, on this device. Nothing is sent to a server or saved by this page.</p>
 <div class="controls"><label class="pick primary">Choose scanner report<input id="report-file" type="file" accept=".json,application/json" aria-label="Choose local review_summary.json"></label><button id="demo" type="button">Try synthetic demo</button><button id="clear" type="button">Clear review</button></div>
@@ -54,8 +57,11 @@ footer {color:#9eb6c5;font-size:.82rem;margin-top:24px}
 <p class="note" id="provenance">UNVERIFIED: This viewer checks report structure only. It cannot confirm the MTC session, audio integrity, source, voice, EVP, or a paranormal cause.</p>
 <div id="summary" class="summary" aria-label="Report summary"></div>
 <p class="small">Overlapping or touching scanner flags are grouped for convenience; original candidate indices are retained. Scores are scanner values, not confidence of speech or an anomaly's cause.</p>
-<div id="windows" aria-live="polite"></div></section>
-<section id="empty" class="card"><h2>What this is — and isn't</h2><p>This is a deliberately limited offline phone viewer, not a live connection to SIGNAL on your PC. It cannot play source WAV files, identify voices, command VEIL instruments, or certify evidence. A human must review candidate audio against ordinary explanations and controls.</p></section>
+<div id="windows" aria-live="polite"></div>
+<div class="note"><strong>Optional human triage — not an evidence finding</strong><p>Choose a status and optional short note for each window. Your choices stay in this tab until you explicitly prepare text to copy. No autosave, network transfer, or alteration of the scanner report.</p>
+<button id="prepare-annotations" type="button">Prepare private review JSON</button>
+<div id="annotation-export" hidden><label for="annotation-output" class="small">Private JSON — select and copy manually; it includes the session ID and any notes you entered. Do not post publicly.</label><textarea id="annotation-output" class="review-field" readonly spellcheck="false" aria-label="Private review JSON for manual copying"></textarea><p class="small">This text is not saved by SIGNAL. On some phones, select-all/copy may require a long press. Re-prepare after edits.</p></div></div></section>
+<section id="empty" class="card"><h2>What this is — and isn't</h2><p>This is a deliberately limited offline phone viewer with optional in-memory human triage, not a live connection to SIGNAL on your PC. It cannot play source WAV files, identify voices, command VEIL instruments, or certify evidence. A human must review candidate audio against ordinary explanations and controls.</p></section>
 <footer>VEIL Research Project · Development preview · No third-party scripts, trackers, cloud APIs or network requests. Opening this file from a phone's local storage has not yet been verified on a Samsung Galaxy S25.</footer>
 </main>
 <script id="logic">
@@ -63,6 +69,8 @@ footer {color:#9eb6c5;font-size:.82rem;margin-top:24px}
 const MAX_BYTES = 2000000;
 const MAX_CANDIDATES = 200;
 const MAX_DURATION = 48 * 3600;
+const REVIEW_STATUSES = Object.freeze(['not_reviewed','needs_original_audio','ordinary_source_noted','inconclusive']);
+let activeReview = null;
 function number(value, name) {
   if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error('Invalid number: ' + name);
   return value;
@@ -117,6 +125,8 @@ function timestamp(seconds) {
 }
 function showReview(report, synthetic) {
   const groups = groupCandidates(report.candidates);
+  activeReview = {report, groups, synthetic};
+  resetPreparedExport();
   const stats = document.getElementById('summary');
   const list = document.getElementById('windows');
   stats.replaceChildren(); list.replaceChildren();
@@ -135,7 +145,16 @@ function showReview(report, synthetic) {
     const label=document.createElement('label');label.className='small';label.textContent='Tap to select start time (seconds):';
     const field=document.createElement('input');field.className='time';field.readOnly=true;field.value=g.start.toFixed(3);field.setAttribute('aria-label','Start seconds for review window '+(i+1));
     field.addEventListener('click',()=>field.select());
-    item.append(title,info,idx,label,field);list.append(item);
+    const statusLabel=document.createElement('label');statusLabel.className='small';statusLabel.textContent='Human review status (not an automated classification):';
+    const select=document.createElement('select');select.className='review-field review-status';select.setAttribute('aria-label','Human status for review window '+(i+1));
+    for (const [value,text] of [['not_reviewed','Not reviewed'],['needs_original_audio','Needs original audio'],['ordinary_source_noted','Ordinary source noted'],['inconclusive','Inconclusive after review']]) {
+      const option=document.createElement('option');option.value=value;option.textContent=text;select.append(option);
+    }
+    const noteLabel=document.createElement('label');noteLabel.className='small';noteLabel.textContent='Optional private operator note (240 characters max):';
+    const note=document.createElement('input');note.type='text';note.className='review-field review-note';note.maxLength=240;note.autocomplete='off';note.setAttribute('aria-label','Operator note for review window '+(i+1));
+    select.addEventListener('change',resetPreparedExport);
+    note.addEventListener('input',resetPreparedExport);
+    item.append(title,info,idx,label,field,statusLabel,select,noteLabel,note);list.append(item);
   }
   if (!groups.length) {const p=document.createElement('p');p.textContent='Scanner reported no candidate windows. This is not evidence that nothing occurred.';list.append(p);}
   document.getElementById('results').hidden=false;
@@ -143,10 +162,44 @@ function showReview(report, synthetic) {
   document.getElementById('provenance').textContent=synthetic ? 'SYNTHETIC DEMO: Invented scanner flags for interface testing. Not a real VEIL session or research result.' : 'UNVERIFIED SCANNER OUTPUT: Report structure passed local checks, but the source session and audio have NOT been verified. Flags do not establish speech, EVP, or a paranormal cause.';
   setStatus(synthetic ? 'Synthetic demo loaded — invented data only.' : 'Scanner report opened locally. Source evidence remains unverified.',true);
 }
+function buildAnnotationExport(report, groups, selections, synthetic) {
+  if (typeof synthetic !== 'boolean' || !Array.isArray(groups) || !Array.isArray(selections) || groups.length !== selections.length) throw new Error('Review selection mismatch');
+  const entries = groups.map((g,i) => {
+    const item=selections[i];
+    if (!item || !REVIEW_STATUSES.includes(item.status)) throw new Error('Invalid human review status');
+    const note=boundedString(item.note,'operator note',240).trim();
+    return {window_id:'R-'+String(i+1).padStart(3,'0'),start_seconds:g.start,end_seconds:g.end,
+      scanner_candidate_indices:g.indices.slice(),human_status:item.status,operator_note:note,evidence_status:'unverified'};
+  });
+  return {schema:'veil.signal.pocket_review_annotations.v1',source:synthetic?'synthetic_demo':'imported_unverified_scanner_report',
+    session_id:report.session,scanner_flags:report.candidates.length,review_windows:groups.length,
+    warning:'Human annotations only. Scanner flags and operator judgments are not independently verified evidence.',entries};
+}
+function resetPreparedExport() {
+  const panel=document.getElementById('annotation-export');
+  if (panel) panel.hidden=true;
+  const output=document.getElementById('annotation-output');
+  if (output) output.value='';
+}
+function prepareAnnotations() {
+  if (!activeReview) {setStatus('Open a report before preparing annotations.',false,true);return;}
+  try {
+    const selections=Array.from(document.querySelectorAll('#windows .window')).map(item=>({
+      status:item.querySelector('.review-status').value,
+      note:item.querySelector('.review-note').value
+    }));
+    const payload=buildAnnotationExport(activeReview.report,activeReview.groups,selections,activeReview.synthetic);
+    const output=document.getElementById('annotation-output');
+    output.value=JSON.stringify(payload,null,2);
+    document.getElementById('annotation-export').hidden=false;
+    setStatus('Private review JSON prepared locally. Select and copy it manually; nothing was uploaded or saved.',true);
+  } catch (err) {resetPreparedExport();setStatus('Could not prepare annotations: '+(err instanceof Error?err.message:'Unknown error'),false,true);}
+}
 function setStatus(message,ready=false,error=false) {
   const el=document.getElementById('status');el.textContent=message;el.className=error?'error':ready?'ready':'';
 }
 function clearReview() {
+  activeReview=null;resetPreparedExport();
   document.getElementById('results').hidden=true;
   document.getElementById('empty').hidden=false;
   document.getElementById('summary').replaceChildren();
@@ -163,6 +216,7 @@ if (typeof document !== 'undefined') {
     showReview(validateReport(data),true);
   });
   document.getElementById('clear').addEventListener('click',clearReview);
+  document.getElementById('prepare-annotations').addEventListener('click',prepareAnnotations);
   document.getElementById('report-file').addEventListener('change',async (event)=>{
     const file=event.target.files && event.target.files[0];
     if (!file) return;
