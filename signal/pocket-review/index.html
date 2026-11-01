@@ -16,7 +16,7 @@ header {display:flex;align-items:center;gap:12px;margin-bottom:20px}
 h1 {font-size:clamp(1.6rem,6vw,2.1rem);line-height:1.12;margin:0}
 .kicker {letter-spacing:.12em;text-transform:uppercase;font-size:.68rem;color:#9fb5c4;font-weight:750}
 .tag {display:inline-block;border:1px solid #b3a063;border-radius:99px;color:#ffe4a0;padding:4px 10px;font-size:.75rem;font-weight:700;margin-top:8px}
-.card {background:#152432;border:1px solid #355166;border-radius:16px;padding:17px;margin:14px 0;box-shadow:0 10px 24px #0003}
+.card {background:#152432;border:1px solid #355166;border-radius:16px;padding:13px;margin:10px 0;box-shadow:0 10px 24px #0003}
 strong {color:#fff}
 p {margin:8px 0 12px;color:#d1dee7}
 button,.pick {border:1px solid #5c8d9e;background:#213e50;color:#fff;border-radius:11px;min-height:46px;padding:10px 14px;font:inherit;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
@@ -34,13 +34,13 @@ button:active {transform:translateY(1px)}
 .stat span {display:block;color:#b3c7d5;font-size:.8rem}
 .stat strong {display:block;font-size:1.2rem;overflow-wrap:anywhere}
 #results[hidden],#empty[hidden] {display:none}
-.window {background:#0e1c29;border:1px solid #355468;border-radius:12px;padding:14px;margin:10px 0}
+.window {background:#0e1c29;border:1px solid #355468;border-radius:12px;padding:11px;margin:8px 0}
 .window h3 {margin:0 0 6px;font-size:1rem}
 .window p {margin:4px 0}
 .time {width:100%;background:#08131d;color:#d6fff1;border:1px solid #5a8c8d;border-radius:8px;padding:10px;font:600 1rem ui-monospace,Consolas,monospace}
 .note {padding:12px;border-radius:10px;background:#302b21;border:1px solid #6d5e3b;color:#f7e4ba}
 .review-field {display:block;width:100%;margin-top:10px;padding:10px;background:#0b1722;color:#f4faff;border:1px solid #6b96a8;border-radius:8px;font:inherit;min-height:44px}
-#annotation-output {min-height:220px;resize:vertical;font:0.8rem ui-monospace,Consolas,monospace;overflow-wrap:anywhere}
+#annotation-output {min-height:150px;resize:vertical;font:0.8rem ui-monospace,Consolas,monospace;overflow-wrap:anywhere}
 #annotation-export[hidden] {display:none}
 footer {color:#9eb6c5;font-size:.82rem;margin-top:24px}
 @media (min-width:600px) {.summary {grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -60,9 +60,9 @@ footer {color:#9eb6c5;font-size:.82rem;margin-top:24px}
 <div id="windows" aria-live="polite"></div>
 <div class="note"><strong>Optional human triage — not an evidence finding</strong><p>Choose a status and optional short note for each window. Your choices stay in this tab until you explicitly prepare text to copy. No autosave, network transfer, or alteration of the scanner report.</p>
 <button id="prepare-annotations" type="button">Prepare private review JSON</button>
-<div id="annotation-export" hidden><label for="annotation-output" class="small">Private JSON — select and copy manually; it includes the session ID and any notes you entered. Do not post publicly.</label><textarea id="annotation-output" class="review-field" readonly spellcheck="false" aria-label="Private review JSON for manual copying"></textarea><p class="small">This text is not saved by SIGNAL. On some phones, select-all/copy may require a long press. Re-prepare after edits.</p></div></div></section>
+<div id="annotation-export" hidden><button id="copy-annotations" type="button">Copy JSON</button><p id="copy-feedback" role="status" aria-live="polite" class="small"></p><label for="annotation-output" class="small">Private JSON — select and copy manually; it includes the session ID and any notes you entered. Do not post publicly.</label><textarea id="annotation-output" class="review-field" readonly spellcheck="false" aria-label="Private review JSON for manual copying"></textarea><p class="small">This text is not saved by SIGNAL. On some phones, select-all/copy may require a long press. Re-prepare after edits.</p></div></div></section>
 <section id="empty" class="card"><h2>What this is — and isn't</h2><p>This is a deliberately limited offline phone viewer with optional in-memory human triage, not a live connection to SIGNAL on your PC. It cannot play source WAV files, identify voices, command VEIL instruments, or certify evidence. A human must review candidate audio against ordinary explanations and controls.</p></section>
-<footer>VEIL Research Project · Development preview · No third-party scripts, trackers, cloud APIs or network requests. Opening this file from a phone's local storage has not yet been verified on a Samsung Galaxy S25.</footer>
+<footer>VEIL Research Project · Development preview · No third-party scripts, trackers, cloud APIs or network requests. Synthetic demo loading and JSON preparation were observed on a Galaxy S25 in Chrome on November 1, 2026. Copying remains unverified until tested on-device.</footer>
 </main>
 <script id="logic">
 'use strict';
@@ -180,6 +180,8 @@ function resetPreparedExport() {
   if (panel) panel.hidden=true;
   const output=document.getElementById('annotation-output');
   if (output) output.value='';
+  const feedback=document.getElementById('copy-feedback');
+  if (feedback) feedback.textContent='';
 }
 function prepareAnnotations() {
   if (!activeReview) {setStatus('Open a report before preparing annotations.',false,true);return;}
@@ -194,6 +196,24 @@ function prepareAnnotations() {
     document.getElementById('annotation-export').hidden=false;
     setStatus('Private review JSON prepared locally. Select and copy it manually; nothing was uploaded or saved.',true);
   } catch (err) {resetPreparedExport();setStatus('Could not prepare annotations: '+(err instanceof Error?err.message:'Unknown error'),false,true);}
+}
+async function copyAnnotations() {
+  const output=document.getElementById('annotation-output');
+  const feedback=document.getElementById('copy-feedback');
+  if (!activeReview || document.getElementById('annotation-export').hidden || !output.value) {
+    feedback.textContent='Prepare JSON before copying.'; return;
+  }
+  try {
+    // Local file pages may not grant clipboard permission; never upload the text.
+    if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
+      throw new Error('Clipboard API unavailable');
+    }
+    await navigator.clipboard.writeText(output.value);
+    feedback.textContent='Copied to clipboard. Keep private review notes confidential.';
+  } catch (_) {
+    output.focus(); output.select();
+    feedback.textContent='Automatic copy unavailable here. Text selected: long-press and choose Copy.';
+  }
 }
 function setStatus(message,ready=false,error=false) {
   const el=document.getElementById('status');el.textContent=message;el.className=error?'error':ready?'ready':'';
@@ -217,6 +237,7 @@ if (typeof document !== 'undefined') {
   });
   document.getElementById('clear').addEventListener('click',clearReview);
   document.getElementById('prepare-annotations').addEventListener('click',prepareAnnotations);
+  document.getElementById('copy-annotations').addEventListener('click',copyAnnotations);
   document.getElementById('report-file').addEventListener('change',async (event)=>{
     const file=event.target.files && event.target.files[0];
     if (!file) return;
