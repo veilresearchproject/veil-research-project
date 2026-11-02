@@ -25,8 +25,7 @@ class StageTests(unittest.TestCase):
         self.assertEqual(s.face.snapshot().mouth_open,0)
     def test_exception_returns_error(self):
         s=RevealStage()
-        with self.assertRaises(RuntimeError):
-            s.speak('Hello.',lambda _: (_ for _ in ()).throw(RuntimeError('speaker error')))
+        self.assertFalse(s.speak('Hello.',lambda _: (_ for _ in ()).throw(RuntimeError('speaker error')))
         self.assertEqual(s.face.mode,Mode.ERROR)
     def test_blocked_answer_never_spoken(self):
         s=RevealStage();spoken=[]
