@@ -1,0 +1,192 @@
+{
+  "version": "2.0.0",
+  "baseline": "v1.9.9 verified Library checkpoint (v1.8 geometry preserved)",
+  "changes": [
+    "4,628 real triangles in 5 editable architectural groups (rear wall, side cladding, epoxy floor, roof-class perimeter service rails)",
+    "Six modeled ceiling softboxes now illuminate surfaces using bounded direction- and distance-dependent diffuse lighting",
+    "Room-scale collision at rear partition; existing mobile tap/hold navigation unchanged",
+    "New architectural materials use existing live PBR atlases; separate UV-mapped PBR GLB export created"
+  ],
+  "geometry": {
+    "newGroups": 5,
+    "newTriangles": 4628,
+    "finite": true,
+    "minTriangleArea": 6.63e-07,
+    "originalV18Groups": 43,
+    "roofClassGroups": 1
+  },
+  "visual": {
+    "camera": [
+      -23.8,
+      1.72,
+      13.85
+    ],
+    "yaw": 0.035,
+    "pitch": 0,
+    "viewport": [
+      1440,
+      900
+    ],
+    "before": "before_webgl_1440_GB001.png",
+    "after": "after_webgl_1440_GB001.png",
+    "comparison": "VEIL_v200_Actual_WebGL_Before_After.png",
+    "difference": {
+      "meanAbsoluteRGB": 8.817,
+      "changedPixelPctMeanRGBAbove20": 14.98,
+      "metricMeaning": "Visual difference only, not a photorealism score"
+    }
+  },
+  "originalGLBCount": 7,
+  "originalGLBSHA256": {
+    "future-research-center/VEIL_Architectural_Mesh_v14.glb": "fa5f4a715117ef60b01be5c3586a415bc4ce1d433aed809731685a1a78548681",
+    "future-research-center/VEIL_Curved_Instruments_v13.glb": "aba5dbd9d7d2e898d9f25b9ff58e162165277d7eacab7b1738a771145fb20b65",
+    "future-research-center/VEIL_GB001_Correlation_v18_PBR.glb": "9246db3aa0c60db2dca2b0d5179bbd5dec148d468ec45289241bd6a3217f90f1",
+    "future-research-center/VEIL_MTC_Acoustic_Interior_v16.glb": "d06f9b4e2be9c581983bdb31aea4b9f064fcee47f5299869fc4080c2ef0db7ce",
+    "future-research-center/VEIL_Research_Center_Visitor_1_0.glb": "19748e689ed59faca434e3ffb9f7df5110ae06200ae084ffa3490c86a5483182",
+    "future-research-center/VEIL_SIGNAL_Command_v17.glb": "b32ea0479bdcb777b9e273c4e8b093bb7a9cafca54df9df9ed05badd9f940c57",
+    "future-research-center/VEIL_Weather_Envelope_v15.glb": "563000db41da3713ab3f023818a70803b10fb15ad8f81e840f26c7fa48eaf62f"
+  },
+  "glbExport": {
+    "version": "2.0.0",
+    "triangles": 4628,
+    "sourceGroups": 5,
+    "gltfMeshes": 26,
+    "gltfPrimitives": 26,
+    "images": 52,
+    "textures": 52,
+    "materials": 26,
+    "uvMapped": true,
+    "glbBytes": 381420,
+    "sha256": "1db5cee499a0208c17649a1e8174ed0c424cf919caa5aef22f990075f538b75f",
+    "roundtrip": "PASS"
+  },
+  "limitations": [
+    "Not photorealistic; lighting is analytic approximation, not ray-traced global illumination",
+    "No actual physical research center or live SIGNAL telemetry; all displays simulated",
+    "Real Samsung Galaxy S25 GPU performance not measured",
+    "Live HTML uses triplanar material atlas; exported GLB has authored UV coordinates",
+    "Canvas fallback full 13-stop traversal not verified in this run; three-stop smoke test passed"
+  ],
+  "browserWebGLDesktop": {
+    "mode": "webgl",
+    "version": "after",
+    "viewport": [
+      1440,
+      900
+    ],
+    "camera": {
+      "position": [
+        -23.8,
+        1.72,
+        13.85
+      ],
+      "yaw": 0.035,
+      "pitch": 0,
+      "level": 1,
+      "stop": 8
+    },
+    "screenshot": "/mnt/data/veil_v200_work/after_webgl_1440_GB001.png",
+    "renderer": "webgl",
+    "tourStops": 13,
+    "toggleBefore": {
+      "roof": true,
+      "section": false,
+      "night": false
+    },
+    "toggleAfter": {
+      "roof": false,
+      "section": true,
+      "night": true
+    },
+    "architecture": {
+      "v18": 43,
+      "v200": 5,
+      "v200Triangles": 4628,
+      "roofGroup": 1,
+      "backWallCollision": true
+    },
+    "PBRAtlases": 2,
+    "glError": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "mobile": null
+  },
+  "browserWebGLMobile": {
+    "mode": "webgl",
+    "version": "after",
+    "viewport": [
+      412,
+      850
+    ],
+    "camera": {
+      "position": [
+        -23.8,
+        1.72,
+        13.85
+      ],
+      "yaw": 0.035,
+      "pitch": 0,
+      "level": 1,
+      "stop": 8
+    },
+    "screenshot": "/mnt/data/veil_v200_work/after_webgl_412_GB001.png",
+    "renderer": "webgl",
+    "tourStops": 13,
+    "toggleBefore": {
+      "roof": true,
+      "section": false,
+      "night": false
+    },
+    "toggleAfter": {
+      "roof": false,
+      "section": true,
+      "night": true
+    },
+    "architecture": {
+      "v18": 43,
+      "v200": 5,
+      "v200Triangles": 4628,
+      "roofGroup": 1,
+      "backWallCollision": true
+    },
+    "PBRAtlases": 2,
+    "glError": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "mobile": {
+      "tapDistance": 0.55,
+      "holdDistance": 2.423,
+      "drawerOpened": true,
+      "mobileStats": {
+        "pointerDown": 2,
+        "tapSteps": 1,
+        "heldReleases": 1,
+        "lastAction": "KeyW",
+        "lastDistance": 2.423359999999963
+      }
+    }
+  },
+  "canvasFallback": {
+    "renderer": "software",
+    "stopsTested": [
+      0,
+      8,
+      12
+    ],
+    "titles": [
+      "Exterior / Building Overview",
+      "Flexible Experiment Room \u00b7 GB-001",
+      "Command Center \u00b7 2nd floor"
+    ],
+    "mobileDrawer": true,
+    "errors": []
+  },
+  "static": {
+    "nodeSyntax": "PASS",
+    "inlineJavascriptSections": 8
+  },
+  "integrity": {
+    "htmlSHA256": "0d9ee45917249d30739876f4a813bbf33f9bd207779f7b964f7c0bdd0ff44be7",
+    "sourceSHA256": "6cb859afb03c4fc7b2484f4942be7a17dadef6fc53d2154e4bc8db32d8c1ed5b"
+  }
+}
