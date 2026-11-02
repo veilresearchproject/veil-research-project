@@ -1,0 +1,22 @@
+name: SIGNAL offline response integration tests
+on:
+  push:
+    branches:
+      - feature/signal-response-quality-20261102
+  pull_request:
+    paths:
+      - 'signal_response_quality/**'
+      - '.github/workflows/signal-response-quality.yml'
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run all offline tests
+        working-directory: signal_response_quality
+        run: python -m unittest discover -s tests -v
