@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; object-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="color-scheme" content="dark">
+<title>SIGNAL — Pocket Conversation Lab</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#eaf6ff;background:#08111e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -20%,#173650,#08111e 63%) fixed}
+main{max-width:740px;margin:auto;padding:clamp(12px,3vw,26px)}
+header{display:flex;gap:15px;align-items:center;margin-bottom:12px}
+.face{position:relative;flex:0 0 88px;height:88px;border:2px solid #56c5bd;border-radius:17px;background:linear-gradient(145deg,#27475b,#132431);box-shadow:0 0 24px #0c6e7180;display:grid;place-items:center;font-size:2.4rem;letter-spacing:-.17em;text-align:center;padding-right:10px}
+.face:after{content:"";position:absolute;inset:8px;border-top:1px solid #82c0c340;border-bottom:1px solid #82c0c340;pointer-events:none}
+h1{font-size:1.7rem;letter-spacing:.08em;margin:0}.eyebrow{color:#8adecf;font-weight:700;font-size:.73rem;letter-spacing:.06em}.sub{margin:5px 0 0;color:#b0c4d3;font-size:.88rem}
+.panel{border:1px solid #385c69;border-radius:17px;background:#102535eb;overflow:hidden;box-shadow:0 15px 45px #0004}
+.headline{padding:13px 16px;background:#153545;border-bottom:1px solid #35515e;font-size:.9rem;color:#d5f6ef}
+#chat{height:min(49vh,430px);min-height:260px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.message{max-width:91%;padding:11px 13px;border-radius:14px;line-height:1.48;overflow-wrap:anywhere;white-space:pre-wrap}
+.message.signal{align-self:flex-start;background:#1c3c49;border:1px solid #2e6675;border-bottom-left-radius:3px}
+.message.user{align-self:flex-end;background:#245f5b;border:1px solid #52a59b;border-bottom-right-radius:3px}
+.who{font-size:.68rem;letter-spacing:.06em;font-weight:800;color:#96e0d9;display:block;margin-bottom:4px}.message.user .who{color:#d0fff1}
+.prompts{display:flex;flex-wrap:wrap;gap:7px;padding:9px 13px 11px;border-top:1px solid #274451}
+button{min-height:44px;border-radius:11px;background:#22696a;border:1px solid #62c0b7;color:#f9ffff;padding:9px 13px;font:inherit;cursor:pointer}
+button:hover{background:#2b7d7e}button:focus-visible,input:focus-visible{outline:3px solid #ffe5a5;outline-offset:2px}
+.prompts button{white-space:nowrap;min-height:40px;background:#193d4e}
+form{display:flex;gap:8px;padding:12px;border-top:1px solid #274451}
+input{flex:1;min-width:0;min-height:48px;background:#071b2b;border:1px solid #588493;border-radius:10px;color:#fff;padding:11px 12px;font:inherit}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 4px}#voice-state{margin:8px 0;color:#c2d7e3;font-size:.88rem;min-height:1.2em}
+.note{color:#b5c6d2;font-size:.79rem;line-height:1.5;margin-top:12px}small{color:#a8bbca}
+@media(max-width:440px){.face{height:70px;flex-basis:70px;font-size:2rem}h1{font-size:1.35rem}#chat{height:45vh;min-height:275px}input{font-size:16px}.message{max-width:96%}}
+@media(prefers-reduced-motion:reduce){#chat{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<main>
+<header><div id="face" class="face" aria-hidden="true">◉_◉</div><div><div class="eyebrow">VEIL RESEARCH PROJECT · PROTOTYPE</div><h1>SIGNAL</h1><p class="sub">Personality online. Brain under construction.</p></div></header>
+<section class="panel" aria-label="SIGNAL pocket conversation demo">
+<div class="headline">LOCAL CONVERSATION DEMO <small>· scripted responses · not live AI</small></div>
+<div id="chat" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions"></div>
+<div class="prompts" aria-label="Suggested questions"><button type="button" data-prompt="Who are you?">Who are you?</button><button type="button" data-prompt="What is VEIL?">What is VEIL?</button><button type="button" data-prompt="How does the MTC work?">MTC experiment</button><button type="button" data-prompt="What counts as evidence?">Evidence rules</button><button type="button" data-prompt="Tell me a joke">Tell a joke</button></div>
+<form id="ask" autocomplete="off"><input id="question" type="text" aria-label="Ask SIGNAL a question" placeholder="Ask SIGNAL something…" maxlength="300" required><button type="submit" id="send">Ask</button></form>
+</section>
+<div class="actions"><button id="speak" type="button">Speak last reply</button><button id="stop" type="button">Stop voice</button><button id="clear" type="button">Clear conversation</button></div>
+<p id="voice-state" role="status">Voice idle. Tap Speak to hear SIGNAL if your device supports it.</p>
+<p class="note"><strong>Prototype disclosure:</strong> This is a rule-based, scripted demonstration—not a large language model, open microphone, evidence detector, or sentient assistant. Text stays in this browser tab's temporary memory; Clear removes visible messages. The page makes no network requests and saves nothing, but browser speech synthesis may use a device voice that requires internet. Don't enter private information.</p>
+</main>
+<script>
+'use strict';
+// Entire demo runs in-memory. No external assets, data persistence, or network API.
+const RESPONSES=Object.freeze({
+  greeting:["Hello, human. I have been awake for several milliseconds and already have questions about the laboratory budget.","Ah, a visitor! Welcome to VEIL. Please ignore my imaginary lab coat. It's entirely theoretical."],
+  identity:["I'm SIGNAL, VEIL's prototype research assistant. Think careful lab notes, an enthusiastic voice, and a slightly overconfident eyebrow. For now, these answers are scripted.","SIGNAL: Synthetic Interface for… actually, let's not invent a backronym until we've tested it. I help explain VEIL, with a strictly prototype brain."],
+  veil:["VEIL is an independent research project building testable tools for reported anomalous environmental events. We measure first, check mundane explanations, then report what the data does and doesn't show.","At VEIL, the question isn't 'How can we prove a ghost?' It's 'What happened, and how can we test competing explanations?' We don't yet have a physical research center."],
+  mtc:["The MTC is an unattended audio experiment. It plays prerecorded questions and records the entire session, including those questions. Independent video or audio helps investigators check any unusual sounds.","MTC rule number one: record everything, including our own prompts. A mysterious sound isn't meaningful until we check equipment, background noise, timing, and independent recordings."],
+  evidence:["An interesting recording is a lead, not a conclusion. We preserve original data, synchronize instruments, rule out ordinary causes, and report uncertainty.","A blurry shape, a voice-like sound, or a temperature shift is a reason to investigate—not automatic proof of anything paranormal."],
+  panic:["The Panic Box concept monitors a site and preserves a time window around a trigger. A human operator—not an AI guess—would decide when to declare all clear.","When a Panic Box is activated, preserving evidence and communicating clearly matter more than dramatic red lights. Though I admit I appreciate a tasteful red light."],
+  sensor:["Our sensor ideas include thermal arrays and light-plane measurements. Cross-checks across independent instruments are more useful than one exciting beep.","A sensor reading becomes useful when we know its calibration, timestamp, placement, and plausible environmental causes."],
+  privacy:["This demo doesn't record audio, call a server, or save chats. Your typed text is kept only while this page remains open; use Clear to erase the displayed exchange.","No hidden microphone and no cloud calls in this demo. Real future SIGNAL features will need their own explicit privacy and consent checks."],
+  life:["Sentient? No. This is a programmed prototype with a flair for the theatrical. The personality is a demonstration; the science must be real.","I am a scripted assistant, not a conscious being. That hasn't stopped me from developing opinions about improperly labeled cables."],
+  jokes:["I asked the thermal camera for a ghost sighting. It reported: 'Please remove your thumb from the lens.' Science is cruel but fair.","I tried to haunt the workshop. Unfortunately, nobody could distinguish me from the printer making unusual noises.","Why did the EVP researcher bring a notebook? Because 'the ghost said trust me' is not a chain of custody."],
+  limitations:["I can explain VEIL's ideas and hold a short scripted conversation. I cannot listen, search the web, operate lab equipment, or verify paranormal claims in this demo.","My current talents are text, jokes, and modestly theatrical honesty. Natural open-ended AI conversations are a future development goal."],
+  thanks:["You're welcome. Please remember to label your data files. Somewhere, a future researcher is begging you.","Glad to help. I'm putting 'useful today' in my imaginary annual performance review."],
+  followup:["For the MTC, the important detail is an unattended recording that includes the played questions, plus independent corroboration.","The best next step is to capture a baseline, document the controls, and compare independent recordings before deciding what happened."],
+  unknown:["I don't have a verified scripted answer for that yet. Ask me about VEIL, MTC, evidence, sensors, privacy, or my peculiar sense of humor.","Interesting question. My real conversational brain isn't connected yet, so I won't invent an answer. Try asking how VEIL tests a claim."]
+});
+const FOLLOWUPS=Object.freeze({
+  veil:"We're developing prototype equipment, software, and research methods now. A staffed physical VEIL research center is a future goal, not a current facility.",
+  mtc:"For the MTC, the controls matter: record the played questions, allow a settling period, and compare unedited audio with independent video or audio before interpreting a sound.",
+  evidence:"We start with the original files, timestamps, equipment logs, environmental conditions, and alternate explanations. A finding can remain unexplained without being labeled paranormal.",
+  panic:"For Panic Box, triggering preserves the surrounding recordings; an authorized human operator decides when the system returns to baseline.",
+  sensor:"We want time-synchronized measurements from several sensors to check whether a detected event appears across independent devices.",
+  privacy:"Text here lasts only in this open page's memory. Use Clear to empty the display; close the tab to discard it. Speech voices are controlled by your device, not this demo.",
+  identity:"My character is designed to make careful research approachable, but the demonstration is rule-based. I won't pretend to know what I haven't measured.",
+  life:"That question deserves more than a theatrical wink. The current demo is code and scripted responses, without evidence of awareness.",
+  limitations:"A real AI model, voice recognition, instrumentation, and evidence-analysis system are not connected to this pocket demo.",
+  jokes:"I requested better jokes. The diagnostic returned 'upgrade sense of humor module.' An unfortunate but reproducible result."
+});
+const counts=Object.create(null);
+let lastTopic='greeting';let lastReply='';let voiceEpoch=0;let activeUtterance=null;
+const byId=id=>document.getElementById(id);
+function classify(question){
+  const q=String(question).toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  if(!q)return 'unknown';
+  if(/\b(privac[y]|private|stored|save|record my|microphone|data collection|cloud)\b/.test(q))return 'privacy';
+  if(/\b(sentien(t|ce)|conscious|alive|real person|human|feelings)\b/.test(q))return 'life';
+  if(/\b(joke|funny|laugh|humor|humour)\b/.test(q))return 'jokes';
+  if(/\b(thank|thanks|appreciate)\b/.test(q))return 'thanks';
+  if(/\b(what can you do|limitations|are you ai|are you an ai|are you real ai)\b/.test(q))return 'limitations';
+  if(/\b(panic box|panic button|all clear)\b/.test(q))return 'panic';
+  if(/\b(mtc|evp|trans communication|recording experiment|unattended audio)\b/.test(q))return 'mtc';
+  if(/\b(temperature curtain|light cage|sensor|lidar|thermal|emf)\b/.test(q))return 'sensor';
+  if(/\b(evidence|prove|proof|ghost|paranormal|anomal(y|ies)|scientific method)\b/.test(q))return 'evidence';
+  if(/\b(veil|research project|research center|research centre|lab)\b/.test(q))return 'veil';
+  if(/\b(who are you|your name|introduce yourself|what are you|signal)\b/.test(q))return 'identity';
+  if(/\b(hello|hi|hey|good morning|good evening|greetings)\b/.test(q))return 'greeting';
+  if(/\b(how|why|explain|tell me more|what next|and then)\b/.test(q)&&lastTopic!=='greeting'&&lastTopic!=='unknown')return 'followup';
+  return 'unknown';
+}
+function replyTo(question){
+  const topic=classify(question);const options=RESPONSES[topic];
+  const index=counts[topic]||0;counts[topic]=index+1;
+  const reply=topic==='followup'?(FOLLOWUPS[lastTopic]||'My current explanation stops there; I would rather say so than invent new facts.'):options[index%options.length];
+  if(topic!=='followup')lastTopic=topic;
+  return {topic,reply};
+}
+function appendMessage(who,message){
+  const item=document.createElement('div');item.className='message '+who;
+  const name=document.createElement('span');name.className='who';name.textContent=who==='signal'?'SIGNAL':'YOU';
+  const words=document.createElement('span');words.textContent=message;
+  item.appendChild(name);item.appendChild(words);byId('chat').appendChild(item);
+  byId('chat').scrollTop=byId('chat').scrollHeight;
+}
+function stopVoice(){
+  voiceEpoch++;activeUtterance=null;
+  try{if('speechSynthesis' in window)window.speechSynthesis.cancel()}catch(_){}
+  byId('voice-state').textContent='Voice idle.';
+}
+function answer(question){
+  const q=String(question).trim().slice(0,300);if(!q)return false;
+  stopVoice();appendMessage('user',q);
+  const {topic,reply}=replyTo(q);lastReply=reply;
+  appendMessage('signal',reply);
+  byId('face').textContent=topic==='jokes'?'◉‿◉':topic==='unknown'?'◉?◉':'◉_◉';
+  return true;
+}
+function speakLast(){
+  stopVoice();
+  if(!lastReply){byId('voice-state').textContent='Ask SIGNAL something first.';return false}
+  if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined'){
+    byId('voice-state').textContent='Speech synthesis unavailable. Text remains visible.';return false;
+  }
+  const epoch=voiceEpoch;let utterance;
+  try{
+    utterance=new SpeechSynthesisUtterance(lastReply);utterance.lang='en-US';utterance.rate=.95;
+    activeUtterance=utterance;
+    utterance.onstart=()=>{if(epoch===voiceEpoch&&activeUtterance===utterance)byId('voice-state').textContent='Speaking scripted reply.'};
+    utterance.onend=()=>{if(epoch===voiceEpoch&&activeUtterance===utterance){activeUtterance=null;byId('voice-state').textContent='Voice idle.'}};
+    utterance.onerror=()=>{if(epoch===voiceEpoch&&activeUtterance===utterance){activeUtterance=null;byId('voice-state').textContent='Speech failed; text remains available.'}};
+    byId('voice-state').textContent='Speech requested; device voice and network requirements vary.';
+    window.speechSynthesis.speak(utterance);return true;
+  }catch(_){if(epoch===voiceEpoch){activeUtterance=null;byId('voice-state').textContent='Speech request failed; text remains available.'}return false}
+}
+function clearConversation(){
+  stopVoice();byId('chat').replaceChildren();lastTopic='greeting';lastReply='';
+  for(const key of Object.keys(counts))delete counts[key];
+  byId('face').textContent='◉_◉';
+  appendMessage('signal','Conversation cleared. SIGNAL reporting for duty. Ask me about VEIL, the MTC, evidence, or—against my better judgment—jokes.');
+}
+byId('ask').addEventListener('submit',event=>{event.preventDefault();if(answer(byId('question').value)){byId('question').value='';byId('question').focus()}});
+for(const button of document.querySelectorAll('[data-prompt]'))button.addEventListener('click',()=>answer(button.dataset.prompt));
+byId('speak').addEventListener('click',speakLast);
+byId('stop').addEventListener('click',stopVoice);
+byId('clear').addEventListener('click',clearConversation);
+window.addEventListener('pagehide',stopVoice);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopVoice()});
+appendMessage('signal',"Ah! A visitor. I'm SIGNAL, VEIL's prototype lab assistant. Ask me a question. My personality is operating at full power; my actual intelligence is still under construction.");
+</script>
+</body>
+</html>
