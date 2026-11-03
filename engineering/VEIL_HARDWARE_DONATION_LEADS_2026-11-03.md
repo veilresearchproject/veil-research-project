@@ -47,3 +47,12 @@ Independent VEIL initiative, Founder and Lead Researcher Andrew Underwood; no ph
 ## Next
 
 Prepare separate outreach for Mini MTC and SIGNAL desktop. Mark each as UNSENT until actual confirmation.
+
+## Verified outreach update — 2026-11-03
+- Cornell Computer Reuse Association: **SENT** to ccra@cornell.edu. Subject: Computer donation request — VEIL Mini MTC independent research instrument. Gmail message ID 1a1a12a8f73097c9. Request one compact Windows computer; shipping/availability unconfirmed.
+- NVIDIA Enterprise/Professional Visualization communications: **SENT** to enterprise-pr@nvidia.com. Subject: Referral request — retired NVIDIA GPU/workstation loan for local VEIL SIGNAL AI prototype. Gmail message ID 1a1a12b0c2758e60. Communications referral, *not* proof of any hardware donation program.
+- MINISFORUM: **ALREADY SENT Nov 1**, pr@minisforum.com (Gmail 1a1982f96e7e88c3), requesting high-memory compact SIGNAL AI machine; no duplicate sent today.
+- Beelink: **ALREADY SENT Nov 1**, beelink@bee-link.com (Gmail 1a1982fa37072138), requesting high-performance SIGNAL compact AI PC; no duplicate sent today.
+- GMKtec: **ALREADY SENT Nov 1**, summer@gmktec.com (Gmail 1a1982f9d3372ee7), requesting EVO-style SIGNAL AI mini-PC; no duplicate sent today.
+- Framework: sponsorship inquiry **NOT SENT**; official web form requires submission.
+- No replies from MINISFORUM/Beelink/GMKtec detected in Nov 3 inbox query; this is not a guarantee that they have received or accepted pitches. No sponsorship agreed and no purchases made.
