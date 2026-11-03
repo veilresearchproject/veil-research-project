@@ -90,6 +90,18 @@ class Tests(unittest.TestCase):
     def test_14_no_transcript_persistence(self):
         self.assertNotIn('open(',bridge.chat.__code__.co_names)
         self.assertFalse(hasattr(bridge,'transcripts'))
+    def test_16_veil_identity_is_explicit_and_not_medical(self):
+        prompt=bridge.SYSTEM.lower()
+        self.assertIn('andrew underwood',prompt)
+        self.assertIn('reported anomalous environmental events',prompt)
+        self.assertIn('not a viral epidemiology project',prompt)
+        self.assertIn('do not invent an expansion',prompt)
+    def test_17_identity_is_in_actual_model_request(self):
+        status,_,_=self.req('POST','/api/chat',{'question':'What is VEIL?'},self.good_headers)
+        self.assertEqual(status,200)
+        prompt=FakeOllama.last_chat['messages'][0]['content']
+        self.assertIn('do not invent an expansion',prompt)
+        self.assertIn('do not guess',prompt.lower())
     def test_15_server_really_binds_loopback(self):
         self.assertEqual(self.bridge.server_address[0],'127.0.0.1')
 
