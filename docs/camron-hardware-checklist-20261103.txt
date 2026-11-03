@@ -1,0 +1,38 @@
+VEIL RESEARCH PROJECT — COMPUTER HARDWARE CHECKLIST
+November 3, 2026 | For Camron
+
+MINI MTC — starting screening targets, not guaranteed minimums:
+- Working x86-64 mini PC or laptop; 8 GB RAM minimum, 16 GB preferred
+- 4 logical CPU cores; SSD with at least 64 GB available after installing software
+- Two USB ports, reliable microphone capture and simultaneous speaker output
+- Stable power adapter. Battery/UPS to be separately tested.
+- Avoid sleep, forced restarts or overheating during unattended recording.
+
+SIGNAL MAIN DESKTOP — starting CPU-only local AI targets:
+- 16 GB RAM minimum, 32 GB preferred
+- 8 logical CPU cores target
+- 100 GB free SSD, ideally 500 GB+ capacity
+- Microphone/speaker, dual monitor connectivity, reliable networking
+- GPU optional for existing CPU configuration; no assumption that old GPUs are compatible.
+
+SEND THESE DETAILS BEFORE BUYING:
+1. Brand and exact model
+2. CPU model
+3. Installed RAM
+4. SSD capacity and available space
+5. OS and OS license status
+6. Pictures of ports and adapter (do not publicly share serial numbers)
+7. Price, donation, or loan arrangement; shipping/return costs
+8. Faults, missing parts and known issues
+
+Do not purchase just because the specifications pass. Screen condition, price and fit for the intended workload. Old laptops can still have a secondary recording role.
+
+MINI MTC ACCEPTANCE TESTS:
+- Verify speaker playback and USB microphone are captured together.
+- Complete 90-minute unattended trial with questions, baseline and final silence.
+- Check for audio clipping, dropouts, clocks drifting, sleep events and missing files.
+- Preserve unedited audio and SHA-256 hashes; test overnight only after initial success.
+- Keep an independently timestamped corroborating camera/recorder where practical.
+- Clean-install or inspect donated hardware before connecting to research data.
+
+Project: https://veilresearchproject.github.io/veil-research-project/
