@@ -1,0 +1,64 @@
+/* SIGNAL v31 — limited blinded source-identity review rehearsal.
+ * Masks case source type/label/timestamps in a packet, not leaked facts inside
+ * free-text descriptions. Pseudorandom order is NOT scientific or secure blinding.
+ */
+(function(root){
+'use strict';
+const CATEGORIES=Object.freeze(['needs-more-data','possible-ordinary-cause','cannot-determine-from-description']);
+const SCHEMA='signal-blind-review',VERSION=1;
+function fail(s){throw new Error(s)}
+function clean(s,max,min=0){if(typeof s!=='string'||s.length>max||s.trim().length<min||/[\u0000-\u001f\u007f]/.test(s))fail('Invalid text field');return s.trim()}
+function seed(s){if(typeof s!=='string'||!/^[0-9a-f]{8}$/i.test(s))fail('Seed must be eight hexadecimal characters');return s.toLowerCase()}
+function shuffled(n,s){let x=parseInt(seed(s),16)||0x9e3779b9;const indexes=Array.from({length:n},(_,i)=>i);for(let i=n-1;i>0;i--){x^=x<<13;x^=x>>>17;x^=x<<5;x>>>=0;const j=x%(i+1);[indexes[i],indexes[j]]=[indexes[j],indexes[i]]}return indexes}
+function create(book,seedHex){
+ if(!book||book.schema!=='signal-casebook'||book.version!==1||!Array.isArray(book.entries)||book.entries.length<1||book.entries.length>30)fail('Expected nonempty Casebook v1');
+ const s=seed(seedHex),indexes=shuffled(book.entries.length,s),items=[],key=[];
+ for(let i=0;i<indexes.length;i++){
+  const original=book.entries[indexes[i]];
+  if(!original||original.number!==indexes[i]+1)fail('Malformed Casebook observation numbering');
+  const alias='OBS-'+String(i+1).padStart(3,'0');
+  const description=clean(original.description,1000,5);
+  items.push({alias,description});
+  key.push({alias,originalNumber:original.number,sourceType:clean(original.sourceType,20,2),sourceLabel:typeof original.sourceLabel==='string'?clean(original.sourceLabel,100):'',observedAt:typeof original.observedAt==='string'?clean(original.observedAt,40):''});
+ }
+ const packet={schema:SCHEMA,version:VERSION,packetId:'B-'+s.toUpperCase()+'-'+items.length,disclosure:'Descriptions only. Source identity/type/timestamps intentionally withheld. Description text may nevertheless reveal them.',items};
+ return {packet,key};
+}
+function validatePacket(packet){
+ if(!packet||typeof packet!=='object'||packet.schema!==SCHEMA||packet.version!==1||!/^B-[0-9A-F]{8}-\d{1,2}$/.test(String(packet.packetId))||!Array.isArray(packet.items)||packet.items.length<1||packet.items.length>30)fail('Invalid blind packet');
+ const seen=new Set();for(const [i,v] of packet.items.entries()){
+  if(!v||v.alias!=='OBS-'+String(i+1).padStart(3,'0')||seen.has(v.alias))fail('Invalid blind aliases');seen.add(v.alias);clean(v.description,1000,5)
+ }
+ return packet;
+}
+function finalize(packet,decisions,reviewer,at=new Date().toISOString()){
+ validatePacket(packet);const who=clean(reviewer,80,2);
+ if(typeof at!=='string'||!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(at)||!Number.isFinite(Date.parse(at)))fail('Invalid timezone-qualified review timestamp');
+ if(!Array.isArray(decisions)||decisions.length!==packet.items.length)fail('Review every anonymous item before finalizing');
+ const ids=new Set();const notes=decisions.map((d,i)=>{
+  if(!d||typeof d!=='object'||d.alias!==packet.items[i].alias||ids.has(d.alias)||!CATEGORIES.includes(d.category))fail('Invalid reviewer decision');
+  ids.add(d.alias);return {alias:d.alias,category:d.category,reason:clean(d.reason,500,10)};
+ });
+ return {schema:'signal-blind-decision',version:1,packetId:packet.packetId,reviewer:who,reviewedAt:at,identityUnverified:true,decisions:notes};
+}
+function reveal(packet,key,finalReview){
+ validatePacket(packet);
+ if(!finalReview||finalReview.schema!=='signal-blind-decision'||finalReview.packetId!==packet.packetId||!Array.isArray(finalReview.decisions)||finalReview.decisions.length!==packet.items.length)fail('Finalize review for this packet before reveal');
+ if(!Array.isArray(key)||key.length!==packet.items.length)fail('Missing source answer key');
+ const items=key.map((k,i)=>{
+  if(k.alias!==packet.items[i].alias||finalReview.decisions[i].alias!==k.alias)fail('Packet/review key mismatch');
+  return {...k,category:finalReview.decisions[i].category,reason:finalReview.decisions[i].reason};
+ });
+ return {packetId:packet.packetId,reviewer:finalReview.reviewer,items};
+}
+function report(unblinded){
+ if(!unblinded||!Array.isArray(unblinded.items))fail('Invalid revealed result');
+ const rows=['SIGNAL v31 — BLINDED-SOURCE REHEARSAL, HUMAN REVIEW ONLY','Packet: '+unblinded.packetId,'Reviewer: '+unblinded.reviewer,'Neither independent identity nor true blinding was authenticated. Descriptions may reveal source identity.'];
+ for(const r of unblinded.items)rows.push(`${r.alias} → entry #${r.originalNumber} [${r.sourceType}, ${r.sourceLabel||'unlabeled'}, ${r.observedAt||'time unknown'}] ${r.category}; rationale: ${r.reason.replace(/[\r\n]/g,' ')}`);
+ rows.push('No original recordings or sensor measurements were analyzed. This is not a paranormal finding, consensus measure or verification of independent observation.');
+ return rows.join('\n');
+}
+const api=Object.freeze({create,validatePacket,finalize,reveal,report,categories:CATEGORIES});
+if(typeof module!=='undefined'&&module.exports)module.exports=api;
+root.SIGNALBlind=api;
+})(typeof window!=='undefined'?window:globalThis);
