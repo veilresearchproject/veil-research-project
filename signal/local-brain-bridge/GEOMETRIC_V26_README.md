@@ -12,7 +12,7 @@ This is a **new local-only experiment**, not a replacement or an upgrade of the 
 ## Windows desktop preview
 Place `v26.html`, `v26_server.py`, and `START_GEOMETRIC_SIGNAL_V26.bat` alongside the existing **`server.py`** in the `signal/local-brain-bridge` development folder; **do not move or replace any v25 files**. Ollama must already be running, with the configured local model installed. You used `llama3.2:3b` in CPU-only mode; preserve your prior Ollama CPU environment if it is still needed.
 
-Set the model before launch, e.g. in Command Prompt `set "SIGNAL_MODEL=llama3.2:3b"`, then run `py -3 v26_server.py` from the folder (or use the `.bat` launch script if the environment is already configured). Open **http://127.0.0.1:8766/**, choose **Check local model**, then **Enable local AI**. There is no need to stop the existing working port 8765 instance.
+The `.bat` launcher defaults to `llama3.2:3b`, matching your installed model (unless `SIGNAL_MODEL` is already set). You may instead set `SIGNAL_MODEL=llama3.2:3b` in Command Prompt before running `py -3 v26_server.py` from the folder. Open **http://127.0.0.1:8766/**, choose **Check local model**, then **Enable local AI**. There is no need to stop the existing working port 8765 instance.
 
 Scripted preview also works by opening `v26.html` directly; the local model will deliberately be unavailable in `file://` mode. The v26 preview is **not** tested on your actual Windows desktop yet.
 
