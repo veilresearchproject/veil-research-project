@@ -13,7 +13,7 @@ from signal_local_v33 import model_name, port
 
 HERE = Path(__file__).resolve().parent
 STATIC = {'/':'v43_lab.html','/v43_lab.html':'v43_lab.html',
-          '/workflow-core.js':'workflow-core.js','/packet-core.js':'packet-core.js'}
+          '/workflow-core.js':'workflow-core.js','/packet-core.js':'packet-core.js','/briefing-core.js':'briefing-core.js'}
 
 
 def make_unified_handler(ollama_port, model, directory=None):
