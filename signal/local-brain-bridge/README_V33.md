@@ -17,6 +17,7 @@ The server binds to **127.0.0.1:8772**, responds to only explicitly allowlisted 
 - **26/26 actual Python HTTP integration tests** passed with a fake local Ollama server. Includes real local GET/POST requests, browser-script serving, model-ready probe, protective origin and Host handling, unauthorized equipment-command denial, bounded history/body size, static route allowlist, and fallback when the model is absent.
 - **16/16 Python readiness-check unit tests** passed against the standalone package checks.
 - Existing six Node suites: 25 Casebook + 15 fingerprint + 23 correlation + 27 clock + 23 blind source-review + 14 v33 UI contract = **127/127 checks**.
+- **Chromium 390×844 browser smoke** passed for scripted chat, responsive layout, Casebook, timestamp candidates, source-masked review and reset, using the real client-side modules injected in the page. The browser sandbox blocked navigation to the actual localhost server; this test does not verify on-device browser-to-server or actual Ollama inference.
 - The standalone diagnostic produces `launch_ready=true` when all local files are present. It still cannot guarantee real Windows/Ollama speech or hardware compatibility; those are the next on-device gates.
 
 ## Safety and limits
