@@ -1,6 +1,7 @@
 @echo off
 setlocal
 cd /d "%~dp0"
+if not defined SIGNAL_MODEL set "SIGNAL_MODEL=llama3.2:3b"
 echo SIGNAL v26 geometric preview - separate from working v25.
 echo Only starts localhost:8766. Keep the existing v25 installation unchanged.
 where py >nul 2>&1
