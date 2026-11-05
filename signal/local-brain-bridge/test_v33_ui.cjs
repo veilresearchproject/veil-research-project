@@ -2,7 +2,7 @@
 const fs=require('node:fs'),assert=require('node:assert/strict'),vm=require('node:vm');
 const html=fs.readFileSync(__dirname+'/v33.html','utf8');let count=0;
 const T=(name,fn)=>{fn();count++;console.log('PASS '+name)};
-T('faceless SIGNAL v33',()=>{assert.match(html,/SIGNAL v33/);assert.match(html,/class="entity"/)});
+T('faceless SIGNAL v33',()=>{assert.match(html,/<h1>SIGNAL <span class="small">v33<\/span><\/h1>/);assert.match(html,/class="entity"/)});
 T('blind core loaded before UI script',()=>assert.match(html,/<script src="blind-core\.js"><\/script><script>/));
 T('explicit research limitations',()=>assert.match(html,/not a validated blind or independent study/));
 T('source hiding class',()=>assert.match(html,/blind-mode #casebook/));
