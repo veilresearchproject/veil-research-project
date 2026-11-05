@@ -1,0 +1,90 @@
+/* SIGNAL v30 — explicit clock offset and uncertainty assessment.
+ * Human-entered metadata only. No sensor/audio reads, networking or persistence.
+ * All offsets and uncertainty estimates are UNVERIFIED OPERATOR ASSERTIONS.
+ */
+(function(root){
+'use strict';
+const METHODS=Object.freeze(['manual-check','shared-clap','ntp-log','unknown']);
+function fail(message){throw new Error(message)}
+function finite(v,lo,hi,name){if(typeof v!=='number'||!Number.isFinite(v)||v<lo||v>hi)fail('Invalid '+name);return v}
+function label(s){if(typeof s!=='string'||!s.trim()||s.length>100||/[\u0000-\u001f\u007f]/.test(s))fail('Invalid source label');return s.trim()}
+function key(s){return label(s).toLocaleLowerCase('en-US')}
+function when(s){
+ if(typeof s!=='string'||s.length>40||!/\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,3})?(?:Z|[+-]\d\d:\d\d)$/.test(s))fail('Time requires ISO date, seconds and explicit timezone');
+ const t=Date.parse(s);if(!Number.isFinite(t))fail('Invalid time');return t;
+}
+function windowSeconds(s){if(typeof s!=='number'||!Number.isInteger(s)||s<0||s>300)fail('Window must be 0–300 whole seconds');return s}
+function profile(p){
+ if(!p||typeof p!=='object'||Array.isArray(p))fail('Invalid clock profile');
+ const sourceLabel=label(p.sourceLabel),method=p.method;
+ if(!METHODS.includes(method))fail('Invalid calibration method');
+ const note=typeof p.note==='string'?p.note:'';
+ if(note.length>240||/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(note))fail('Invalid calibration note');
+ if(method==='unknown'){
+  if(p.offsetMs!==null||p.uncertaintyMs!==null)fail('Unknown calibration must not assert offset or uncertainty');
+  return {sourceLabel,method,offsetMs:null,uncertaintyMs:null,note:note.trim()};
+ }
+ if(note.trim().length<6)fail('Explain how offset and uncertainty were estimated');
+ return {sourceLabel,method,offsetMs:finite(p.offsetMs,-3600000,3600000,'signed offset'),uncertaintyMs:finite(p.uncertaintyMs,0,3600000,'clock uncertainty'),note:note.trim()};
+}
+function profiles(input){
+ if(!Array.isArray(input)||input.length>30)fail('Maximum 30 clock profiles');
+ const map=new Map();
+ for(const p of input){const item=profile(p),id=key(item.sourceLabel);if(map.has(id))fail('Duplicate source label');map.set(id,item)}
+ return map;
+}
+function entries(input){
+ if(!input||typeof input!=='object'||Array.isArray(input)||input.schema!=='signal-casebook'||input.version!==1||!Array.isArray(input.entries)||input.entries.length>30)fail('Expected SIGNAL Casebook v1 with up to 30 observations');
+ return input.entries.map((e,index)=>{
+  if(!e||typeof e!=='object'||Array.isArray(e)||e.number!==index+1)fail('Invalid entry number');
+  const sourceLabel=typeof e.sourceLabel==='string'?e.sourceLabel:'';
+  const observedAt=typeof e.observedAt==='string'?e.observedAt:'';
+  if(sourceLabel.length>100||/[\u0000-\u001f\u007f]/.test(sourceLabel))fail('Invalid observation source label');
+  return {number:index+1,sourceLabel:sourceLabel.trim(),observedAt,rawMs:observedAt?when(observedAt):null};
+ });
+}
+function analyze(casebook,calibrations,seconds=5){
+ const es=entries(casebook),cs=profiles(calibrations),thresholdMs=windowSeconds(seconds)*1000;
+ const skipped={missingTimestamp:0,missingLabel:0,noClockProfile:0,unknownClock:0};
+ const usable=[];
+ for(const e of es){
+  if(e.rawMs===null){skipped.missingTimestamp++;continue}
+  if(!e.sourceLabel){skipped.missingLabel++;continue}
+  const p=cs.get(key(e.sourceLabel));
+  if(!p){skipped.noClockProfile++;continue}
+  if(p.method==='unknown'){skipped.unknownClock++;continue}
+  const correctedMs=e.rawMs+p.offsetMs;
+  if(!Number.isFinite(correctedMs))fail('Time range is invalid');
+  usable.push({number:e.number,sourceLabel:e.sourceLabel,method:p.method,correctedMs,uncertaintyMs:p.uncertaintyMs,offsetMs:p.offsetMs});
+ }
+ const candidates=[];
+ for(let i=0;i<usable.length;i++)for(let j=i+1;j<usable.length;j++){
+  const a=usable[i],b=usable[j];if(key(a.sourceLabel)===key(b.sourceLabel))continue;
+  const distanceMs=Math.abs(a.correctedMs-b.correctedMs),combinedMs=a.uncertaintyMs+b.uncertaintyMs;
+  const earliestMs=Math.max(0,distanceMs-combinedMs),latestMs=distanceMs+combinedMs;
+  if(earliestMs>thresholdMs)continue;
+  const classification=latestMs<=thresholdMs?'within-estimated-bounds':'uncertainty-overlaps-window';
+  candidates.push({entryA:a.number,entryB:b.number,sourceA:a.sourceLabel,sourceB:b.sourceLabel,correctedDeltaMs:distanceMs,earliestMs,latestMs,classification});
+ }
+ candidates.sort((a,b)=>a.earliestMs-b.earliestMs||a.correctedDeltaMs-b.correctedDeltaMs||a.entryA-b.entryA||a.entryB-b.entryB);
+ return {schema:'signal-clock-review',version:1,caseTitle:String(casebook.title||'').slice(0,100),windowSeconds:seconds,totalEntries:es.length,calibratedEntries:usable.length,skipped,candidateCount:candidates.length,candidates,calibrationCount:cs.size};
+}
+function safeLine(s){return String(s).replace(/[\r\n\t]/g,' ').replace(/[\u0000-\u001f\u007f]/g,'').slice(0,110)}
+function report(result){
+ if(!result||result.schema!=='signal-clock-review'||result.version!==1||!Array.isArray(result.candidates))fail('Not a SIGNAL clock review result');
+ const lines=[
+  'SIGNAL v30 — CLOCK OFFSET / UNCERTAINTY REVIEW (METADATA ONLY)',
+  'Case: '+safeLine(result.caseTitle),
+  `Candidate window: ±${result.windowSeconds} s; entries: ${result.totalEntries}; entries with operator clock estimates: ${result.calibratedEntries}`,
+  `Excluded: missing time ${result.skipped.missingTimestamp}; missing source label ${result.skipped.missingLabel}; no clock profile ${result.skipped.noClockProfile}; unknown clock ${result.skipped.unknownClock}`,
+  `Candidate pairs: ${result.candidateCount}`,
+ ];
+ for(const c of result.candidates)lines.push(`#${c.entryA} ${safeLine(c.sourceA)} ↔ #${c.entryB} ${safeLine(c.sourceB)}: corrected Δ${(c.correctedDeltaMs/1000).toFixed(3)}s; estimated distance ${ (c.earliestMs/1000).toFixed(3)}–${(c.latestMs/1000).toFixed(3)}s; ${c.classification}`);
+ lines.push('Clock offsets and uncertainties were entered by an operator; the tool did NOT verify synchronization, absolute time, shared signal, device independence, or causal connection.');
+ lines.push('Uncertainty intervals are estimates, not measured guarantees. No source files or hardware were inspected. Neither candidate class confirms matching phenomena or anything paranormal.');
+ return lines.join('\n');
+}
+const api=Object.freeze({profile,profiles,analyze,report,windowSeconds,methods:METHODS});
+if(typeof module!=='undefined'&&module.exports)module.exports=api;
+root.SIGNALClock=api;
+})(typeof window!=='undefined'?window:globalThis);

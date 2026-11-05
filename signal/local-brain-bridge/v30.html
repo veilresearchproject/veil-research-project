@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="dark"><title>SIGNAL v30 — Cross-Source Correlation Lab</title>
+<style>
+:root{font:16px system-ui,'Segoe UI',sans-serif;color:#efffff;background:#07111c}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -20%,#174658 0%,#07111c 62%)}main{max-width:950px;padding:22px;margin:auto}h1{margin:0;letter-spacing:.14em;font-size:clamp(1.8rem,5vw,2.7rem)}p{line-height:1.5}.eyebrow{font-size:.73rem;letter-spacing:.17em;font-weight:800;color:#8beadf}.subtitle{color:#bdd0db;margin:.4rem 0}.layout{display:grid;grid-template-columns:minmax(220px,.85fr) minmax(310px,1.15fr);gap:18px}.panel{border:1px solid #355969;background:#0d2232d9;border-radius:18px;overflow:hidden}.visual{padding:22px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:430px}.entity{--tone:#52ead9;--glow:#1c7d8e;position:relative;width:min(100%,310px);aspect-ratio:1;display:grid;place-items:center;filter:drop-shadow(0 0 26px var(--glow));transition:filter .4s ease}.entity svg{width:100%;overflow:visible}.orbit{fill:none;stroke:var(--tone);stroke-width:1.2;opacity:.4;transform-origin:center;animation:orbit 18s linear infinite}.orbit.second{animation-direction:reverse;animation-duration:27s;opacity:.18}.facet{fill:var(--tone);fill-opacity:.21;stroke:var(--tone);stroke-width:2;stroke-linejoin:round;transition:fill .5s,stroke .5s,transform .4s;transform-origin:110px 110px}.inner{fill:var(--tone);opacity:.6;transition:opacity .3s}.core{fill:white;opacity:.84;transform-origin:110px 110px;animation:breathe 3s ease-in-out infinite}.entity[data-state="speaking"] .facet{animation:speak .55s ease-in-out infinite alternate}.entity[data-state="thinking"] .facet{animation:think 2.1s ease-in-out infinite}.entity[data-state="listening"] .facet{animation:breathe 1.6s ease-in-out infinite}.entity[data-state="humor"] .facet{animation:humor .65s ease-in-out 2 alternate}.entity[data-state="uncertain"] .core{animation:breathe 1.1s ease-in-out infinite}.entity[data-state="error"] .orbit{animation-play-state:paused}.entity.word .core{animation:none;transform:scale(1.36)}.entity.word .facet{stroke-width:3.5}@keyframes orbit{to{transform:rotate(360deg)}}@keyframes breathe{50%{transform:scale(1.13);opacity:1}}@keyframes speak{to{transform:scale(1.12) rotate(5deg)}}@keyframes think{50%{transform:rotate(23deg) scale(.92)}}@keyframes humor{to{transform:rotate(-12deg) scale(1.16)}}.state{font-size:.8rem;text-transform:uppercase;letter-spacing:.14em;font-weight:800;color:#a3ece5;margin-top:12px}.legend{font-size:.82rem;color:#b8cbd5;max-width:295px}.transcript{height:320px;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}.bubble{max-width:92%;padding:11px 14px;border-radius:13px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}.bubble.signal{align-self:flex-start;background:#1a3b49;border:1px solid #366c75}.bubble.user{align-self:flex-end;background:#205b55;border:1px solid #3a9a91}.speaker{display:block;font-size:.67rem;letter-spacing:.1em;font-weight:800;margin-bottom:4px;color:#a5eee4}.modebar{padding:14px 16px;background:#123245;border-bottom:1px solid #355969;display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between}.mode{font-size:.81rem;font-weight:800;color:#d3f5e9}form{display:flex;gap:9px;padding:12px;border-top:1px solid #355969}input[type=text]{flex:1;min-width:0;color:white;background:#091b2b;border:1px solid #507e85;border-radius:10px;padding:12px;font:inherit;font-size:16px}.controls{display:flex;flex-wrap:wrap;gap:9px;margin:13px 0}button{font:inherit;min-height:44px;border:1px solid #68c9c2;border-radius:10px;background:#1b6463;color:white;cursor:pointer;padding:10px 13px}button:hover{background:#2b7472}button:disabled{opacity:.55;cursor:not-allowed}button.secondary{background:#173b4c;border-color:#486f7c}button:focus-visible,input:focus-visible{outline:3px solid #ffe6a4;outline-offset:3px}.check{display:flex;align-items:center;gap:7px;font-size:.91rem;padding:5px 0}.check input{width:18px;height:18px;accent-color:#55dfc9}.notice{color:#c8d9e4;min-height:1.4rem;font-size:.91rem}.small{color:#b1c5cf;font-size:.8rem}.noticebar{padding:12px 15px;border-top:1px solid #355969}.suggest{display:flex;flex-wrap:wrap;gap:7px;padding:12px;border-top:1px solid #355969}.suggest button{background:#17394c;min-height:38px;font-size:.85rem}#captions{font-size:1rem;line-height:1.4;min-height:4.4em;display:block;padding:9px 14px;border-radius:12px;border:1px solid #3e6b78;background:#071a29;text-align:left;width:100%}.reduced *, .reduced *::before, .reduced *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media(max-width:720px){main{padding:12px}.layout{grid-template-columns:1fr}.visual{min-height:300px;padding:10px}.entity{max-width:220px}.transcript{height:300px}}
+
+.case-panel{padding:18px;margin-top:17px}.case-panel h2{margin:0 0 6px;font-size:1.18rem}.case-panel h3{font-size:1rem;margin:0 0 6px}.case-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:11px 0}.case-field{display:flex;flex-direction:column;gap:5px;font-size:.85rem}.case-field>input,.case-field>select,.case-field>textarea{min-width:0;width:100%;border-radius:8px;padding:9px;background:#091b2b;color:white;border:1px solid #507e85;font:inherit;font-size:1rem}.case-field textarea{resize:vertical;min-height:86px;line-height:1.4}.case-field input:focus-visible,.case-field select:focus-visible,.case-field textarea:focus-visible{outline:3px solid #ffe6a4;outline-offset:2px}.case-panel .checklist{display:flex;gap:10px 20px;flex-wrap:wrap}.case-panel .checklist label{display:flex;align-items:center;gap:6px;min-height:38px}.case-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.case-entries{list-style:decimal;margin:14px 0;padding:0 0 0 26px;max-height:270px;overflow:auto}.case-entries li{padding:8px 4px;border-bottom:1px solid #294d5d;line-height:1.45;overflow-wrap:anywhere}.case-entries small{display:block;color:#bad3dd}.case-summary{white-space:pre-wrap;overflow-wrap:anywhere;background:#061521;padding:14px;border:1px solid #305260;border-radius:12px;font: .86rem/1.5 ui-monospace,Consolas,monospace;max-height:330px;overflow:auto}.case-notice{min-height:1.3em;color:#c0e6db;font-size:.85rem}.case-review-row{display:flex;flex-wrap:wrap;align-items:end;gap:10px}.case-review-row>.case-field{min-width:165px;flex:1}.case-review-row select{min-height:42px}.case-panel .warning{color:#ffddb1}.case-panel details{margin-top:12px} @media(max-width:720px){.case-grid{grid-template-columns:1fr}.case-panel{padding:12px}}
+.hash-panel{padding:18px;margin-top:17px}.hash-panel h2{font-size:1.18rem;margin:0 0 5px}.hash-flex{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;align-items:end}.hash-panel .case-field{flex:1;min-width:220px}.hash-output{font: .86rem/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;border:1px solid #3e6b78;border-radius:11px;background:#061521}.hash-panel input[type=file]{max-width:100%;padding:8px;border-radius:8px;border:1px solid #507e85;background:#091b2b}.hash-panel input[type=text]{color:white;background:#091b2b;border:1px solid #507e85;border-radius:8px;padding:9px;font-size:1rem;width:100%}.hash-warning{font-size:.82rem;color:#ffddb1;line-height:1.5}@media(max-width:720px){.hash-panel{padding:12px}}
+.cor-panel{padding:18px;margin:17px 0}.cor-panel h2{font-size:1.17rem;margin:0}.cor-tools{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:12px 0}.cor-tools label{display:flex;flex-direction:column;gap:5px;max-width:185px}.cor-tools input{min-width:90px;max-width:185px;padding:10px;border:1px solid #507e85;border-radius:9px;background:#091b2b;color:white;font-size:1rem}.cor-report{white-space:pre-wrap;overflow-wrap:anywhere;background:#061521;padding:14px;border:1px solid #305260;border-radius:12px;font: .86rem/1.5 ui-monospace,Consolas,monospace;max-height:430px;overflow:auto}.cor-note{color:#ffddb1;font-size:.82rem;line-height:1.5}@media(max-width:720px){.cor-panel{padding:12px}}
+
+.clock-panel{padding:18px;margin:17px 0}.clock-panel h2{font-size:1.17rem;margin:0}.clock-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}.clock-field{display:flex;flex-direction:column;gap:5px;font-size:.86rem}.clock-field input,.clock-field select,.clock-field textarea{width:100%;min-width:0;color:white;background:#091b2b;border:1px solid #507e85;border-radius:9px;padding:10px;font:inherit}.clock-field textarea{min-height:70px;resize:vertical}.clock-panel .clock-actions{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.clock-profiles{padding:12px 12px 12px 32px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:200px;overflow:auto}.clock-profiles li{border-bottom:1px solid #2e4a5b;padding:5px}.clock-report{white-space:pre-wrap;overflow-wrap:anywhere;background:#061521;padding:14px;border:1px solid #305260;border-radius:12px;font:.85rem/1.5 ui-monospace,Consolas,monospace;max-height:420px;overflow:auto}.clock-warning{color:#ffddb1;font-size:.84rem}@media(max-width:720px){.clock-grid{grid-template-columns:1fr}.clock-panel{padding:12px}}
+</style></head><body><main>
+<header><div class="eyebrow">VEIL Research Project · isolated prototype</div><h1>SIGNAL <span class="small">v29</span></h1><p class="subtitle">Evidence first. Even when the timestamps seem suspiciously cooperative.</p></header>
+<div class="layout"><section class="panel visual" aria-label="SIGNAL geometric visualizer">
+<div class="entity" id="entity" data-state="idle" aria-hidden="true"><svg viewBox="0 0 220 220" focusable="false"><circle class="orbit" cx="110" cy="110" r="90" stroke-dasharray="6 13"/><ellipse class="orbit second" cx="110" cy="110" rx="80" ry="57" transform="rotate(25 110 110)"/><polygon class="facet" points="110,21 166,49 199,110 166,173 110,199 52,173 21,110 52,49"/><polygon class="facet inner" points="110,48 164,109 110,168 57,109"/><polygon class="facet inner" points="110,48 110,168 57,109"/><polygon class="facet inner" points="110,48 164,109 110,168"/><circle class="core" cx="110" cy="110" r="12"/></svg></div>
+<div class="state" id="state" role="status" aria-live="polite">Idle · cyan</div><p class="legend">Blue = input · purple = thinking · cyan = speaking · magenta = humor · amber = uncertainty · red = error.</p><output id="captions" aria-live="polite">Captions appear here when SIGNAL speaks.</output></section>
+<section class="panel" aria-label="SIGNAL conversation"><div class="modebar"><span id="mode" class="mode">SCRIPTED · no AI enabled</span><span id="status" class="small" role="status">No local model requests yet.</span></div><div id="chat" class="transcript" role="log" aria-live="polite" aria-relevant="additions" aria-label="Chat transcript"></div>
+<div class="suggest"><button type="button" data-prompt="Who are you?">Meet SIGNAL</button><button type="button" data-prompt="What is VEIL?">VEIL</button><button type="button" data-prompt="How do we evaluate evidence?">Evidence</button><button type="button" data-prompt="Tell me a joke">Humor</button></div>
+<form id="form"><input id="question" type="text" maxlength="800" autocomplete="off" aria-label="Ask SIGNAL" placeholder="Ask SIGNAL something…" required><button id="ask" type="submit">Ask</button></form><div class="noticebar"><label class="check"><input id="auto" type="checkbox" checked> Speak replies automatically (device voice)</label><label class="check"><input id="reduce" type="checkbox"> Reduce movement</label></div></section></div>
+<div class="controls"><button id="check" class="secondary">Check local model</button><button id="enable">Enable local AI</button><button id="speak" class="secondary">Speak last reply</button><button id="stop" class="secondary">Stop voice</button><button id="clear" class="secondary">Clear conversation</button></div>
+<p class="notice" id="notice" role="status">Ready for a scripted conversation. Local AI requires explicit permission and a running local bridge.</p>
+<p class="small"><strong>Prototype limits:</strong> Motion follows speech start/end and word-boundary events when the browser provides them; it is not measured audio amplitude or perfect lip sync. Device voices (including Natural voices) may require internet depending on Windows settings. No microphone, sensor reads, hardware control, cloud API, telemetry, cookies, or transcript storage. Local AI is optional, uses only same-origin loopback to Ollama via the existing Python bridge, and can make mistakes. Original evidence and human decisions remain authoritative.</p>
+
+
+<section class="panel hash-panel" aria-label="Local file fingerprint prototype">
+<h2>EVIDENCE FINGERPRINT — local file SHA-256</h2>
+<p class="small">Choose a file yourself. SIGNAL calculates a SHA-256 digest of its bytes entirely inside your browser, without uploading it or asking AI to open it. Preview limit: 25 MiB per file. Matching hashes suggest byte-for-byte equality, <strong>not</strong> authenticity or a paranormal cause.</p>
+<div class="hash-flex"><label class="case-field">Select original or comparison file (25 MiB maximum)<input type="file" id="hash-file" aria-label="Choose a file to hash"></label><button type="button" id="hash-calc">Hash selected file</button><button type="button" id="hash-clear" class="secondary">Clear fingerprint</button></div>
+<div class="hash-flex"><label class="case-field">Known SHA-256 reference (64 hexadecimal characters)<input id="hash-reference" type="text" spellcheck="false" maxlength="64" placeholder="Paste a previously recorded SHA-256 digest"></label><button type="button" id="hash-compare" class="secondary">Compare hash</button></div>
+<div class="hash-flex"><button id="hash-copy" type="button" class="secondary">Insert fingerprint into new Casebook note</button></div>
+<p id="hash-status" class="case-notice" role="status">No file selected. No file bytes have been read.</p>
+<output id="hash-output" class="hash-output" aria-live="polite">No SHA-256 fingerprint yet.</output>
+<p class="hash-warning">A digest identifies the exact bytes selected for hashing. A digest does not establish where the file originated, who recorded it, whether it was edited before hashing, or whether a reported event is genuine. Keep the original separately under an investigator-approved evidence policy.</p>
+</section>
+<section class="panel case-panel" id="casebook" aria-label="SIGNAL evidence Casebook">
+<h2>CASEBOOK — observation descriptions only</h2>
+<p class="small">Record what someone reported, identify missing checks, and prepare a cautious human-review packet. This cannot inspect files or verify an event. Nothing is saved automatically or sent to AI without a separate opt-in action.</p>
+<div class="case-grid"><label class="case-field">Case title <input id="case-title" type="text" maxlength="100" placeholder="e.g., MTC bench rehearsal"></label><div class="case-field"><span>Session state</span><div class="case-notice" id="case-state" role="status">No case started. Data stays in this tab only.</div></div></div>
+<div class="case-actions"><button type="button" id="case-new">Start new case</button><button class="secondary" type="button" id="case-discard">Discard session case</button></div>
+<div class="case-grid">
+<label class="case-field">Source type<select id="case-source"><option value="audio">Audio</option><option value="video">Video</option><option value="image">Image</option><option value="sensor">Sensor log</option><option value="witness">Witness account</option><option value="other">Other</option></select></label>
+<label class="case-field">Source label (optional)<input id="case-source-label" type="text" maxlength="100" placeholder="Microphone A; camera 2; witness statement"></label>
+<label class="case-field">Observation time (optional; timezone required)<input id="case-observed" type="text" maxlength="40" placeholder="2026-11-05T05:15:00-05:00" aria-describedby="case-time-help"><span id="case-time-help" class="small">Leave blank if unknown. Never infer a timestamp.</span></label>
+<label class="case-field">Observation description<textarea id="case-description" maxlength="1000" placeholder="Describe what was reported; avoid attributing a cause."></textarea></label>
+</div>
+<div class="checklist" aria-label="Research documentation checks">
+<label><input type="checkbox" id="case-original"> Original preserved</label>
+<label><input type="checkbox" id="case-timestamp"> Timestamp checked</label>
+<label><input type="checkbox" id="case-alternative"> Ordinary explanations checked</label>
+<label><input type="checkbox" id="case-corroboration"> Independent corroboration checked</label>
+</div><div class="case-actions"><button type="button" id="case-add">Add observation</button><button type="button" id="case-summary-button" class="secondary">Build cautious summary</button></div>
+<ol id="case-entries" class="case-entries" aria-label="Session observation entries"></ol>
+<div class="case-review-row"><label class="case-field">Human review decision<select id="case-decision"><option value="needs-more-info">Needs more information</option><option value="reviewed-inconclusive">Reviewed; no conclusion</option></select></label><label class="case-field">Reviewer name (self-reported)<input id="case-reviewer" maxlength="80" placeholder="Researcher name"></label><button id="case-review" type="button">Record human review</button></div>
+<div class="case-actions"><button id="case-export" type="button" class="secondary">Export JSON to this computer</button><button id="case-import" type="button" class="secondary">Import JSON from this computer</button><input type="file" accept=".json,application/json" id="case-file" hidden></div>
+<label class="check"><input type="checkbox" id="case-share"> I explicitly agree to send these observation descriptions to the enabled local model (never automatically).</label>
+<div class="case-actions"><button id="case-ask-ai" type="button" class="secondary">Ask local SIGNAL for suggested checks</button></div>
+<p id="case-notice" class="case-notice" role="status">No case created. Start a case, then add observations.</p><pre id="case-summary" class="case-summary" aria-label="Deterministic case summary">No case summary yet.</pre>
+<p class="small warning">Research rule: flags mean documentation has not been confirmed, not that a witness is unreliable. This prototype does not authenticate evidence, control laboratory equipment, establish chain of custody or replace human review. Model suggestions are never research findings.</p>
+</section>
+
+<section class="panel cor-panel" aria-label="Cross-source timestamp correlation preview">
+<h2>CROSS-SOURCE TIMELINE — candidate alignments</h2>
+<p class="small">Compare only the timestamps and source labels explicitly entered into this session's Casebook. SIGNAL finds candidate proximity between different labels—not independently proven instruments, matching sounds, synchronized clocks or paranormal evidence.</p>
+<div class="cor-tools"><label>Time window (0–300 seconds)<input type="number" id="cor-window" min="0" max="300" step="1" value="5"></label><button id="cor-run" type="button">Find candidate alignments</button><button id="cor-export" type="button" class="secondary">Download report</button><button id="cor-clear" type="button" class="secondary">Clear report</button></div>
+<p id="cor-status" class="case-notice" role="status">No correlation analysis has been run.</p>
+<pre id="cor-report" class="cor-report" aria-label="Deterministic correlation report">No candidate alignments calculated yet.</pre>
+<p class="cor-note">A close timestamp is not proof of correlation or cause. Human investigators must verify independent sources, clock synchronization, expected propagation/recording delays, original recordings, and ordinary explanations.</p>
+</section>
+
+<section class="panel clock-panel" aria-label="Clock offset and uncertainty review prototype">
+<h2>CLOCK REVIEW — operator-entered offsets and uncertainty</h2>
+<p class="small">v29 compares raw times. This v30 check adjusts them only when you enter a clock profile for each source. <strong>Plus offset means add milliseconds to that device's recorded time to estimate reference UTC.</strong> These values are estimates, not measured or independently authenticated calibrations.</p>
+<div class="clock-grid">
+<label class="clock-field">Exact source label from Casebook<input id="clock-label" type="text" maxlength="100" placeholder="e.g. Camera B"></label>
+<label class="clock-field">How was the offset estimated?
+<select id="clock-method"><option value="unknown">Unknown — exclude from time comparison</option><option value="manual-check">Manual clock check</option><option value="shared-clap">Shared clap/flash reference</option><option value="ntp-log">Operator-reported NTP log</option></select></label>
+<label class="clock-field">Signed correction (ms)<input id="clock-offset" type="number" min="-3600000" max="3600000" step="1" placeholder="e.g. +10000"></label>
+<label class="clock-field">Estimated uncertainty, ±ms<input id="clock-uncertainty" type="number" min="0" max="3600000" step="1" placeholder="e.g. 1500"></label>
+<label class="clock-field" style="grid-column:1/-1">How did you estimate these numbers? (required when known)<textarea id="clock-note" maxlength="240" placeholder="Describe a measured time reference, uncertainty assumptions, or the limits of the check."></textarea></label>
+</div>
+<div class="clock-actions"><button type="button" id="clock-save">Save or replace source profile</button><button type="button" id="clock-run">Compare with clock estimates</button><button type="button" id="clock-export" class="secondary">Download review</button><button type="button" id="clock-clear" class="secondary">Clear clock profiles</button></div>
+<p id="clock-status" class="case-notice" role="status">No clock profiles saved. This will not modify the Casebook or original files.</p>
+<ol id="clock-profiles" class="clock-profiles" aria-label="Saved clock profiles"></ol>
+<pre id="clock-report" class="clock-report">No clock-corrected comparisons have been run.</pre>
+<p class="clock-warning">Even two devices sharing an approximate clock do not prove independent observations. Uncertainty bounds are operator estimates, not guarantees. Always preserve and examine originals; test expected recording lag, offset direction, and mundane explanations.</p>
+</section>
+</main><script src="casebook-core.js"></script><script src="fingerprint-core.js"></script><script src="correlation-core.js"></script><script src="clock-core.js"></script><script>
+'use strict';
+const $=id=>document.getElementById(id);
+const states=Object.freeze({idle:['#53e9da','#17788c','Idle · cyan'],listening:['#70aaff','#204fa4','Input · blue'],thinking:['#ad88ff','#5533a1','Thinking · purple'],speaking:['#53e9da','#168b98','Speaking · cyan'],humor:['#ff69dd','#a33c89','Humor · magenta'],uncertain:['#ffce6d','#9f682c','Uncertain · amber'],error:['#ff7983','#9d3347','Attention · red']});
+const scripted={identity:'I’m SIGNAL, VEIL’s research assistant prototype. I have traded my old face for geometric dignity. Please admire the angles.',veil:'VEIL is an independent research project developing methods and prototypes to study reported anomalous events. The proposed staffed research center is a future goal, not a building we operate today.',evidence:'Preserve the original file, document its source and timestamps, test ordinary explanations, and seek independent corroboration. An unexplained result is not proof of a spirit.',mtc:'MTC tests unattended questions and continuous recording, including the question audio. We need independent recording and careful controls before drawing conclusions.',panic:'Panic Box is a proposed event-preservation system. A human operator must authorize ALL CLEAR. I cannot control or reset it.',humor:'A scientist told me I had no emotional depth. I said, “Interesting hypothesis. Have you calibrated your depth sensor?”',fallback:'Good question. This scripted demonstration cannot verify that answer. Enable your locally installed model for open-ended conversation, then check its claims.'};
+let mode='scripted',history=[],lastReply='',lastReplyKind='idle',busy=false,generation=0,controller=null,voiceEpoch=0,activeUtterance=null,voiceTimer=null,healthEpoch=0;
+function topic(q){const s=q.toLowerCase();if(/\b(joke|funny|humor|laugh)\b/.test(s))return 'humor';if(/\b(mtc|evp|trans.?communication)\b/.test(s))return 'mtc';if(/\b(panic box|all clear)\b/.test(s))return 'panic';if(/\b(evidence|ghost|proof|paranormal|verify|scientific)\b/.test(s))return 'evidence';if(/\b(veil|research center)\b/.test(s))return 'veil';if(/\b(signal|who are you|your name|introduce)\b/.test(s))return 'identity';return 'fallback'}
+function disallowedControl(q){return /\b(?:activate|arm|disarm|reset|unlock|turn on|turn off|erase|delete|override)\b.{0,65}\b(?:panic box|mtc|generator|sensor|alarms?|recordings?|evidence|all clear)\b/i.test(q)}
+function setState(name){const [tone,glow,label]=states[name]||states.idle;const e=$('entity');e.dataset.state=name;e.style.setProperty('--tone',tone);e.style.setProperty('--glow',glow);$('state').textContent=label;}
+function caption(s){$('captions').textContent=s||'Captions appear here when SIGNAL speaks.'}
+function bubble(who,message){const el=document.createElement('div');el.className='bubble '+who;const t=document.createElement('span');t.className='speaker';t.textContent=who==='signal'?'SIGNAL':'YOU';const body=document.createElement('span');body.textContent=message;el.append(t,body);$('chat').append(el);$('chat').scrollTop=$('chat').scrollHeight;}
+function stopVoice(){voiceEpoch++;clearTimeout(voiceTimer);voiceTimer=null;activeUtterance=null;try{window.speechSynthesis?.cancel()}catch(_){}if(!busy)setState('idle');}
+function speak(text=lastReply){stopVoice();if(!text)return void($('notice').textContent='Ask something first.');caption(text);if(!window.speechSynthesis||typeof SpeechSynthesisUtterance==='undefined'){setState('uncertain');$('notice').textContent='Voice unsupported. Captions remain available.';return}const token=voiceEpoch;try{const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=.97;u.pitch=1;const voices=window.speechSynthesis.getVoices?.()||[];const preferred=voices.find(v=>/Ryan/i.test(v.name)&&/^en/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang)&&v.localService);if(preferred)u.voice=preferred;activeUtterance=u;
+u.onstart=()=>{if(token!==voiceEpoch||activeUtterance!==u)return;setState(lastReplyKind==='humor'?'humor':'speaking');$('notice').textContent='Device voice speaking; local playback is not guaranteed.'};
+u.onboundary=ev=>{if(token!==voiceEpoch||activeUtterance!==u)return;const start=Number(ev.charIndex)||0;const length=Number(ev.charLength)||0;caption(length?text.slice(start,start+length):text);$('entity').classList.remove('word');void $('entity').offsetWidth;$('entity').classList.add('word');clearTimeout(voiceTimer);voiceTimer=setTimeout(()=>$('entity').classList.remove('word'),170)};
+const finish=()=>{if(token!==voiceEpoch||activeUtterance!==u)return;activeUtterance=null;clearTimeout(voiceTimer);$('entity').classList.remove('word');setState('idle');caption(text)};u.onend=finish;u.onerror=()=>{finish();$('notice').textContent='Voice playback unavailable; full reply is shown in captions.'};window.speechSynthesis.speak(u)}catch(_){setState('error');$('notice').textContent='Voice request failed; reply remains in captions.'}}
+function cancelPending(){generation++;if(controller){controller.abort();controller=null}busy=false;$('ask').disabled=false;setState('idle')}
+function clearChat(){cancelPending();stopVoice();history=[];lastReply='';$('chat').replaceChildren();caption('');bubble('signal','Fresh notebook, no lost evidence—because this demo never saves evidence. Ask away.');$('notice').textContent='Session cleared. Nothing saved to disk.'}
+function deliver(reply,kind){lastReply=reply;lastReplyKind=kind;bubble('signal',reply);caption(reply);setState(kind==='humor'?'humor':kind==='uncertain'?'uncertain':'idle');if($('auto').checked)speak(reply)}
+async function ask(question){const q=String(question).trim().slice(0,800);if(!q||busy)return;stopVoice();setState('listening');bubble('user',q);if(disallowedControl(q)){deliver('I cannot activate, reset, erase, or control VEIL equipment or original evidence. An authorized human must perform those actions.', 'uncertain');return}
+if(mode==='scripted'){const key=topic(q);deliver(scripted[key],key==='humor'?'humor':key==='fallback'?'uncertain':'idle');$('notice').textContent='Scripted response, not AI-generated.';return}
+const ticket=++generation;busy=true;$('ask').disabled=true;setState('thinking');controller=new AbortController();$('notice').textContent='Requesting an answer from this computer’s Ollama model…';try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,history:history.slice(-12)}),signal:controller.signal,cache:'no-store'});const d=await r.json();if(ticket!==generation)return;if(!r.ok||typeof d.reply!=='string'||!d.reply.trim())throw Error(d.error||'No usable local reply');const reply=d.reply.slice(0,1600);history.push({role:'user',content:q},{role:'assistant',content:reply});history=history.slice(-12);busy=false;deliver(reply,topic(q)==='humor'?'humor':'idle');$('notice').textContent='Local AI response. Verify its factual claims.'}
+catch(err){if(ticket!==generation)return;busy=false;deliver('The local model did not respond. Scripted mode is still available. No cloud model was contacted.','uncertain');$('notice').textContent='Local model error: '+String(err.message||'unavailable').slice(0,100)}finally{if(ticket===generation){controller=null;busy=false;$('ask').disabled=false}}}
+function localOrigin(){return location.protocol==='http:'&&/^(127\.0\.0\.1|localhost)$/.test(location.hostname)}
+async function checkModel(){const ticket=++healthEpoch;if(!localOrigin()){$('status').textContent='Open via the v26 loopback server to use AI.';return false}try{const res=await fetch('/api/health',{cache:'no-store'});if(!res.ok)throw Error('unavailable');const d=await res.json();if(ticket!==healthEpoch)return false;$('status').textContent=String(d.detail||'Model status unavailable').slice(0,170);return d.model_ready===true}catch(_){if(ticket===healthEpoch)$('status').textContent='Local Ollama bridge unavailable.';return false}}
+async function toggleAI(){if(busy){$('notice').textContent='Finish or clear the pending reply first.';return}if(mode==='local'){healthEpoch++;mode='scripted';history=[];stopVoice();$('mode').textContent='SCRIPTED · no AI enabled';$('enable').textContent='Enable local AI';$('notice').textContent='AI disabled; model context cleared.';return}const ticket=++generation;const ready=await checkModel();if(ticket!==generation)return;if(!ready){$('notice').textContent='Local AI not ready; scripted mode remains active.';return}mode='local';history=[];$('mode').textContent='LOCAL OLLAMA · explicitly enabled';$('enable').textContent='Disable local AI';$('notice').textContent='AI enabled. Only typed questions and bounded history go to loopback Ollama.'}
+$('form').addEventListener('submit',ev=>{ev.preventDefault();const q=$('question').value;if(!q.trim())return;$('question').value='';ask(q);$('question').focus()});document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>ask(b.dataset.prompt)));$('check').addEventListener('click',checkModel);$('enable').addEventListener('click',toggleAI);$('speak').addEventListener('click',()=>speak());$('stop').addEventListener('click',()=>{stopVoice();caption(lastReply);$('notice').textContent='Voice stopped.'});$('clear').addEventListener('click',clearChat);$('reduce').addEventListener('change',()=>document.documentElement.classList.toggle('reduced',$('reduce').checked));$('question').addEventListener('focus',()=>{if(!busy&&!activeUtterance)setState('listening')});$('question').addEventListener('blur',()=>{if(!busy&&!activeUtterance)setState('idle')});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopVoice()});window.addEventListener('pagehide',()=>{cancelPending();stopVoice()});bubble('signal','Geometric form online. Evidence standards intact. I am SIGNAL, and yes, I have corners now.');
+
+/* Casebook events are deliberate and separate from chat; no background file access. */
+const CB=window.SIGNALCasebook;let caseBook=null;
+function caseNotice(message){$('case-notice').textContent=message}
+function caseRender(){
+ const list=$('case-entries');list.replaceChildren();
+ $('case-state').textContent=caseBook?`${caseBook.entries.length} observation(s) · ${caseBook.review.status}`:'No active case; entries stay only in session memory.';
+ if(!caseBook){$('case-summary').textContent='No case summary yet.';return}
+ for(const entry of caseBook.entries){
+  const li=document.createElement('li'),head=document.createElement('strong'),detail=document.createElement('span'),meta=document.createElement('small');
+  head.textContent=`${entry.sourceType.toUpperCase()} — ${entry.sourceLabel||'Unlabeled source'}`;
+  detail.textContent=' — '+entry.description;
+  const missing=CB.gaps(caseBook).find(g=>g.number===entry.number).needs.length;
+  meta.textContent=`Time: ${entry.observedAt||'unknown'} · Documentation items not confirmed: ${missing}`;
+  li.append(head,detail,meta);list.append(li);
+ }
+ $('case-summary').textContent=CB.summary(caseBook);
+}
+$('case-new').addEventListener('click',()=>{
+ if(caseBook&&!window.confirm('Replace current in-memory case? Export it first if you need to retain the notes.'))return;
+ try{caseBook=CB.create($('case-title').value);caseRender();caseNotice('New case started. No data saved outside this tab.')}catch(e){caseNotice(e.message)}
+});
+$('case-discard').addEventListener('click',()=>{
+ if(!caseBook)return caseNotice('No case to discard.');
+ if(!window.confirm('Discard this in-memory case? This cannot be undone unless you exported it.'))return;
+ caseBook=null;$('case-share').checked=false;caseRender();caseNotice('In-memory case discarded. No file was changed.');
+});
+$('case-add').addEventListener('click',()=>{
+ if(!caseBook)return caseNotice('Start a case first.');
+ try{
+  caseBook=CB.add(caseBook,{sourceType:$('case-source').value,sourceLabel:$('case-source-label').value,observedAt:$('case-observed').value,description:$('case-description').value,checks:{originalPreserved:$('case-original').checked,timeVerified:$('case-timestamp').checked,alternativesChecked:$('case-alternative').checked,corroborationChecked:$('case-corroboration').checked}});
+  $('case-description').value='';caseRender();caseNotice('Observation added as a description only. Any previous review was reset.');
+ }catch(e){caseNotice(e.message)}
+});
+$('case-summary-button').addEventListener('click',()=>{if(!caseBook)return caseNotice('Start a case first.');caseRender();caseNotice('Rule-based metadata summary prepared; original files have not been examined.')});
+$('case-review').addEventListener('click',()=>{
+ if(!caseBook)return caseNotice('Start a case first.');
+ try{caseBook=CB.review(caseBook,$('case-decision').value,$('case-reviewer').value);caseRender();caseNotice('Human review self-attributed; reviewer identity was not authenticated.')}catch(e){caseNotice(e.message)}
+});
+$('case-export').addEventListener('click',()=>{
+ if(!caseBook)return caseNotice('Start a case first.');
+ try{const json=CB.toJSON(caseBook),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download='signal-casebook-v1.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ caseNotice('Export requested to your computer. Confirm the file appeared in Downloads; nothing was uploaded.');
+ }catch(e){caseNotice(e.message)}
+});
+$('case-import').addEventListener('click',()=>$('case-file').click());
+$('case-file').addEventListener('change',async()=>{
+ const file=$('case-file').files?.[0];if(!file)return;
+ try{if(file.size>120000)throw Error('File is larger than 120 KB.');
+ const incoming=CB.fromJSON(await file.text());
+ if(caseBook&&!window.confirm('Replace the current in-memory case with the imported JSON?'))return;
+ caseBook=incoming;$('case-title').value=incoming.title;$('case-share').checked=false;caseRender();caseNotice('Local JSON metadata imported. No external evidence file was inspected.');
+ }catch(e){caseNotice('Import rejected: '+e.message)}finally{$('case-file').value=''}
+});
+$('case-ask-ai').addEventListener('click',()=>{
+ if(!caseBook)return caseNotice('Start a case first.');
+ if(mode!=='local')return caseNotice('Enable your local Ollama model before requesting case critique.');
+ if(!$('case-share').checked)return caseNotice('Check explicit case-sharing consent first. No notes have been sent.');
+ try{const prompt=CB.aiPrompt(caseBook);if(prompt.length>800)throw Error('Model prompt exceeds local model input limit');
+  caseNotice('Sending only bounded observation descriptions to local Ollama; not original evidence files.');ask(prompt);
+ }catch(e){caseNotice(e.message)}
+});
+caseRender();
+
+
+/* File fingerprinting: explicit user choice, SHA-256 inside browser, no uploads. */
+const FP=window.SIGNALFingerprint;let lastFingerprint=null,hashToken=0,hashBusy=false;
+function hashNotice(message){$('hash-status').textContent=message}
+$('hash-file').addEventListener('change',()=>{hashToken++;lastFingerprint=null;$('hash-output').textContent='No SHA-256 fingerprint yet.';hashNotice('File selection changed; press Hash selected file to read bytes locally.');});
+$('hash-clear').addEventListener('click',()=>{hashToken++;lastFingerprint=null;$('hash-file').value='';$('hash-reference').value='';$('hash-output').textContent='No SHA-256 fingerprint yet.';hashNotice('Fingerprint and file selection cleared from this tab. The original file was not modified.');});
+$('hash-calc').addEventListener('click',async()=>{
+ const file=$('hash-file').files?.[0];if(!file)return hashNotice('Select one file first.');
+ if(hashBusy)return hashNotice('Hash in progress. Select another file or clear to ignore the current result.');
+ const ticket=++hashToken;hashBusy=true;$('hash-calc').disabled=true;
+ try{if(file.size>FP.MAX_FILE_SIZE)throw Error('File too large. Not read: 25 MiB maximum.');
+  hashNotice('Reading selected file into browser memory for local SHA-256…');
+  const rec=await FP.fingerprint(file);
+  if(ticket!==hashToken)return;
+  lastFingerprint=rec;
+  $('hash-output').textContent=`Selected file: ${rec.fileName}\nSize: ${rec.sizeBytes} bytes\nSHA-256: ${rec.sha256}`;
+  hashNotice('SHA-256 computed locally. No file bytes were uploaded or analyzed by AI.');
+ }catch(e){if(ticket===hashToken){lastFingerprint=null;hashNotice(e.message||'Fingerprint unavailable.');}}
+ finally{hashBusy=false;$('hash-calc').disabled=false;}
+});
+$('hash-compare').addEventListener('click',()=>{
+ if(!lastFingerprint)return hashNotice('Hash a file first.');
+ try{const match=FP.compare(lastFingerprint.sha256,$('hash-reference').value);
+  hashNotice(match?'MATCH — hashes equal. This does not prove origin or authenticity.':'MISMATCH — selected file digest differs. Check file versions before interpreting.');
+ }catch(e){hashNotice(e.message)}
+});
+$('hash-copy').addEventListener('click',()=>{
+ if(!lastFingerprint)return hashNotice('Hash a file first.');
+ if(!caseBook)return hashNotice('Start a Casebook case first.');
+ try{const note=FP.note(lastFingerprint);const prev=$('case-description').value;
+  if(prev.length+note.length+2>1000)throw Error('Casebook observation would exceed 1000 characters. Shorten it first.');
+  $('case-description').value=prev+(prev?'\n':'')+note;
+  hashNotice('Fingerprint details inserted into your unsaved Casebook note. Press Add observation deliberately to record them.');
+ }catch(e){hashNotice(e.message)}
+});
+
+
+/* Deterministic metadata-only time-proximity report; no sensor access. */
+const COR=window.SIGNALCorrelation;let correlationReport='',correlationCaseSnapshot='';
+function corNotice(message){$('cor-status').textContent=message}
+$('cor-run').addEventListener('click',()=>{
+ if(!caseBook)return corNotice('Create or import a Casebook first.');
+ try{const result=COR.analyze(caseBook,$('cor-window').value);correlationReport=COR.report(result);correlationCaseSnapshot=JSON.stringify(caseBook);
+  $('cor-report').textContent=correlationReport;
+  corNotice(`${result.candidateCount} candidate time alignment(s) found. Instrument independence and timing accuracy are not verified.`);
+ }catch(e){corNotice(e.message)}
+});
+$('cor-export').addEventListener('click',()=>{
+ if(!correlationReport)return corNotice('Run a correlation comparison first.');
+ if(!caseBook||JSON.stringify(caseBook)!==correlationCaseSnapshot)return corNotice('Casebook changed since this report. Re-run comparison before exporting.');
+ const blob=new Blob([correlationReport+'\n'],{type:'text/plain'}),url=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download='signal-timestamp-candidates.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ corNotice('Local report download requested. This does not certify evidence or save files automatically.');
+});
+$('cor-clear').addEventListener('click',()=>{correlationReport='';correlationCaseSnapshot='';$('cor-report').textContent='No candidate alignments calculated yet.';corNotice('Correlation report cleared from memory.');});
+
+
+/* v30: clock profiles stay in memory until intentionally exported as a report. */
+const CLOCK=window.SIGNALClock;
+let clockProfiles=[],clockText='',clockLastInput='';
+function clockNotice(s){$('clock-status').textContent=s}
+function clockFingerprint(){return JSON.stringify([caseBook,clockProfiles,$('cor-window').value])}
+function clockInvalidate(){clockText='';clockLastInput='';$('clock-report').textContent='Clock estimates changed. Rerun comparison before exporting.'}
+function renderClockProfiles(){const list=$('clock-profiles');list.replaceChildren();for(const p of clockProfiles){const li=document.createElement('li');li.textContent=`${p.sourceLabel} · ${p.method}${p.method==='unknown'?' (excluded)':` · correction ${p.offsetMs} ms · uncertainty ±${p.uncertaintyMs} ms`} · ${p.note||'No calibration note'}`;list.append(li)}}
+$('clock-save').addEventListener('click',()=>{
+ try{
+  const method=$('clock-method').value;
+  const off=$('clock-offset').value,unc=$('clock-uncertainty').value;
+  if(method!=='unknown'&&(off.trim()===''||unc.trim()===''))throw Error('Enter both correction and uncertainty; blank is not zero.');
+  const p=CLOCK.profile({sourceLabel:$('clock-label').value,method,offsetMs:method==='unknown'?null:Number(off),uncertaintyMs:method==='unknown'?null:Number(unc),note:$('clock-note').value});
+  const at=clockProfiles.findIndex(x=>x.sourceLabel.toLocaleLowerCase('en-US')===p.sourceLabel.toLocaleLowerCase('en-US'));
+  if(at<0)clockProfiles.push(p);else clockProfiles[at]=p;
+  CLOCK.profiles(clockProfiles);clockInvalidate();renderClockProfiles();clockNotice(`${p.sourceLabel}: profile recorded as an unverified operator estimate. No source clock was inspected.`);
+ }catch(e){clockNotice(String(e.message||e))}
+});
+$('clock-run').addEventListener('click',()=>{
+ if(!caseBook)return clockNotice('Start or import a Casebook with time-stamped notes first.');
+ try{
+  const sec=Number($('cor-window').value);
+  const r=CLOCK.analyze(caseBook,clockProfiles,sec);
+  clockText=CLOCK.report(r);clockLastInput=clockFingerprint();$('clock-report').textContent=clockText;
+  clockNotice(`${r.candidateCount} operator-calibrated candidate pair(s). ${r.calibratedEntries}/${r.totalEntries} entries had clock estimates. No time was independently verified.`);
+ }catch(e){clockNotice(String(e.message||e))}
+});
+$('clock-export').addEventListener('click',()=>{
+ if(!clockText)return clockNotice('Run the clock review first.');
+ if(clockLastInput!==clockFingerprint())return clockNotice('Casebook, profiles, or window changed. Rerun comparison before downloading.');
+ const blob=new Blob([clockText+'\n'],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='signal-clock-review-unverified.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ clockNotice('Download requested locally. Report is not an evidence-authenticity certificate.');
+});
+$('clock-clear').addEventListener('click',()=>{clockProfiles=[];clockInvalidate();renderClockProfiles();clockNotice('Clock profiles cleared from memory; Casebook observations remain unchanged.')});
+
+window.SIGNALv26={topic,disallowedControl,localOrigin,states};
+</script></body></html>
