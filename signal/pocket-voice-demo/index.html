@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; object-src 'none'; form-action 'none'"><title>SIGNAL Pocket Voice Demo</title><style>:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#0b1320;color:#f0f6fc}body{margin:0}main{max-width:620px;margin:auto;padding:18px}.panel{background:#172736;border:1px solid #38596a;border-radius:14px;padding:16px;margin:14px 0}.tag{color:#ffdc97;font-size:.85rem}button{min-height:48px;border:1px solid #64b9b1;border-radius:10px;background:#145f5e;color:#fff;padding:10px 16px;font:inherit;margin:5px}button:focus-visible{outline:3px solid #ffe297}button:disabled{opacity:.45}#face{font-size:5rem;text-align:center}#speech{font-size:1.18rem;min-height:5rem}small{color:#b9ced9}.controls{display:flex;flex-wrap:wrap}</style></head><body><main><header><h1>SIGNAL — Pocket Voice Lab</h1><div class="tag">SYNTHETIC SCRIPTED DEMO · NO AI · NO MICROPHONE · OFFLINE PAGE</div></header><section class="panel"><div id="face" aria-hidden="true">◉_◉</div><p id="speech" role="status" aria-live="polite">Ah. You've found the portable version of me. Smaller screen, same extraordinarily modest expectations.</p><div class="controls"><button data-line="intro">Introduce yourself</button><button data-line="veil">Explain VEIL</button><button data-line="evidence">Evidence rules</button><button data-line="humor">SIGNAL humor</button></div><div class="controls"><button id="speak">Speak current line</button><button id="stop">Stop speaking</button><button id="check-voice">Check voice support</button></div><p id="voice-state" role="status">Voice idle.</p><section aria-label="Simulated instrument status"><h2>Instrument status sandbox</h2><label for="status-request">Type a status question (no equipment connected)</label><input id="status-request" type="text" maxlength="240" autocomplete="off" style="display:block;width:95%;min-height:44px;margin:8px 0;background:#0b1320;color:white;border:1px solid #64b9b1;border-radius:8px;padding:8px" placeholder="MTC status"><button id="status-check" type="button">Check simulated status</button><p id="status-answer" role="status" aria-live="polite">No equipment connected.</p></section><small>This uses your device's built-in speech synthesis if available. The page makes no network requests, but device speech voices may require a network connection. Voice availability depends on Android settings. No recordings or conversations are stored. No live AI, voice input, or equipment connection. Typed status requests are processed in-page and are not saved.</small></section></main><script>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; object-src 'none'; form-action 'none'"><title>SIGNAL Pocket Voice Demo</title><style>:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#0b1320;color:#f0f6fc}body{margin:0}main{max-width:620px;margin:auto;padding:18px}.panel{background:#172736;border:1px solid #38596a;border-radius:14px;padding:16px;margin:14px 0}.tag{color:#ffdc97;font-size:.85rem}button{min-height:48px;border:1px solid #64b9b1;border-radius:10px;background:#145f5e;color:#fff;padding:10px 16px;font:inherit;margin:5px}button:focus-visible{outline:3px solid #ffe297}button:disabled{opacity:.45}#face{font-size:5rem;text-align:center}#speech{font-size:1.18rem;min-height:5rem}small{color:#b9ced9}.controls{display:flex;flex-wrap:wrap}</style></head><body><main><header><h1>SIGNAL — Pocket Voice Lab</h1><div class="tag">SYNTHETIC SCRIPTED DEMO · NO AI · NO MICROPHONE · OFFLINE PAGE</div></header><section class="panel"><div id="face" aria-hidden="true">◉_◉</div><p id="speech" role="status" aria-live="polite">Ah. You've found the portable version of me. Smaller screen, same extraordinarily modest expectations.</p><div class="controls"><button data-line="intro">Introduce yourself</button><button data-line="veil">Explain VEIL</button><button data-line="evidence">Evidence rules</button><button data-line="humor">SIGNAL humor</button></div><div class="controls"><button id="speak">Speak current line</button><button id="stop">Stop speaking</button><button id="check-voice">Check voice support</button></div><p id="voice-state" role="status">Voice idle.</p><section aria-label="Simulated instrument status"><h2>Instrument status sandbox</h2><label for="status-request">Type a status question (no equipment connected)</label><input id="status-request" type="text" maxlength="240" autocomplete="off" style="display:block;width:95%;min-height:44px;margin:8px 0;background:#0b1320;color:white;border:1px solid #64b9b1;border-radius:8px;padding:8px" placeholder="MTC status"><button id="status-check" type="button">Check simulated status</button><button id="status-speak" type="button" disabled>Speak status response</button><p id="status-answer" role="status" aria-live="polite">No equipment connected.</p></section><small>This uses your device's built-in speech synthesis if available. The page makes no network requests, but device speech voices may require a network connection. Voice availability depends on Android settings. No recordings or conversations are stored. No live AI, voice input, or equipment connection. Typed status requests are processed in-page and are not saved.</small></section></main><script>
 'use strict';
 const lines=Object.freeze({intro:"Hello! I am SIGNAL, a prototype research assistant for VEIL. Today's demonstration is scripted, not generated by AI.",veil:"VEIL is an independent research initiative testing reports of anomalous environmental events using careful measurements and ordinary explanations first.",evidence:"A scanner flag is a reason to review original recordings, not proof of a voice, an anomaly, or anything paranormal.",humor:"I checked the research logs twice. This does not make me psychic. It makes me delightfully suspicious of spreadsheets."});
 function simulatedStatus(input) {
@@ -15,6 +15,12 @@ function simulatedStatus(input) {
   return {kind:'unrecognized',message:'No simulated status match. Try “MTC status” or “Panic Box status”. No device was contacted.'};
 }
 let current=lines.intro;
+let lastStatus=null;
+function statusSpeechText(result) {
+  if (!result || !['simulation','blocked','rejected','unrecognized'].includes(result.kind) || typeof result.message!=='string') return null;
+  return 'SIGNAL demonstration. '+result.message;
+}
+function clearStatusSpeech(){lastStatus=null;document.getElementById('status-speak').disabled=true;}
 let voiceEpoch=0;
 let activeUtterance=null;
 const voiceState=()=>document.getElementById('voice-state');
@@ -61,7 +67,23 @@ function speak(){
 for(const b of document.querySelectorAll('[data-line]'))b.addEventListener('click',()=>selectLine(b.dataset.line));
 document.getElementById('speak').addEventListener('click',speak);
 document.getElementById('stop').addEventListener('click',stopVoice);
-document.getElementById('status-check').addEventListener('click',()=>{const result=simulatedStatus(document.getElementById('status-request').value);document.getElementById('status-answer').textContent=result.message;});
+document.getElementById('status-check').addEventListener('click',()=>{
+  stopVoice();
+  const result=simulatedStatus(document.getElementById('status-request').value);
+  lastStatus=result;
+  document.getElementById('status-answer').textContent=result.message;
+  document.getElementById('status-speak').disabled=false;
+});
+document.getElementById('status-request').addEventListener('input',()=>{stopVoice();clearStatusSpeech();document.getElementById('status-answer').textContent='Question changed. Check simulated status again before speaking.';});
+document.getElementById('status-speak').addEventListener('click',()=>{
+  if(!lastStatus)return;
+  const line=statusSpeechText(lastStatus);
+  if(!line)return;
+  stopVoice();
+  current=line;
+  document.getElementById('speech').textContent=line;
+  speak();
+});
 document.getElementById('check-voice').addEventListener('click',checkVoiceSupport);
 window.addEventListener('pagehide',stopVoice);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopVoice()});
