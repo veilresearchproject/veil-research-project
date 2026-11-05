@@ -14,7 +14,7 @@ def evaluate(snapshot: Mapping, *, now_monotonic: float, previous: Mapping | Non
     Timestamps are local monotonic seconds; never compare across computers.
     Missing/untrusted inputs fail closed. Previous must be from the same session.
     """
-    if not isinstance(snapshot, Mapping) or not isinstance(now_monotonic, (int, float)):
+    if not isinstance(snapshot, Mapping) or type(now_monotonic) not in (int, float) or type(max_age) not in (int, float):
         return Decision('UNCONFIRMED', ('invalid_input',))
     import math
     if not math.isfinite(now_monotonic) or not math.isfinite(max_age) or max_age <= 0:
@@ -47,5 +47,5 @@ def evaluate(snapshot: Mapping, *, now_monotonic: float, previous: Mapping | Non
             for k in ('wav_bytes','wav_frames','callback_count'):
                 if snapshot[k] == previous[k]: faults.append('no_progress_' + k)
     else:
-        return Decision('UNCONFIRMED', ('no_previous_snapshot',) + tuple(faults))
+        return Decision('HOLD' if faults else 'UNCONFIRMED', tuple(faults) if faults else ('no_previous_snapshot',))
     return Decision('HOLD' if faults else 'PROGRESS_ONLY', tuple(faults))
