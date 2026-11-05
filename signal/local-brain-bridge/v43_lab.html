@@ -1,12 +1,68 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'none'; form-action 'none'; object-src 'none'; base-uri 'none'">
-<title>SIGNAL v43 — Unified VEIL Case Workspace</title><meta name="color-scheme" content="dark">
+<title>SIGNAL v43.1 — Integrated VEIL Research Assistant</title><meta name="color-scheme" content="dark">
 <style>
 :root{font:16px/1.45 system-ui,'Segoe UI',sans-serif;color:#edffff;background:#07121d}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1a5064,#07121d 65%);min-height:100vh}main{max-width:1150px;margin:auto;padding:clamp(12px,2vw,30px)}h1{font-size:clamp(1.8rem,5vw,2.7rem);letter-spacing:.11em;margin:0}h2{font-size:1.15rem;margin:0 0 8px}h3{font-size:1rem;margin:8px 0}.eyebrow{color:#7de9da;font-size:.75rem;text-transform:uppercase;font-weight:800;letter-spacing:.17em}.muted,.small{color:#aec7d0}.small{font-size:.84rem}.top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;margin-bottom:15px}.top p{margin:4px 0}.chip{border-radius:99px;border:1px solid #a4b958;background:#333d22;color:#eef1c3;padding:6px 12px;font-size:.75rem;font-weight:800}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.panel{border:1px solid #365b68;border-radius:16px;background:#102435de;padding:19px;box-shadow:0 14px 40px #0004}.wide{grid-column:span 2}.row{display:flex;flex-wrap:wrap;gap:9px;align-items:end}.field{display:flex;flex:1;min-width:160px;flex-direction:column;gap:5px;margin:9px 0;font-size:.87rem}.field input,.field select,.field textarea{width:100%;background:#081a27;color:#f4ffff;border:1px solid #567e84;border-radius:9px;padding:9px;font:inherit;font-size:1rem}.field textarea{min-height:75px;resize:vertical}button,.link{display:inline-block;cursor:pointer;font:inherit;font-weight:700;border:1px solid #62bdb5;border-radius:9px;min-height:42px;padding:9px 12px;background:#236863;color:#fff;text-decoration:none}button.secondary,.link{background:#193a4d;border-color:#4c7580}button:hover,.link:hover{filter:brightness(1.2)}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #ffe09c;outline-offset:2px}button:disabled{opacity:.55;cursor:not-allowed}.check{display:flex;align-items:center;gap:7px;margin:10px 0}.check input{width:20px;height:20px}.output{margin:10px 0;white-space:pre-wrap;overflow-wrap:anywhere;max-height:290px;overflow-y:auto;padding:12px;border:1px solid #2c5261;border-radius:10px;background:#071722;font: .82rem/1.52 ui-monospace,Consolas,monospace}.status{font-size:.84rem;color:#c3e1d7;min-height:1.4em}.warning{color:#f8d8a9;font-size:.85rem}.entries{list-style:none;padding:0;margin:10px 0;max-height:210px;overflow:auto}.entries li{border:1px solid #355767;border-radius:9px;padding:9px 11px;margin:7px 0;overflow-wrap:anywhere}.entries small{display:block;color:#adc8d4}.stat{display:flex;align-items:center;justify-content:space-between;gap:12px}.station{border:1px solid #375e71;border-radius:10px;margin:9px 0;padding:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.station small{color:#b5cbd2}.station strong{font-weight:800}.case-work-panel{margin-bottom:16px}.case-work-panel .case-candidates{max-height:350px;overflow:auto}.case-work-panel .case-candidates>li{display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between;gap:10px}.case-work-panel .case-candidates button{min-height:35px}.case-work-panel .case-note{font-size:.83rem;color:#f3d9af}.entity-small{width:45px;height:45px;flex-shrink:0;filter:drop-shadow(0 0 10px #40daca)}.case-inline{display:flex;align-items:center;gap:13px}.case-inline h2{margin:0}.lamp{width:12px;height:12px;border-radius:50%;background:#61dfca;display:inline-block;margin-right:7px}.lamp.attention{background:#f3ae5d}.lamp.offline{background:#ef7474}.lamp.recording{background:#84b9ff}footer{color:#adc4cd;margin:24px 0}.controls{margin-top:12px}code{font-size:.88em}@media(max-width:750px){.grid{grid-template-columns:1fr}.wide{grid-column:span 1}.panel{padding:13px}main{padding:11px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* v43.1 read-only geometric briefing interface */
+.assistant-panel{margin-bottom:16px;display:grid;grid-template-columns:minmax(165px,235px) minmax(0,1fr);align-items:center;gap:20px;border-color:#5eaba8}
+.assistant-art{text-align:center}.assistant-entity{width:min(100%,220px);aspect-ratio:1;display:block;overflow:visible;margin:auto;--glow:#64e3d6;filter:drop-shadow(0 0 18px #178d9a88)}
+.assistant-entity .shell{fill:#104256;stroke:var(--glow);stroke-width:2;transition:stroke .2s,transform .2s;transform-origin:center}
+.assistant-entity .facet{fill:#34c1b044;stroke:#b9fff2;stroke-width:1.4;transform-origin:center}
+.assistant-entity .orbit{fill:none;stroke:#65e8d5;stroke-dasharray:5 10;opacity:.58;transform-origin:100px 100px;animation:assistant-spin 16s linear infinite}
+.assistant-entity[data-state="speaking"] .facet{animation:assistant-talk .5s ease-in-out infinite alternate}
+.assistant-entity[data-state="speaking"] .shell{stroke:#a6efff}
+.assistant-entity[data-state="uncertain"]{--glow:#f7bd65}
+.assistant-entity[data-state="uncertain"] .orbit{stroke:#edbd65}
+.assistant-entity.pulse .facet{transform:scale(1.09)}
+@keyframes assistant-spin{to{transform:rotate(360deg)}}@keyframes assistant-talk{to{transform:scale(1.075) rotate(3deg)}}
+.assistant-art .small{margin:3px 0}.assistant-controls{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.assistant-controls button{font-size:.89rem}
+.assistant-answer{white-space:pre-wrap;overflow-wrap:anywhere;min-height:5rem;max-height:230px;overflow:auto;border:1px solid #376e78;background:#071722;border-radius:10px;padding:12px;margin:9px 0}
+.assistant-input{display:flex;gap:8px;align-items:end}.assistant-input input{width:100%;min-width:0;background:#081a27;color:white;border:1px solid #567e84;border-radius:9px;padding:12px;font:inherit}
+.assistant-input button{flex-shrink:0}.assistant-note{font-size:.8rem;color:#ddcea8}
+@media(max-width:700px){.assistant-panel{grid-template-columns:1fr}.assistant-entity{max-width:150px}.assistant-art{display:flex;align-items:center;gap:16px;text-align:left}.assistant-art .small{max-width:155px}.assistant-input{flex-wrap:wrap}.assistant-input button{width:100%}}
+@media(prefers-reduced-motion:reduce){.assistant-entity .orbit,.assistant-entity .facet{animation:none!important}}
+
+.assistant-ai{margin:13px 0;border-top:1px solid #386b7b;padding-top:12px}.assistant-ai summary{cursor:pointer;font-weight:750;color:#a7f0dc;padding:6px 0}
+.assistant-ai input{min-width:0;flex:1;background:#081a27;color:white;border:1px solid #567e84;border-radius:9px;padding:11px;font:inherit}
+.assistant-ai form{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}.assistant-ai form button{flex-shrink:0}
 </style></head><body><main>
-<div class="top"><div><div class="eyebrow">VEIL Research Project · isolated local development</div><h1>SIGNAL <span class="small">v43</span></h1><p class="muted">Case review · approved memory · synthetic station dashboard · no live control</p></div><div class="row"><span class="chip">SIMULATION / REVIEW ONLY</span><a class="link" href="/v33.html">Open v33 geometric companion</a></div></div>
-<p class="warning">This is a standalone laboratory prototype. Source markers need human listening; simulated station states never represent real equipment. v25, public VEIL, and original evidence files are not modified. Local AI remains opt-in on the separate v33 companion page.</p>
+<div class="top"><div><div class="eyebrow">VEIL Research Project · isolated local development</div><h1>SIGNAL <span class="small">v43.1</span></h1><p class="muted">Case review · approved memory · synthetic station dashboard · no live control</p></div><div class="row"><span class="chip">SIMULATION / REVIEW ONLY</span><a class="link" href="/v33.html">Optional standalone geometric demo</a></div></div>
+<p class="warning">This is a standalone laboratory prototype. Source markers need human listening; simulated station states never represent real equipment. v25, public VEIL, and original evidence files are not modified. This page offers deterministic, read-only SIGNAL briefings; optional local Ollama is also available here behind explicit opt-in, without automatic access to case data.</p>
+
+
+<section class="panel assistant-panel" id="assistant-panel" aria-labelledby="assistant-title">
+ <div class="assistant-art">
+  <svg id="assistant-entity" class="assistant-entity" viewBox="0 0 200 200" data-state="idle" role="img" aria-label="Faceted geometric SIGNAL indicator. Motion reflects requested speech, not sensor readings.">
+   <circle class="orbit" cx="100" cy="100" r="82"/>
+   <polygon class="shell" points="100,16 155,44 184,100 155,155 100,184 45,155 16,100 45,44"/>
+   <polygon class="facet" points="100,36 158,100 100,163 43,100"/>
+   <polygon class="facet" points="100,36 100,163 43,100"/>
+   <polygon class="facet" points="100,36 158,100 100,163"/>
+   <circle fill="#d7fff8" cx="100" cy="100" r="9"/>
+  </svg>
+  <div><p class="small"><strong>Geometric SIGNAL</strong></p><p id="assistant-state" class="small" role="status">Ready — deterministic briefing only</p></div>
+ </div>
+ <div>
+  <h2 id="assistant-title">SIGNAL · Read-only research briefings</h2>
+  <p class="small">Ask for a case summary, the next unreviewed amplitude marker, manual assignment counts, or <strong>simulated</strong> station status. This is a local rule-based helper, not an AI examination of recordings; optional Ollama chat is separately enabled below.</p>
+  <div class="assistant-controls"><button type="button" data-brief="overview">Brief me</button><button type="button" data-brief="next" class="secondary">Next unreviewed</button><button type="button" data-brief="assignments" class="secondary">Assignments</button><button type="button" data-brief="stations" class="secondary">SIMULATED stations</button><button type="button" data-brief="limitations" class="secondary">Limits</button></div>
+  <form id="assistant-form" class="assistant-input"><label class="field" for="assistant-question">Read-only request<input id="assistant-question" maxlength="120" placeholder="brief me / next marker / assignments" autocomplete="off"></label><button type="submit" class="secondary">Ask</button></form>
+  <div id="assistant-caption" class="assistant-answer" aria-live="polite">No briefing requested. The case and instruments are not being monitored.</div>
+  <label class="check"><input type="checkbox" id="assistant-tts-consent"> Allow this browser's device voice to speak my requested briefings (voice may use network services).</label>
+  <div class="assistant-controls"><button type="button" id="assistant-voice" class="secondary">Speak last briefing</button><button type="button" id="assistant-stop" class="secondary">Stop SIGNAL voice</button><label class="check"><input type="checkbox" id="assistant-reduce"> Reduce geometric movement</label></div>
+  <p id="assistant-voice-status" class="status" role="status">Speech is off unless explicitly enabled. No microphone is active.</p>
+  <p class="assistant-note">Briefings use only counts and file-relative timing. They do not read saved memory, transmit original audio or review notes, perform autonomous assignments, activate equipment, or send anything to Ollama.</p>
+  <details class="assistant-ai" id="assistant-ai-details"><summary>Optional local Ollama conversation — disabled by default</summary>
+   <p class="assistant-note">Only questions <strong>you type here</strong> and up to 12 recent messages go to the local Python/Ollama bridge on this computer. Case notes, original audio, approved memories, stations and task records are <strong>never attached automatically</strong>. AI-generated advice can be wrong. Do not enter sensitive third-party evidence until security and consent are reviewed.</p>
+   <div class="row"><button type="button" id="assistant-ai-check" class="secondary">Check installed model</button><button type="button" id="assistant-ai-enable" class="secondary">Enable local AI</button><button type="button" id="assistant-ai-reset" class="secondary">Clear AI context</button></div>
+   <form id="assistant-ai-form"><label class="field" for="assistant-ai-question">Question for installed local AI<input id="assistant-ai-question" maxlength="800" placeholder="Type a question (not automatically taken from the case)" autocomplete="off"></label><button id="assistant-ai-send" type="submit" disabled>Ask local Ollama</button></form>
+   <p id="assistant-ai-status" role="status" class="status">LOCAL AI OFF. No requests sent to the model.</p>
+  </details>
+
+ </div>
+</section>
 
 <section class="panel case-work-panel" aria-labelledby="workflow-title">
 <div class="case-inline"><svg class="entity-small" viewBox="0 0 100 100" role="img" aria-label="SIGNAL geometric emblem"><polygon points="50,3 82,20 97,50 80,80 50,97 20,80 3,50 20,20" fill="#2b838b" stroke="#6bf0df" stroke-width="3"/><polygon points="50,18 80,50 50,82 20,50" fill="#79d4dc66" stroke="#cafefa"/></svg><div><h2 id="workflow-title">v39–v43 · Unified evidence workspace</h2><p class="small">A single operator session linking WAV screening, file fingerprints, human-reviewed amplitude markers, manual assignments and an exportable handoff packet.</p></div></div>
@@ -55,11 +111,13 @@
 <p id="sim-status" role="status" class="status">Ready for synthetic demonstration.</p><div id="stations" aria-live="polite"></div><pre class="output" id="sim-report">No simulated snapshot yet.</pre>
 </section></div>
 <footer>Local-first prototype • human oversight • explicit uncertainty • no supernatural conclusion • no live control or cloud API</footer>
-<script src="voice-core.js"></script><script src="assignments-core.js"></script><script src="audio-core.js"></script><script src="dashboard-core.js"></script><script src="workflow-core.js"></script><script src="packet-core.js"></script>
+<script src="voice-core.js"></script><script src="assignments-core.js"></script><script src="audio-core.js"></script><script src="dashboard-core.js"></script><script src="workflow-core.js"></script><script src="packet-core.js"></script><script src="briefing-core.js"></script>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
 let voice=SIGNALVoice.create(),speechEpoch=0,activeSpeech=null,tasks=[],stations=SIGNALDashboard.validate(SIGNALDashboard.synthetic);
+let assistantEpoch=0,assistantSpeechToken=0,assistantUtterance=null,assistantLast="",assistantLastEpoch=-1;
+let assistantAI={enabled:false,history:[],controller:null,epoch:0};
 const status=(id,message)=>$(id).textContent=message;
 function download(name,content,type='text/plain'){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),500)}
 async function memoryCall(path,payload){const response=await fetch(path,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const value=await response.json();if(!response.ok)throw Error(value.error||'Local memory request failed');return value;}
@@ -73,12 +131,12 @@ $('voice-interrupt').addEventListener('click',()=>{if(voice.state!=='speaking')r
 $('voice-ptt').addEventListener('click',()=>{try{voice=SIGNALVoice.transition(voice,'press-to-talk');renderVoice()}catch(err){status('voice-state',err.message)}});
 $('voice-stop').addEventListener('click',stopSpeech);
 $('voice-transmit').addEventListener('click',()=>{try{voice=SIGNALVoice.transition(voice,'heard-text',$('voice-transcript').value);renderVoice()}catch(err){status('voice-state',err.message)}});
-function renderTasks(){const host=$('task-entries');host.replaceChildren();for(const task of tasks){const li=document.createElement('li'),heading=document.createElement('strong'),desc=document.createElement('small'),controls=document.createElement('div');heading.textContent=task.kind+' · '+task.state.toUpperCase();desc.textContent=task.description+' (operator: '+task.operator+')';controls.className='row';const action=(label,fn)=>{const button=document.createElement('button');button.type='button';button.className='secondary';button.textContent=label;button.addEventListener('click',()=>{try{fn();renderTasks()}catch(err){status('task-status',err.message)}});controls.append(button)};const modify=(verb,details={})=>{tasks=tasks.map(t=>t.id===task.id?SIGNALAssignments.advance(t,verb,details):t);};if(task.state==='assigned')action('Mark manually started',()=>modify('start'));if(task.state==='in-progress')action('Submit manual result',()=>{const result=prompt('Enter actual results of work performed manually. Do not invent work.');if(result!==null)modify('submit',{result})});if(task.state==='awaiting-review'){action('Human accept',()=>{const reviewer=prompt('Reviewer name');const reason=prompt('Why accept?');if(reviewer!==null&&reason!==null)modify('accept',{reviewer,reason})});action('Human reject',()=>{const reviewer=prompt('Reviewer name');const reason=prompt('Why reject?');if(reviewer!==null&&reason!==null)modify('reject',{reviewer,reason})})}li.append(heading,desc,controls);host.append(li)}status('task-status',tasks.length+' session assignments; no tasks run automatically.')}
+function renderTasks(){invalidateAssistant();const host=$('task-entries');host.replaceChildren();for(const task of tasks){const li=document.createElement('li'),heading=document.createElement('strong'),desc=document.createElement('small'),controls=document.createElement('div');heading.textContent=task.kind+' · '+task.state.toUpperCase();desc.textContent=task.description+' (operator: '+task.operator+')';controls.className='row';const action=(label,fn)=>{const button=document.createElement('button');button.type='button';button.className='secondary';button.textContent=label;button.addEventListener('click',()=>{try{fn();renderTasks()}catch(err){status('task-status',err.message)}});controls.append(button)};const modify=(verb,details={})=>{tasks=tasks.map(t=>t.id===task.id?SIGNALAssignments.advance(t,verb,details):t);};if(task.state==='assigned')action('Mark manually started',()=>modify('start'));if(task.state==='in-progress')action('Submit manual result',()=>{const result=prompt('Enter actual results of work performed manually. Do not invent work.');if(result!==null)modify('submit',{result})});if(task.state==='awaiting-review'){action('Human accept',()=>{const reviewer=prompt('Reviewer name');const reason=prompt('Why accept?');if(reviewer!==null&&reason!==null)modify('accept',{reviewer,reason})});action('Human reject',()=>{const reviewer=prompt('Reviewer name');const reason=prompt('Why reject?');if(reviewer!==null&&reason!==null)modify('reject',{reviewer,reason})})}li.append(heading,desc,controls);host.append(li)}status('task-status',tasks.length+' session assignments; no tasks run automatically.')}
 $('task-create').addEventListener('click',()=>{try{if(tasks.length>=20)throw Error('Session demo maximum 20 assignments');tasks.push(SIGNALAssignments.create($('task-kind').value,$('task-description').value,$('task-operator').value));$('task-description').value='';renderTasks()}catch(err){status('task-status',err.message)}});
 let wavEpoch=0;
 $('wav-analyze').addEventListener('click',async()=>{const file=$('wav-file').files[0];if(!file)return status('wav-status','Select a WAV file first.');if(file.size>25*1024*1024)return status('wav-status','Selected file exceeds 25 MiB limit.');const token=++wavEpoch;status('wav-status','Analyzing selected bytes locally. No upload.');try{const bytes=await file.arrayBuffer();if(token!==wavEpoch)return;const result=SIGNALAudio.analyze(bytes);$('wav-report').textContent=SIGNALAudio.report(result);status('wav-status','Analysis complete. '+result.candidates.length+' volume-energy candidate(s) for human listening.')}catch(err){if(token!==wavEpoch)return;status('wav-status',String(err.message||err));$('wav-report').textContent='Audio not analyzed.'}});
 $('wav-clear').addEventListener('click',()=>{wavEpoch++;$('wav-file').value='';$('wav-report').textContent='No amplitude analysis yet.';status('wav-status','Local WAV result cleared from this page.')});
-function renderDashboard(){const s=SIGNALDashboard.snapshot(stations);$('stations').replaceChildren();for(const row of s.stations){const el=document.createElement('div'),left=document.createElement('div'),right=document.createElement('strong'),lamp=document.createElement('span'),label=document.createElement('span'),meta=document.createElement('small');el.className='station';lamp.className='lamp '+row.status;label.textContent=row.kind+' · '+row.id;meta.textContent='  '+row.location+' — SIMULATED';left.append(lamp,label,meta);right.textContent=row.status.toUpperCase();el.append(left,right);$('stations').append(el)}status('sim-status',s.total+' simulated stations; '+s.attention+' attention/stale indicators (fake data).');$('sim-report').textContent=SIGNALDashboard.report(s)}
+function renderDashboard(){invalidateAssistant();const s=SIGNALDashboard.snapshot(stations);$('stations').replaceChildren();for(const row of s.stations){const el=document.createElement('div'),left=document.createElement('div'),right=document.createElement('strong'),lamp=document.createElement('span'),label=document.createElement('span'),meta=document.createElement('small');el.className='station';lamp.className='lamp '+row.status;label.textContent=row.kind+' · '+row.id;meta.textContent='  '+row.location+' — SIMULATED';left.append(lamp,label,meta);right.textContent=row.status.toUpperCase();el.append(left,right);$('stations').append(el)}status('sim-status',s.total+' simulated stations; '+s.attention+' attention/stale indicators (fake data).');$('sim-report').textContent=SIGNALDashboard.report(s)}
 $('sim-reset').addEventListener('click',()=>{stations=SIGNALDashboard.validate(SIGNALDashboard.synthetic);renderDashboard()});
 $('sim-event').addEventListener('click',()=>{stations=SIGNALDashboard.simulate(stations,'SIM-MTC-01','attention');renderDashboard()});
 $('sim-export').addEventListener('click',()=>download('SIGNAL_SIMULATED_STATIONS.txt',SIGNALDashboard.report(SIGNALDashboard.snapshot(stations))));
@@ -87,6 +145,7 @@ renderVoice();renderTasks();renderDashboard();
 // v39–v43 unified case workspace; all records in tab memory until deliberate export.
 let workflow=null,workEpoch=0;
 function renderWorkflow(){
+ invalidateAssistant();
  const list=$('work-candidates'),picker=$('work-marker');list.replaceChildren();picker.replaceChildren();
  const option=document.createElement('option');option.value='';option.textContent='Select an amplitude marker';picker.append(option);
  if(!workflow){status('work-status','No active case; start one before analyzing selected WAV.');$('work-report-view').textContent='No active case summary.';return;}
@@ -129,5 +188,125 @@ $('work-import').addEventListener('click',async()=>{const file=$('work-import-fi
  try{const data=await SIGNALPacket.importJSON(await file.text());workEpoch++;workflow=data.workflow;tasks=data.tasks;stations=data.stations;renderWorkflow();renderTasks();renderDashboard();status('work-status','Checked local JSON loaded. Imported human identities and notes are still self-reported.')}catch(err){status('work-status','Import refused: '+String(err.message||err))}
 });
 renderWorkflow();
+
+
+// v43.1 integrated deterministic briefing. No AI calls or automatic speaking.
+function assistantVisual(state){
+ const el=$('assistant-entity');el.dataset.state=state;
+ $('assistant-state').textContent=(state==='speaking'?'Speaking through device voice':state==='uncertain'?'Limited / read-only':'Ready — deterministic briefing only');
+}
+function stopAssistantVoice(update=true){
+ assistantSpeechToken++;
+ if(assistantUtterance){try{window.speechSynthesis?.cancel()}catch(_){}}
+ assistantUtterance=null;
+ const el=$('assistant-entity');el.classList.remove('pulse');
+ assistantVisual('idle');
+ if(update)$('assistant-voice-status').textContent='SIGNAL briefing speech stopped. No microphone was used.';
+}
+function invalidateAssistant(){
+ assistantEpoch++;
+ if(assistantAI.history.length||assistantAI.controller)clearAssistantAI("Local AI context cleared because research-session data changed.",true);
+ if(assistantLast){stopAssistantVoice(false);assistantLast='';assistantLastEpoch=-1;
+  $('assistant-caption').textContent='The session changed. Request a new briefing to avoid outdated information.';
+  $('assistant-voice-status').textContent='Previous briefing invalidated; request a fresh summary.';
+ }
+}
+function showAssistantBrief(intent){
+ try{
+  const current=SIGNALBriefing.snapshot(workflow,tasks,stations);
+  const result=SIGNALBriefing.answer(intent,current);
+  stopAssistantVoice(false);
+  assistantLast=result.text;assistantLastEpoch=assistantEpoch;
+  $('assistant-caption').textContent=result.text;
+  assistantVisual(result.intent==='unsupported'||intent==='refused'?'uncertain':'idle');
+  $('assistant-voice-status').textContent='Fresh local briefing. Speech not requested.';
+  if(result.focusMarker!==null&&result.focusMarker!==undefined&&$('work-marker').querySelector('option[value="'+result.focusMarker+'"]')){
+   $('work-marker').value=String(result.focusMarker);
+  }
+ }catch(err){assistantLast='';assistantLastEpoch=-1;assistantVisual('uncertain');$('assistant-caption').textContent='Briefing unavailable: '+String(err.message||err).slice(0,140)}
+}
+function speakAssistant(){
+ if(!$('assistant-tts-consent').checked)return void($('assistant-voice-status').textContent='Enable the device voice consent checkbox first.');
+ if(!assistantLast||assistantLastEpoch!==assistantEpoch)return void($('assistant-voice-status').textContent='Request a current briefing before speaking.');
+ if(!window.speechSynthesis||typeof SpeechSynthesisUtterance==='undefined')return void($('assistant-voice-status').textContent='Browser speech unavailable; text remains visible.');
+ // Device TTS might require network access under Windows; never auto-start it.
+ stopAssistantVoice(false);
+ if(activeSpeech)stopSpeech();
+ const token=assistantSpeechToken,text=assistantLast;
+ try{
+  const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=.95;assistantUtterance=u;
+  u.onstart=()=>{if(token!==assistantSpeechToken||assistantUtterance!==u||assistantLastEpoch!==assistantEpoch)return;assistantVisual('speaking');$('assistant-voice-status').textContent='Device voice playing (offline status depends on the installed Windows voice).'};
+  u.onboundary=()=>{if(token!==assistantSpeechToken||assistantUtterance!==u)return;const el=$('assistant-entity');el.classList.toggle('pulse')};
+  u.onend=()=>{if(token!==assistantSpeechToken||assistantUtterance!==u)return;assistantUtterance=null;assistantVisual('idle');$('assistant-voice-status').textContent='Speech finished. Text remains visible.'};
+  u.onerror=()=>{if(token!==assistantSpeechToken||assistantUtterance!==u)return;assistantUtterance=null;assistantVisual('uncertain');$('assistant-voice-status').textContent='Voice unavailable; read the visible briefing instead.'};
+  window.speechSynthesis.speak(u);
+ }catch(_){assistantUtterance=null;assistantVisual('uncertain');$('assistant-voice-status').textContent='Unable to request device speech. Read the briefing instead.'}
+}
+document.querySelectorAll('[data-brief]').forEach(button=>button.addEventListener('click',()=>showAssistantBrief(button.dataset.brief)));
+$('assistant-form').addEventListener('submit',event=>{event.preventDefault();showAssistantBrief(SIGNALBriefing.classify($('assistant-question').value));});
+$('assistant-voice').addEventListener('click',speakAssistant);
+$('assistant-stop').addEventListener('click',()=>{stopAssistantVoice();if(activeSpeech)stopSpeech();});
+$('assistant-tts-consent').addEventListener('change',()=>{if(!$('assistant-tts-consent').checked)stopAssistantVoice();});
+$('assistant-reduce').addEventListener('change',()=>{$('assistant-entity').style.animation=$('assistant-reduce').checked?'none':'';$('assistant-entity').querySelectorAll('.orbit,.facet').forEach(el=>el.style.animation=$('assistant-reduce').checked?'none':'');});
+
+// Optional local-only Ollama. No case/task/memory object or source file ever enters the payload.
+function assistantLocalOrigin(){return location.protocol==='http:'&&/^(localhost|127\.0\.0\.1)$/.test(location.hostname)}
+function clearAssistantAI(notice='Local AI context cleared.',preserveMode=false){
+ assistantAI.epoch++;
+ if(assistantAI.controller){assistantAI.controller.abort();assistantAI.controller=null}
+ assistantAI.history=[];
+ if(!preserveMode)assistantAI.enabled=false;
+ $('assistant-ai-send').disabled=!assistantAI.enabled;
+ $('assistant-ai-enable').textContent=assistantAI.enabled?'Disable local AI':'Enable local AI';
+ $('assistant-ai-status').textContent=notice;
+}
+async function assistantModelHealth(){
+ if(!assistantLocalOrigin())return false;
+ try{
+  const r=await fetch('/api/health',{cache:'no-store'});
+  if(!r.ok)return false;
+  const data=await r.json();return data.model_ready===true;
+ }catch(_){return false}
+}
+$('assistant-ai-check').addEventListener('click',async()=>{
+ $('assistant-ai-status').textContent=assistantLocalOrigin()?'Checking only localhost Ollama…':'Use the preview server on this computer for Ollama.';
+ const ok=await assistantModelHealth();
+ $('assistant-ai-status').textContent=ok?'Local model available; enable explicitly before asking.':'Local model unavailable or no preview server. Read-only briefings still work.';
+});
+$('assistant-ai-enable').addEventListener('click',async()=>{
+ if(assistantAI.enabled){clearAssistantAI('Local AI disabled; temporary conversation context cleared.');return}
+ $('assistant-ai-status').textContent='Checking installed local model…';
+ const ticket=++assistantAI.epoch;const ok=await assistantModelHealth();if(ticket!==assistantAI.epoch)return;
+ if(!ok)return void($('assistant-ai-status').textContent='Local Ollama not ready. Nothing sent to an AI model.');
+ assistantAI.enabled=true;assistantAI.history=[];$('assistant-ai-send').disabled=false;
+ $('assistant-ai-enable').textContent='Disable local AI';
+ $('assistant-ai-status').textContent='Local AI enabled. Only explicitly typed questions and limited text history are sent to Ollama.';
+});
+$('assistant-ai-reset').addEventListener('click',()=>clearAssistantAI('Local AI context cleared. '+(assistantAI.enabled?'Local AI remains enabled.':'Local AI remains disabled.'),true));
+$('assistant-ai-form').addEventListener('submit',async event=>{
+ event.preventDefault();if(!assistantAI.enabled||assistantAI.controller)return;
+ const question=$('assistant-ai-question').value.trim();if(!question||question.length>800)return;
+ const ticket=++assistantAI.epoch,controller=new AbortController();assistantAI.controller=controller;
+ $('assistant-ai-send').disabled=true;$('assistant-ai-status').textContent='Asking the installed local Ollama model (not reading VEIL case records)…';
+ try{
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},cache:'no-store',signal:controller.signal,
+   body:JSON.stringify({question,history:assistantAI.history.slice(-12)})});
+  const d=await r.json();if(ticket!==assistantAI.epoch)return;
+  if(!r.ok||typeof d.reply!=='string'||!d.reply.trim())throw Error(d.error||'Local model gave no usable answer');
+  const reply=d.reply.slice(0,1600);
+  assistantAI.history.push({role:'user',content:question},{role:'assistant',content:reply});assistantAI.history=assistantAI.history.slice(-12);
+  stopAssistantVoice(false);assistantLast=reply;assistantLastEpoch=assistantEpoch;
+  $('assistant-caption').textContent='LOCAL AI — UNVERIFIED RESPONSE\n'+reply;
+  $('assistant-ai-question').value='';
+  $('assistant-ai-status').textContent='Local AI generated this answer. Verify all research claims; no case files were opened by this request.';
+ }catch(err){if(ticket!==assistantAI.epoch)return;
+  $('assistant-ai-status').textContent='Local model error; scripted briefings still work. '+String(err.message||'unavailable').slice(0,90);
+ }finally{if(ticket===assistantAI.epoch){assistantAI.controller=null;$('assistant-ai-send').disabled=!assistantAI.enabled}}
+});
+
+// Prevent two independent browser TTS controls talking over one another.
+$('voice-speak').addEventListener('click',()=>{if(assistantUtterance)stopAssistantVoice(false)},{capture:true});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAssistantVoice(false)});
+window.addEventListener('pagehide',()=>{stopAssistantVoice(false);clearAssistantAI('Page closed; AI context cleared.');});
 
 </script></main></body></html>
