@@ -1,0 +1,31 @@
+'use strict';
+const assert=require('node:assert/strict'),CB=require('./casebook-core.js'),C=require('./correlation-core.js');
+let count=0;function test(name,fn){fn();count++;console.log('PASS '+name)}
+const at='2026-11-05T10:00:00Z',checks={originalPreserved:false,timeVerified:false,alternativesChecked:false,corroborationChecked:false};
+const mk=()=>CB.create('MTC time review',at);
+const add=(b,label,when,ver=false)=>CB.add(b,{sourceType:'audio',sourceLabel:label,observedAt:when,description:`Reported sound at ${label||'unlabeled source'}`,checks:{...checks,timeVerified:ver}},at);
+function pair(){let b=mk();b=add(b,'Recorder A','2026-11-05T05:00:00-05:00',true);b=add(b,'Camera B','2026-11-05T10:00:04Z',false);return b}
+test('default ±5 second candidate',()=>{const r=C.analyze(pair());assert.equal(r.candidateCount,1);assert.equal(r.candidates[0].deltaSeconds,4)});
+test('UTC timezone normalization',()=>assert.equal(C.analyze(pair()).candidates[0].observedA,'2026-11-05T10:00:00.000Z'));
+test('narrower window eliminates candidate',()=>assert.equal(C.analyze(pair(),3).candidateCount,0));
+test('exact boundary included',()=>assert.equal(C.analyze(pair(),4).candidateCount,1));
+test('case-insensitive labels cannot match themselves',()=>{let b=mk();b=add(b,'Recorder A','2026-11-05T10:00:00Z');b=add(b,'recorder a','2026-11-05T10:00:02Z');assert.equal(C.analyze(b).candidateCount,0)});
+test('unknown timestamps excluded',()=>{let b=pair();b=add(b,'Recorder C','');const r=C.analyze(b);assert.equal(r.candidateCount,1);assert.equal(r.missingTime,1)});
+test('missing source labels excluded',()=>{let b=mk();b=add(b,'','2026-11-05T10:00:00Z');b=add(b,'Camera B','2026-11-05T10:00:01Z');assert.equal(C.analyze(b).candidateCount,0);assert.equal(C.analyze(b).missingLabels,1)});
+test('one unchecked time is not fully verified',()=>assert.equal(C.analyze(pair()).candidates[0].reportedTimeChecks,false));
+test('two self-reported checks not an independence claim',()=>{let b=mk();b=add(b,'A','2026-11-05T10:00:00Z',true);b=add(b,'B','2026-11-05T10:00:00Z',true);assert.equal(C.analyze(b).candidates[0].reportedTimeChecks,true);assert.match(C.report(C.analyze(b)),/Independence is NOT verified/)});
+test('zero-second window is legal',()=>{let b=mk();b=add(b,'A','2026-11-05T10:00:00Z');b=add(b,'B','2026-11-05T10:00:00Z');assert.equal(C.analyze(b,0).candidateCount,1)});
+test('rejects negative tolerance',()=>assert.throws(()=>C.analyze(pair(),-1)));
+test('rejects fractional tolerance',()=>assert.throws(()=>C.analyze(pair(),1.5)));
+test('rejects tolerance above five minutes',()=>assert.throws(()=>C.analyze(pair(),301)));
+test('rejects empty string tolerance',()=>assert.throws(()=>C.analyze(pair(),'')));
+test('report warns no files were inspected',()=>assert.match(C.report(C.analyze(pair())),/No source recording or sensor stream was read/));
+test('reports missing verified timestamps',()=>assert.equal(C.analyze(pair()).uncheckedTimes,1));
+test('report includes measurable delta',()=>assert.match(C.report(C.analyze(pair())),/Δ4.000s/));
+test('no entries produce zero candidates',()=>assert.equal(C.analyze(mk()).candidateCount,0));
+test('three distinct sources produce three pairs',()=>{let b=mk();for(let i=1;i<=3;i++)b=add(b,'R'+i,`2026-11-05T10:00:0${i}Z`);assert.equal(C.analyze(b).candidateCount,3)});
+test('does not change the casebook input',()=>{const b=pair(),v=JSON.stringify(b);C.analyze(b);assert.equal(JSON.stringify(b),v)});
+test('result is sorted by smallest delta',()=>{let b=mk();b=add(b,'A','2026-11-05T10:00:00Z');b=add(b,'B','2026-11-05T10:00:03Z');b=add(b,'C','2026-11-05T10:00:04Z');assert.equal(C.analyze(b).candidates[0].deltaSeconds,1)});
+test('source labels cannot inject multiline into report',()=>{let b=mk();b=add(b,'Camera\nheader','2026-11-05T10:00:00Z');b=add(b,'Recorder','2026-11-05T10:00:01Z');assert.match(C.report(C.analyze(b)),/Camera header/)});
+test('no network or instrument APIs in core',()=>{const s=require('node:fs').readFileSync(__filename.replace('test_correlation.cjs','correlation-core.js'),'utf8');assert.doesNotMatch(s,/(?:fetch\(|XMLHttpRequest|WebSocket|navigator\.serial|https?:\/\/)/)});
+console.log(`${count}/${count} SIGNAL correlation checks passed`);
