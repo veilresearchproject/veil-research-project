@@ -29,3 +29,5 @@ function makeMemory() {
   });
 }
 if(typeof module!=='undefined' && module.exports) module.exports={makeMemory};
+
+if(typeof globalThis!=='undefined') globalThis.SignalMemory=Object.freeze({makeMemory});
