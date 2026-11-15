@@ -1,15 +1,24 @@
-# SIGNAL laboratory demonstrator v0.1
+# SIGNAL laboratory demonstrator v0.2 — six incremental updates
 
-Synthetic-data-only, no-cost Python standard-library proof of concept. Does not connect to physical equipment or an AI model. **Never interpret threshold flags as paranormal findings.**
+**Synthetic data only.** No physical sensors, voice services or AI model connected. All scripts use the Python standard library with no cloud calls or fees.
 
-From this folder:
+From the `signal_lab_demo` folder:
 
 ```bash
-python signal_lab_demo.py --output output
-python signal_lab_demo.py --output output --verify
-python -m unittest -v
+python run_lab.py --output signal_lab_output
+python -m unittest -v test_updates.py
 ```
 
-Outputs: timestamped **synthetic** readings CSV, SHA-256 provenance manifest and human-review report. Times are fixed sample timeline timestamps, not real capture times. To run on Windows, use `py` if `python` is unavailable.
+Windows may use `py` in place of `python`. Open `signal_lab_output/dashboard.html` in a browser.
 
-Next step: separate read-only sensor adapters, safe operator-approved scheduling, and provenance-preserving integration with SIGNAL. Main branch and current desktop installation are untouched.
+## Six updates
+1. `profile.py` — validated thresholds and intervals.
+2. `ingest.py` — strict, read-only synthetic CSV parsing.
+3. `correlate.py` — temporal grouping of flags, without causal interpretation.
+4. `provenance.py` — file SHA-256 inventory and verification.
+5. `review.py` — explicit human review decisions in append-only-by-convention JSONL.
+6. `dashboard.py` — static, offline HTML summary.
+
+`run_lab.py` ties the modules to the original v0.1 simulation. `test_updates.py` checks each capability. The six comparable local tests passed; CI has not independently run these repository files.
+
+**Limitations:** All timestamps and sensor readings are synthetic. Fingerprints reveal file changes but are not an authenticated chain of custody. Human review logs are ordinary local files, not cryptographically immutable. Keep this branch separate from the public website and existing desktop baseline pending review.
