@@ -135,6 +135,44 @@ class PilotTest(unittest.TestCase):
                        expected="checksum mismatch")
         self.review(case_id, expected="matching checksums")
 
+    def test_private_delivery_receipt_requires_current_intact_version(self):
+        case_id = self.new_case()
+        evidence = self.intake(case_id)["evidence_id"]
+        self.review(case_id)
+        first = self.run_pilot("report", case_id, 1, "--format", "html", raw=True)
+        first_hash = hashlib.sha256(first.encode()).hexdigest()
+        self.assertEqual(self.run_pilot("check-delivery", case_id, 1)["html_sha256"], first_hash)
+
+        def receipt(version, sha, expected=None):
+            return self.run_pilot("record-delivery", case_id, version, "--report-sha256", sha,
+                                  "--recipient-reference", "consented-recipient-01",
+                                  "--delivery-reference", "private-transfer-fixture-01",
+                                  "--confirm-private-delivery", expected=expected)
+
+        receipt(1, "0" * 64, expected="HTML checksum")
+        delivered = receipt(1, first_hash)
+        self.assertFalse(delivered["already_recorded"])
+        self.assertEqual(delivered["html_sha256"], first_hash)
+        self.assertTrue(receipt(1, first_hash)["already_recorded"])
+        self.run_pilot("analyze", case_id, evidence, "--interval", 60, "--threshold", 1.5)
+        receipt(1, first_hash, expected="Analysis has changed")
+        self.review(case_id, "--correction", "Included the controlled CSV audit.")
+        receipt(1, first_hash, expected="latest reviewed report")
+        second = self.run_pilot("report", case_id, 2, "--format", "html", raw=True)
+        second_hash = hashlib.sha256(second.encode()).hexdigest()
+        new_source = self.root / "extra.csv"
+        new_source.write_text(CSV + "extra row", encoding="utf-8")
+        self.intake(case_id, source=new_source)
+        receipt(2, second_hash, expected="Evidence has changed")
+        self.run_pilot("check-delivery", case_id, 2, expected="Evidence has changed")
+        self.review(case_id, "--correction", "Added a second source.")
+        third = self.run_pilot("report", case_id, 3, "--format", "html", raw=True)
+        with sqlite3.connect(self.store / "pilot.sqlite3") as db:
+            db.execute("UPDATE evidence SET contents = ? WHERE id = ?", (b"changed", evidence))
+        receipt(3, hashlib.sha256(third.encode()).hexdigest(), expected="Original checksum mismatch")
+        events = self.run_pilot("status", case_id)["custody"]
+        self.assertEqual(sum(event["action"] == "private_delivery_recorded" for event in events), 1)
+
     def test_expiry_and_withdrawal(self):
         case_id = self.new_case()
         evidence = self.intake(case_id)["evidence_id"]

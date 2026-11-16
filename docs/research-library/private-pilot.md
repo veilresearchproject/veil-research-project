@@ -39,6 +39,18 @@ python tools/evidence-review/pilot.py --store PRIVATE_PATH --actor operator stat
 
 HTML reports are written to standard output as UTF-8. Redirect only to a new file on the protected volume using a shell that preserves the output bytes. Open the file privately and print to PDF if needed. Use `--correction` with a reason to issue another version. Prior versions remain available until expiry or withdrawal.
 
+## Deliver and record the reviewed report
+
+Before encrypting, run `check-delivery` and match its SHA-256 against the exported HTML. The check fails if there is a newer report or if evidence or analysis changed since review. Verify the intended recipient and encrypt the exported HTML to their verified certificate using the procedure above. Keep the transfer outside the application. Once private delivery is confirmed, record it against the report version using the SHA-256 of the exact plaintext HTML bytes the recipient received.
+
+```text
+python tools/evidence-review/pilot.py --store PRIVATE_PATH --actor operator check-delivery CASE_ID 1
+openssl dgst -sha256 final-report.html
+python tools/evidence-review/pilot.py --store PRIVATE_PATH --actor operator record-delivery CASE_ID 1 --report-sha256 SHA256 --recipient-reference RECIPIENT_REF --delivery-reference TRANSFER_REF --confirm-private-delivery
+```
+
+Use private opaque references. This receipt records the operator's confirmation. The command verifies the current report, checks that the report covers the current evidence and SIGNAL audit records, and rejects checksum mismatches. Repeat calls with identical details reuse the receipt. PDF printouts are reading copies. The receipt covers only the approved HTML bytes. If the report-rendering code changes between export and receipt, preserve the exact report bytes and use the same checkout to record the receipt.
+
 ## What the pilot records
 
 - The store issues year-based case and evidence IDs. Keep a single pilot store and coordinate numbering with VEIL's case register before using IDs externally. Case, original bytes and checksum, reviews, and recorded custody events are stored transactionally.

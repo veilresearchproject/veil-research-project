@@ -305,14 +305,19 @@ def review(db, args):
     return {"case_id": args.case, "report_version": version, "visibility": "private"}
 
 
-def report(db, args):
+def report_packet(db, args):
     case(db, args.case)
     row = db.execute("SELECT packet FROM reports WHERE case_id = ? AND version = ?",
                      (args.case, args.version)).fetchone()
     if row is None:
         raise ValueError("Unknown report version.")
-    log(db, args, "private_report_read", str(args.version))
     return json.loads(row["packet"])
+
+
+def report(db, args):
+    packet = report_packet(db, args)
+    log(db, args, "private_report_read", str(args.version))
+    return packet
 
 
 def printable_report(packet):
@@ -347,6 +352,50 @@ h2 {{ break-after: avoid; }}
 </style></head><body><header><p>VEIL Research Project · Private · No-fee pilot</p>
 <h1>{heading}</h1><p>Human reviewer {reviewer} · {reviewed}</p></header>
 <main>{"".join(sections)}</main></body></html>"""
+
+
+def delivery_digest(db, args):
+    packet = report_packet(db, args)
+    latest = db.execute("SELECT MAX(version) FROM reports WHERE case_id = ?", (args.case,)).fetchone()[0]
+    if args.version != latest:
+        raise ValueError("Use the latest reviewed report for delivery.")
+    evidence = db.execute("SELECT id, sha256 FROM evidence WHERE case_id = ? ORDER BY id",
+                          (args.case,)).fetchall()
+    reviewed = [(item["id"], item["sha256"]) for item in packet["evidence"]]
+    if [tuple(row) for row in evidence] != reviewed:
+        raise ValueError("Evidence has changed since review. Issue a new reviewed version.")
+    analysis = db.execute("SELECT id FROM analyses WHERE case_id = ? ORDER BY id", (args.case,))
+    if [row["id"] for row in analysis] != [item["analysis_id"] for item in packet["signal_analysis"]]:
+        raise ValueError("Analysis has changed since review. Issue a new reviewed version.")
+    for evidence_id, sha in reviewed:
+        contents = db.execute("SELECT contents FROM evidence WHERE id = ?", (evidence_id,)).fetchone()[0]
+        if digest(contents) != sha:
+            raise ValueError("Original checksum mismatch. Stop delivery and inspect the retained source.")
+    return digest(printable_report(packet).encode("utf-8"))
+
+
+def check_delivery(db, args):
+    return {"case_id": args.case, "report_version": args.version, "html_sha256": delivery_digest(db, args)}
+
+
+def record_delivery(db, args):
+    expected = delivery_digest(db, args)
+    if args.report_sha256.lower() != expected:
+        raise ValueError("Delivered HTML checksum does not match the reviewed version.")
+    receipt = {
+        "report_version": args.version,
+        "html_sha256": expected,
+        "recipient_reference": clean(args.recipient_reference, 120),
+        "delivery_reference": clean(args.delivery_reference, 120),
+    }
+    reference = json_text(receipt)
+    exists = db.execute(
+        "SELECT 1 FROM custody WHERE case_id = ? AND action = ? AND reference = ?",
+        (args.case, "private_delivery_recorded", reference),
+    ).fetchone()
+    if not exists:
+        log(db, args, "private_delivery_recorded", reference)
+    return {"case_id": args.case, **receipt, "already_recorded": exists is not None}
 
 
 def status(db, args):
@@ -409,6 +458,14 @@ def parser():
     read.add_argument("case")
     read.add_argument("version", type=int)
     read.add_argument("--format", choices=("json", "html"), default="json")
+    for name in ("check-delivery", "record-delivery"):
+        delivery = commands.add_parser(name)
+        delivery.add_argument("case")
+        delivery.add_argument("version", type=int)
+        if name == "record-delivery":
+            for option in ("report-sha256", "recipient-reference", "delivery-reference"):
+                delivery.add_argument("--" + option, required=True)
+            delivery.add_argument("--confirm-private-delivery", action="store_true", required=True)
     commands.add_parser("status").add_argument("case")
     withdrawal = commands.add_parser("withdraw")
     withdrawal.add_argument("case")
@@ -418,7 +475,8 @@ def parser():
 
 
 OPERATIONS = {"open-case": open_case, "intake": intake, "verify": verify, "analyze": analyze,
-              "review": review, "report": report, "status": status,
+              "review": review, "report": report, "check-delivery": check_delivery,
+              "record-delivery": record_delivery, "status": status,
               "withdraw": withdraw, "purge-expired": purge_expired}
 
 
