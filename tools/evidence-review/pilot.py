@@ -12,6 +12,7 @@ import sqlite3
 import stat
 import subprocess
 import sys
+import tempfile
 
 REPO = Path(__file__).resolve().parents[2]
 AUDIT = REPO / "signal/csv-audit-core.js"
@@ -22,6 +23,7 @@ CAPTURE_TIME = re.compile(
 )
 FINDINGS = ("Explained", "Probable explanation", "Inconclusive",
             "Unexplained after investigation")
+EFFORT_STAGES = ("intake", "technical-examination", "independent-review", "correction", "delivery")
 MEDIA = {
     ".jpg": (0, b"\xff\xd8\xff"), ".jpeg": (0, b"\xff\xd8\xff"),
     ".png": (0, b"\x89PNG\r\n\x1a\n"), ".wav": (8, b"WAVE"),
@@ -44,6 +46,11 @@ CREATE TABLE IF NOT EXISTS analyses (
 CREATE TABLE IF NOT EXISTS reports (
     case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
     version INTEGER NOT NULL, packet TEXT NOT NULL, PRIMARY KEY (case_id, version)
+);
+CREATE TABLE IF NOT EXISTS effort (
+    case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
+    entry TEXT NOT NULL, stage TEXT NOT NULL, minutes INTEGER NOT NULL,
+    PRIMARY KEY (case_id, entry)
 );
 CREATE TABLE IF NOT EXISTS custody (
     id INTEGER PRIMARY KEY, case_id TEXT NOT NULL REFERENCES cases(id) ON DELETE CASCADE,
@@ -86,17 +93,21 @@ def json_text(data):
     return json.dumps(data, ensure_ascii=True, allow_nan=False)
 
 
-@contextmanager
-def open_store(path):
+def private_directory(path):
     root = path.resolve()
     if root.is_relative_to(REPO) or REPO.is_relative_to(root):
         raise ValueError("Choose a dedicated evidence directory outside the repository.")
     root.mkdir(mode=0o700, parents=True, exist_ok=True)
-    database = root / "pilot.sqlite3"
     if os.name == "posix":
         info = root.stat()
         if info.st_uid != os.getuid() or info.st_mode & 0o077:
             raise ValueError("The evidence directory must be owned by you and have mode 0700.")
+    return root
+
+
+@contextmanager
+def open_store(path):
+    database = private_directory(path) / "pilot.sqlite3"
     if database.is_symlink():
         raise ValueError("The evidence database must be a regular local file.")
     fd = os.open(database, os.O_CREAT | os.O_RDWR | getattr(os, "O_NOFOLLOW", 0), 0o600)
@@ -240,24 +251,29 @@ def verify(db, args):
     return {"evidence_id": args.evidence, "sha256": record["sha256"], "verified": True}
 
 
+def run_signal_audit(contents, interval, threshold):
+    result = subprocess.run(
+        ["node", "-e", AUDIT_RUNNER, str(AUDIT), str(interval), str(threshold)],
+        input=contents, capture_output=True, timeout=15, check=False,
+        env={key: os.environ[key] for key in ("PATH", "SystemRoot") if key in os.environ},
+    )
+    if result.returncode:
+        raise ValueError("SIGNAL CSV audit failed. Check CSV format and audit parameters.")
+    return json.loads(result.stdout)
+
+
 def analyze(db, args):
     record = checked_evidence(db, args)
     source = json.loads(record["details"])
     if source["extension"] != ".csv":
         raise ValueError("SIGNAL analysis in this pilot supports temperature CSV only.")
     code_hash = digest(AUDIT.read_bytes())
-    result = subprocess.run(
-        ["node", "-e", AUDIT_RUNNER, str(AUDIT), str(args.interval), str(args.threshold)],
-        input=record["contents"], capture_output=True, timeout=15, check=False,
-        env={key: os.environ[key] for key in ("PATH", "SystemRoot") if key in os.environ},
-    )
-    if result.returncode:
-        raise ValueError("SIGNAL CSV audit failed. Check CSV format and audit parameters.")
+    measurements = run_signal_audit(record["contents"], args.interval, args.threshold)
     packet = {
         "status": "provisional", "method": "deterministic CSV audit", "engine": "SIGNAL CSV Audit Bench",
         "engine_sha256": code_hash, "created_utc": now(),
         "case_id": args.case, "evidence_id": args.evidence, "source_sha256": record["sha256"],
-        "source": source, "measurements": json.loads(result.stdout),
+        "source": source, "measurements": measurements,
         "uncertainty": "Threshold and cadence flags require human interpretation. Source clock, "
                        "calibration, and cause require independent verification.",
     }
@@ -398,6 +414,80 @@ def record_delivery(db, args):
     return {"case_id": args.case, **receipt, "already_recorded": exists is not None}
 
 
+def preflight(path):
+    root = private_directory(path)
+    openssl = subprocess.run(["openssl", "version"], capture_output=True, text=True, timeout=10, check=True)
+    if not openssl.stdout.startswith("OpenSSL 3."):
+        raise ValueError("The documented encrypted handoff uses OpenSSL 3.")
+    synthetic = (b"timestamp,temperature_c\n"
+                 b"2026-11-16T08:00:00Z,21.0\n2026-11-16T08:01:00Z,23.0\n")
+    with tempfile.TemporaryDirectory(prefix="preflight-", dir=root) as temp:
+        with open_store(Path(temp)) as db, write(db):
+            db.execute("INSERT INTO counters VALUES (?, ?)", (2026, 1))
+        with open_store(Path(temp)) as db:
+            if db.execute("PRAGMA quick_check").fetchone()[0] != "ok" or db.execute(
+                    "SELECT number FROM counters WHERE year = ?", (2026,)).fetchone()[0] != 1:
+                raise ValueError("Temporary evidence database failed the write/read check.")
+        if run_signal_audit(synthetic, 60, 1.5)["steps"] != 1:
+            raise ValueError("SIGNAL did not detect the synthetic temperature step.")
+    return {
+        "temporary_store": "write/read passed",
+        "posix_permissions": "checked" if os.name == "posix" else "manual Windows ACL check required",
+        "signal_csv": "synthetic temperature step detected",
+        "openssl": openssl.stdout.strip(),
+        "manual_checks_remaining": [
+            "Volume encryption and access under the intended local account",
+            "Encrypted handoff and backup restoration on this workstation",
+            "Consent, reviewer independence and private delivery",
+        ],
+    }
+
+
+def record_effort(db, args):
+    case(db, args.case)
+    entry = clean(args.entry, 80)
+    if not 1 <= args.minutes <= 1440:
+        raise ValueError("Record between 1 and 1440 active minutes per entry.")
+    previous = db.execute("SELECT stage, minutes FROM effort WHERE case_id = ? AND entry = ?",
+                          (args.case, entry)).fetchone()
+    if previous is not None and tuple(previous) != (args.stage, args.minutes):
+        raise ValueError("This effort entry already exists with different values.")
+    db.execute("INSERT OR IGNORE INTO effort VALUES (?, ?, ?, ?)",
+               (args.case, entry, args.stage, args.minutes))
+    return {"entry": entry, "stage": args.stage, "minutes": args.minutes,
+            "already_recorded": previous is not None}
+
+
+def effort_summary(db, args):
+    record = case(db, args.case)
+    stages = {stage: 0 for stage in EFFORT_STAGES}
+    for row in db.execute("SELECT stage, SUM(minutes) AS total FROM effort WHERE case_id = ? GROUP BY stage",
+                          (args.case,)):
+        stages[row["stage"]] = row["total"]
+    inventory = db.execute("SELECT details FROM evidence WHERE case_id = ?", (args.case,))
+    formats = {}
+    total_bytes = 0
+    for row in inventory:
+        source = json.loads(row["details"])
+        extension = source["extension"]
+        formats[extension] = formats.get(extension, 0) + 1
+        total_bytes += source["bytes"]
+    first_delivery = db.execute(
+        "SELECT MIN(utc) FROM custody WHERE case_id = ? AND action = 'private_delivery_recorded'",
+        (args.case,),
+    ).fetchone()[0]
+    turnaround = None
+    if first_delivery:
+        elapsed = datetime.fromisoformat(first_delivery) - datetime.fromisoformat(record["created"])
+        turnaround = round(elapsed.total_seconds() / 60, 2)
+    return {
+        "case_id": args.case, "active_minutes_by_stage": stages,
+        "total_active_minutes": sum(stages.values()), "file_count_by_extension": formats,
+        "total_source_bytes": total_bytes, "first_delivery_turnaround_minutes": turnaround,
+        "visibility": "private",
+    }
+
+
 def status(db, args):
     record = case(db, args.case)
     return {
@@ -425,6 +515,7 @@ def parser():
     cli.add_argument("--actor", required=True, help="Local operator or reviewer identifier")
     commands = cli.add_subparsers(dest="command", required=True)
 
+    commands.add_parser("preflight")
     new = commands.add_parser("open-case")
     for option in ("question", "consent-reference", "expires"):
         new.add_argument("--" + option, required=True)
@@ -466,6 +557,12 @@ def parser():
             for option in ("report-sha256", "recipient-reference", "delivery-reference"):
                 delivery.add_argument("--" + option, required=True)
             delivery.add_argument("--confirm-private-delivery", action="store_true", required=True)
+    effort = commands.add_parser("record-effort")
+    effort.add_argument("case")
+    effort.add_argument("--entry", required=True)
+    effort.add_argument("--stage", required=True, choices=EFFORT_STAGES)
+    effort.add_argument("--minutes", required=True, type=int)
+    commands.add_parser("effort-summary").add_argument("case")
     commands.add_parser("status").add_argument("case")
     withdrawal = commands.add_parser("withdraw")
     withdrawal.add_argument("case")
@@ -477,6 +574,7 @@ def parser():
 OPERATIONS = {"open-case": open_case, "intake": intake, "verify": verify, "analyze": analyze,
               "review": review, "report": report, "check-delivery": check_delivery,
               "record-delivery": record_delivery, "status": status,
+              "record-effort": record_effort, "effort-summary": effort_summary,
               "withdraw": withdraw, "purge-expired": purge_expired}
 
 
@@ -485,13 +583,16 @@ def main():
     args = cli.parse_args()
     try:
         args.actor = clean(args.actor, 80)
-        with open_store(args.store) as db, write(db):
-            result = OPERATIONS[args.command](db, args)
+        if args.command == "preflight":
+            result = preflight(args.store)
+        else:
+            with open_store(args.store) as db, write(db):
+                result = OPERATIONS[args.command](db, args)
         if args.command == "report" and args.format == "html":
             sys.stdout.buffer.write(printable_report(result).encode("utf-8"))
         else:
             print(json.dumps(result, indent=2, ensure_ascii=True))
-    except (ValueError, OSError, sqlite3.Error, subprocess.TimeoutExpired) as exc:
+    except (ValueError, OSError, sqlite3.Error, subprocess.SubprocessError) as exc:
         cli.exit(1, f"Pilot: {exc}\n")
 
 

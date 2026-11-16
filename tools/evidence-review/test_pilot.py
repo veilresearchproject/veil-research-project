@@ -154,6 +154,7 @@ class PilotTest(unittest.TestCase):
         self.assertFalse(delivered["already_recorded"])
         self.assertEqual(delivered["html_sha256"], first_hash)
         self.assertTrue(receipt(1, first_hash)["already_recorded"])
+        self.assertGreaterEqual(self.run_pilot("effort-summary", case_id)["first_delivery_turnaround_minutes"], 0)
         self.run_pilot("analyze", case_id, evidence, "--interval", 60, "--threshold", 1.5)
         receipt(1, first_hash, expected="Analysis has changed")
         self.review(case_id, "--correction", "Included the controlled CSV audit.")
@@ -172,6 +173,42 @@ class PilotTest(unittest.TestCase):
         receipt(3, hashlib.sha256(third.encode()).hexdigest(), expected="Original checksum mismatch")
         events = self.run_pilot("status", case_id)["custody"]
         self.assertEqual(sum(event["action"] == "private_delivery_recorded" for event in events), 1)
+
+    @unittest.skipUnless(shutil.which("openssl"), "OpenSSL is required for workstation preflight")
+    def test_preflight_does_not_open_the_case_store(self):
+        case_id = self.new_case()
+        database = self.store / "pilot.sqlite3"
+        before = database.read_bytes()
+        result = self.run_pilot("preflight")
+        self.assertEqual(result["temporary_store"], "write/read passed")
+        self.assertIn("synthetic temperature step", result["signal_csv"])
+        self.assertIn("Consent, reviewer independence and private delivery", result["manual_checks_remaining"])
+        self.assertEqual(database.read_bytes(), before)
+        self.assertEqual(list(self.store.iterdir()), [database])
+        self.assertEqual(self.run_pilot("status", case_id)["case_id"], case_id)
+
+    def test_effort_summary_supports_retries_and_retention(self):
+        case_id = self.new_case()
+        self.intake(case_id)
+        base = ("record-effort", case_id, "--entry", "shift-1-intake", "--stage", "intake")
+        self.assertFalse(self.run_pilot(*base, "--minutes", 15)["already_recorded"])
+        self.assertTrue(self.run_pilot(*base, "--minutes", 15)["already_recorded"])
+        self.run_pilot(*base, "--minutes", 16, expected="different values")
+        self.run_pilot("record-effort", case_id, "--entry", "bad", "--stage", "delivery",
+                       "--minutes", 0, expected="between 1 and 1440")
+        self.run_pilot("record-effort", case_id, "--entry", "shift-1-review",
+                       "--stage", "independent-review", "--minutes", 25)
+        summary = self.run_pilot("effort-summary", case_id)
+        self.assertEqual(summary["total_active_minutes"], 40)
+        self.assertEqual(summary["active_minutes_by_stage"]["independent-review"], 25)
+        self.assertEqual(summary["active_minutes_by_stage"]["delivery"], 0)
+        self.assertEqual(summary["file_count_by_extension"], {".csv": 1})
+        self.assertEqual(summary["total_source_bytes"], len(self.source.read_bytes()))
+        self.assertIsNone(summary["first_delivery_turnaround_minutes"])
+        self.run_pilot("withdraw", case_id, "--confirm")
+        self.run_pilot("effort-summary", case_id, expected="Unknown case")
+        with sqlite3.connect(self.store / "pilot.sqlite3") as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM effort").fetchone()[0], 0)
 
     def test_expiry_and_withdrawal(self):
         case_id = self.new_case()

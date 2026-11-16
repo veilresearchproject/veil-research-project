@@ -9,6 +9,14 @@ This is a local operator workflow for an invited, no-fee case. It uses Python 3.
 - Use a private, verified handoff. Record the transfer date and expected SHA-256 from a channel where you have verified the submitter. The checksum verifies the received bytes. The submitter and operator document source, device, time zone, clock uncertainty, and acquisition context separately.
 - Keep sensitive notes out of shell history and process arguments. Supply them from a trusted local argument file using `@path-to-file`, one argument per line with no shell quoting. Restrict permissions and retain or delete the argument file under the same case retention plan. Never use a submitter-supplied argument file.
 
+## Check the intended workstation
+
+```text
+python tools/evidence-review/pilot.py --store PRIVATE_PATH --actor operator preflight
+```
+
+This checks the documented OpenSSL version, writes and reads a temporary SQLite store, and runs SIGNAL against a known synthetic step. The temporary store is removed and existing evidence is untouched. Use the reported manual checks to verify OS access permissions, encryption, backup restoration, and the agreed handoff before working with an invited submitter.
+
 ## Encrypted handoff rehearsal
 
 OpenSSL 3 is an optional offline transfer tool. Before using it, the operator provisions a dedicated recipient certificate and password-protected private key. The operator shares only the public certificate. Confirm its full SHA-256 fingerprint over an independently verified channel. Rehearse with a short-lived synthetic certificate and original.
