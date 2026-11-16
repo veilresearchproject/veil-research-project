@@ -40,7 +40,7 @@ function show(){
 }
 search.addEventListener("input",show);
 fetch("cases.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Catalog unavailable");return r.json()})
-.then(data=>{if(!data||!Array.isArray(data.cases))throw Error("Invalid catalog");cases=data.cases.filter(x=>x.status==="published"&&typeof x.report_url==="string"&&/^[a-zA-Z0-9._/-]+\\.pdf$/.test(x.report_url)&&!x.report_url.includes(".."));show()})
+.then(data=>{if(!data||!Array.isArray(data.cases))throw Error("Invalid catalog");cases=data.cases.filter(x=>x.status==="published"&&typeof x.report_url==="string"&&/^[a-zA-Z0-9._/-]+\.pdf$/.test(x.report_url)&&!x.report_url.includes(".."));show()})
 .catch(()=>{results.textContent="The case catalog is temporarily unavailable. Please check again later.";});
 })();
 </script></body></html>
