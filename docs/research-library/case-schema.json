@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VEIL Public Case Catalog",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "last_updated",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "event_date",
+          "publication_date",
+          "classification",
+          "report_url",
+          "summary",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^VEIL-IR-[0-9]{4}-[0-9]{3}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "event_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "publication_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "classification": {
+            "enum": [
+              "Explained",
+              "Probable explanation",
+              "Inconclusive",
+              "Unexplained after investigation"
+            ]
+          },
+          "status": {
+            "const": "published"
+          },
+          "report_url": {
+            "type": "string",
+            "pattern": "^([a-zA-Z0-9._/-]+\\.pdf)$"
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 600
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "review_version": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
