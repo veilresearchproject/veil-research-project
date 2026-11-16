@@ -2,6 +2,22 @@
 
 This is a local operator workflow for an invited, no-fee case. It uses Python 3.10+ and, for SIGNAL CSV analysis, Node.js. It starts no network listener. Run the [synthetic regression suite](../../tools/evidence-review/test_pilot.py) before handling a consented case. Use synthetic evidence until the operator has tested the workstation, storage access, private handoff, and backup restoration.
 
+## Desktop review
+
+Use the [PR #118 branch](https://github.com/veilresearchproject/veil-research-project/tree/feat/research-library-private-pilot). On Windows, open a terminal at the repository root and run the following with Python 3.10+, Node.js and OpenSSL 3 available.
+
+```powershell
+py -3 -B tools/evidence-review/rehearse.py --workspace "$env:LOCALAPPDATA\VEIL\Rehearsal" --keep-report
+py -3 -B tools/research-library/validate_catalog.py
+py -3 -B tools/research-library/browser_smoke.py --preview
+```
+
+- **Rehearsal:** Open the HTML path printed by the first command. Check the programmed temperature step and source line under SIGNAL, then the human finding and limitations. The exercise uses generated files and short-lived test certificates. It checks encrypted intake and return, the report receipt, and restoration from a synthetic backup. The rehearsal's temporary data is removed at the end. Only the optional synthetic HTML remains.
+- **Catalog:** Open the address printed by the preview command. Check the catalog at desktop width and around 390 px using browser responsive mode. The catalog should show the empty published state and display search, finding selection, methods and historical references without horizontal scrolling. The preview serves only the catalog and the pages used by its smoke checks. Press Ctrl+C when finished.
+- **Optional automated browser check:** With Playwright and Chromium already available, run `py -3 -B tools/research-library/browser_smoke.py` or supply `--chromium PATH`. It tests views at 320, 390 and 1440 px and injects synthetic filter fixtures only within its browser session.
+
+Before using any consented case, have an operator and a separate reviewer confirm the local access and encryption setup, private transfer and restoration, submitter authority and consent, expiry, and report delivery. Use the private pilot workflow below for that trial.
+
 ## Prepare the workstation and consent
 
 - Use a dedicated private directory on an encrypted local volume outside every repository checkout, website root, shared drive, and sync folder. On Linux/macOS the directory must be owner-only (0700); the pilot checks existing database ownership and permissions there. On Windows, set and verify owner-only access with Windows ACLs, and confirm encryption under the local OS account before using real data. Use a private terminal. Keep evidence, consent records, keys, backups, and reports off GitHub.
