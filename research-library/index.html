@@ -1,10 +1,13 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="VEIL Research Library: documented investigations, experiments, and evidence-first research."><title>VEIL Research Library | VEIL Research Project</title><link rel="stylesheet" href="../styles.css"><style>
-.library-wrap{max-width:1100px;margin:0 auto;padding:2rem 1rem 5rem;color:#e8f1f5}.library-hero{padding:3rem 0 2rem}.library-hero h1{font-size:clamp(2rem,6vw,3.8rem);margin:.5rem 0}.library-hero p{max-width:760px;line-height:1.7}.library-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:1rem}.library-card{border:1px solid #356171;border-radius:14px;padding:1.25rem;background:#101f27}.library-card h2{font-size:1.2rem;margin:.2rem 0 .75rem}.library-card p{line-height:1.6}.library-note{border-left:4px solid #64c9d4;padding:1rem 1.25rem;background:#122a31;margin:2rem 0}.library-wrap a{color:#82dce7}.library-pill{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#a4d8de}.library-cta{display:inline-block;padding:.8rem 1rem;border:1px solid #82dce7;border-radius:8px;margin:.5rem .75rem .5rem 0}.library-footer{border-top:1px solid #356171;margin-top:2.5rem;padding-top:1.2rem;color:#bdd0d7}
+.library-wrap{max-width:1100px;margin:0 auto;padding:2rem 1rem 5rem;color:#e8f1f5}.library-hero{padding:3rem 0 2rem}.library-hero h1{font-size:clamp(2rem,6vw,3.8rem);margin:.5rem 0}.library-hero p{max-width:760px;line-height:1.7}.library-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:1rem}.library-card{border:1px solid #356171;border-radius:14px;padding:1.25rem;background:#101f27}.library-card h2{font-size:1.2rem;margin:.2rem 0 .75rem}.library-card p{line-height:1.6}.library-note{border-left:4px solid #64c9d4;padding:1rem 1.25rem;background:#122a31;margin:2rem 0}.library-wrap a{color:#82dce7}.library-pill{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#a4d8de}.library-cta{display:inline-block;padding:.8rem 1rem;border:1px solid #82dce7;border-radius:8px;margin:.5rem .75rem .5rem 0}.library-filters{display:flex;flex-wrap:wrap;align-items:center;gap:.65rem}
+.library-filters input,.library-filters select{max-width:100%;padding:.7rem;background:#101f27;border:1px solid #82dce7;border-radius:7px;color:#fff}
+.library-filters input{width:min(100%,320px)}
+.library-footer{border-top:1px solid #356171;margin-top:2.5rem;padding-top:1.2rem;color:#bdd0d7}
 </style></head><body><main class="library-wrap">
 <nav aria-label="Breadcrumb"><a href="../">VEIL Research Project</a> / Research Library</nav>
 <section class="library-hero"><p class="library-pill">VEIL · Evidence before explanation</p><h1>VEIL Research Library</h1><p>A developing collection of documented investigations, experimental methods, historical references and research findings. We record ordinary explanations, unresolved observations and negative results with equal care.</p></section>
-<div class="library-note"><strong>Library under development.</strong> This page describes planned research collections and editorial standards. It does not represent an existing public catalog of completed VEIL case reports. New research will appear here only after review, privacy checks and publication approval.</div>
+<div class="library-note"><strong>Library under development.</strong> VEIL case reports will appear here after human review, privacy checks and publication approval.</div>
 <section aria-label="Library collections" class="library-grid">
 <article class="library-card"><h2>Original Investigations</h2><p>Case-numbered reports with observations, evidence sources, alternative hypotheses, methods and conclusions.</p></article>
 <article class="library-card"><h2>Experimental Research</h2><p>Protocols and reproducible results from VEIL instrumentation, including MTC, ECHO, and related systems.</p></article>
@@ -13,34 +16,35 @@
 <article class="library-card"><h2>Research Findings</h2><p>Searchable classifications including explained, probable explanation, inconclusive and unexplained after investigation.</p></article>
 </section>
 <section aria-labelledby="catalog-title"><h2 id="catalog-title">Published case catalog</h2>
-<p>Search officially published VEIL investigation reports. The catalog currently contains no released cases; planned studies and submitted evidence are not presented as completed investigations.</p>
-<label for="case-search">Search published cases</label> <input id="case-search" type="search" placeholder="Search case number, title or topic" aria-controls="case-results" style="padding:.7rem;width:min(100%,450px);background:#101f27;border:1px solid #82dce7;border-radius:7px;color:#fff">
-<div id="case-results" aria-live="polite" style="margin:1rem 0">Loading catalog…</div></section>
+<p>Search published VEIL investigation reports by case number, title or topic, or filter by finding.</p>
+<div class="library-filters"><label for="case-search">Search published cases</label> <input id="case-search" type="search" placeholder="Search case number, title or topic" aria-controls="case-results">
+<label for="case-finding">Finding</label>
+<select id="case-finding" aria-controls="case-results">
+<option value="">All findings</option>
+<option>Explained</option>
+<option>Probable explanation</option>
+<option>Inconclusive</option>
+<option>Unexplained after investigation</option>
+</select></div>
+<noscript><p>Enable JavaScript to search published case reports.</p></noscript>
+<div id="case-results" aria-live="polite" style="margin:1rem 0"></div></section>
+<section aria-labelledby="references-title">
+<h2 id="references-title">Historical references</h2>
+<article class="library-card">
+<h3>Hampton Court Palace CCTV, 2003</h3>
+<p>Historic Royal Palaces published a CCTV excerpt and its account of a sequence of fire-door incidents. The excerpt can inform questions about camera geometry and scene reconstruction. It does not provide the original recordings or establish the figure’s identity.</p>
+<p><a href="https://www.youtube.com/watch?v=lne_ye2UYBo">Historic Royal Palaces CCTV excerpt and account</a></p>
+</article>
+</section>
+<section aria-labelledby="methods-title">
+<h2 id="methods-title">VEIL research methods</h2>
+<ul>
+<li><a href="../mtc/">Mobile Trans-Communication (MTC)</a></li>
+<li><a href="../temperature-curtain/">Temperature Curtain</a></li>
+<li><a href="../echo/">ECHO experiment</a></li>
+</ul>
+</section>
 <h2>Our reporting principles</h2><p>Each VEIL report will distinguish original observations from witness statements, instrument readings, automated analysis and human conclusions. An event remaining unexplained is not proof of a paranormal cause. Reports will include limits, competing explanations, and corrections where required.</p>
 <p><a class="library-cta" href="../">Explore VEIL</a><a class="library-cta" href="../evidence-review/">Learn about future evidence reviews</a></p>
 <footer class="library-footer">VEIL Research Project · Independent, evidence-first research · This public page does not accept evidence uploads.</footer>
-</main><script>
-(function(){
-"use strict";
-const search=document.getElementById("case-search"),results=document.getElementById("case-results");
-let cases=[];
-function show(){
-  results.replaceChildren();
-  const q=search.value.trim().toLowerCase();
-  const found=cases.filter(item=>[item.id,item.title,item.summary,...(item.topics||[])].join(" ").toLowerCase().includes(q));
-  if(!found.length){const p=document.createElement("p");p.textContent=cases.length?"No published cases match your search.":"No VEIL investigation reports have been published yet.";results.append(p);return;}
-  for(const item of found){
-    const article=document.createElement("article");article.className="library-card";article.style.marginBottom="1rem";
-    const heading=document.createElement("h3"),link=document.createElement("a");
-    link.href=item.report_url;link.textContent=item.id+" · "+item.title;heading.append(link);
-    const meta=document.createElement("p");meta.textContent=item.classification+" · Published "+item.publication_date;
-    const desc=document.createElement("p");desc.textContent=item.summary;
-    article.append(heading,meta,desc);results.append(article);
-  }
-}
-search.addEventListener("input",show);
-fetch("cases.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Catalog unavailable");return r.json()})
-.then(data=>{if(!data||!Array.isArray(data.cases))throw Error("Invalid catalog");cases=data.cases.filter(x=>x.status==="published"&&typeof x.report_url==="string"&&/^[a-zA-Z0-9._/-]+\.pdf$/.test(x.report_url)&&!x.report_url.includes(".."));show()})
-.catch(()=>{results.textContent="The case catalog is temporarily unavailable. Please check again later.";});
-})();
-</script></body></html>
+</main><script src="catalog.js" defer></script></body></html>

@@ -43,3 +43,11 @@ Explained; Probable explanation; Inconclusive; Unexplained after investigation. 
 
 ## Pilot success criterion
 Run a consented non-paid case from intake to private report, verify originals and hashes, retain an audit trail and document reviewer corrections. Do not claim operational readiness solely from posting this plan.
+
+## Operator pilot
+
+The [private pilot runbook](private-pilot.md) covers encrypted handoff, local intake, SIGNAL CSV audit, human review, private report delivery, and retention. The software supports no-fee cases only. The public catalog accepts manually edited entries for approved VEIL reports. A private report has no publication or catalog-export command.
+
+Use the pilot to record active minutes for intake, technical examination, independent review, corrections and delivery. Track file count and size, media type, turnaround, follow-up burden, storage needs and failed or withdrawn cases. Before proposing fixed scopes or prices, compare total effort across representative photo, audio, video and instrument-data cases. Define deliverables, supported file sizes, turnaround, revision limits and cancellation terms. An eventual order state must remain independent of the evidence finding and publication permission.
+
+A controlled synthetic CSV exercise can verify the mechanics but cannot validate physical sensors, reviewer independence, customer readiness or legal terms. The no-fee consented field pilot remains the next operational gate.

@@ -6,16 +6,20 @@
 (function(root) {
   'use strict';
   const MAX_CHARS = 1000000, MAX_ROWS = 15000;
-  function csvRows(csv) {
+  function csvRows(csv, sourceLines = []) {
     if (typeof csv !== 'string' || csv.length > MAX_CHARS) throw Error('CSV must be text smaller than 1,000,000 characters.');
     let rows=[], row=[], field='', quoted=false, closed=false;
+    let line=1, rowStart=1;
     function addField() {
       if (row.length >= 24) throw Error('Too many columns (maximum 24).');
       row.push(field); field=''; closed=false;
     }
     function addRow() {
       addField();
-      if (!(row.length===1 && row[0].trim()==='')) rows.push(row);
+      if (!(row.length===1 && row[0].trim()==='')) {
+        rows.push(row);
+        sourceLines.push(rowStart);
+      }
       if (rows.length > MAX_ROWS+1) throw Error('CSV exceeds the 15,000-data-row limit.');
       row=[];
     }
@@ -29,10 +33,15 @@
         else throw Error('Unescaped quote in CSV field near character '+(i+1)+'.');
       } else if(!quoted && (c===','||c==='\n'||c==='\r')){
         if(c===',') addField();
-        else {addRow(); if(c==='\r' && csv[i+1]==='\n') i++;}
+        else {
+          addRow();
+          if(c==='\r' && csv[i+1]==='\n') i++;
+          rowStart=++line;
+        }
       } else {
         if(closed) throw Error('Unexpected text after closing quote near character '+(i+1)+'.');
         field+=c;
+        if (c==='\r' || (c==='\n' && csv[i-1]!=='\r')) line++;
         if(field.length>1500)throw Error('CSV field too long (maximum 1,500 characters).');
       }
     }
@@ -62,7 +71,8 @@
     return {intervalSec:interval,thresholdC:threshold};
   }
   function analyze(csv, opts={}){
-    const o=optionsCheck(opts), rows=csvRows(csv);
+    const sourceLines=[];
+    const o=optionsCheck(opts), rows=csvRows(csv, sourceLines);
     if(!rows.length)throw Error('CSV is empty.');
     const header=rows.shift().map(x=>x.trim().toLowerCase());
     if(new Set(header).size!==header.length)throw Error('Duplicate column names.');
@@ -72,7 +82,7 @@
     let invalid=0, valid=0, dropped=0, outOfOrder=0, gaps=0, steps=0, min=Infinity,max=-Infinity;
     function flag(item){if(events.length<150)events.push(item);else dropped++;}
     rows.forEach((row,i)=>{
-      const line=i+2;
+      const line=sourceLines[i+1];
       const rawTime=(row[ti]||'').trim(), rawValue=(row[vi]||'').trim();
       const sensor=si>=0?(row[si]||'').trim():'sensor-1';
       const ms=strictTime(rawTime);

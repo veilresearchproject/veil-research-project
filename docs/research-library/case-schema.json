@@ -59,7 +59,7 @@
           },
           "report_url": {
             "type": "string",
-            "pattern": "^([a-zA-Z0-9._/-]+\\.pdf)$"
+            "pattern": "^(?:[a-zA-Z0-9_-]+/)*[a-zA-Z0-9_-]+(?:\\.[a-zA-Z0-9_-]+)*\\.pdf$"
           },
           "summary": {
             "type": "string",
