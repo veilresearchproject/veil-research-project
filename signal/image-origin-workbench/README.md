@@ -54,7 +54,7 @@ Only after a human validates this workflow on desktop and Samsung mobile may the
 
 ## v0.2 draft continuation (November 17, 2026)
 
-A **separate draft branch** adds local JSON reopening: choose a previously exported private JSON, then select the original image. The case is restored **only when file SHA-256, size and decoded dimensions match**. Review identity/date are reset; any stored crop is a metadata-only record and the actual crop PNG must be recreated before searching. Never regard an imported record as authenticated or a photograph as genuine because it has a hash.
+The **existing isolated draft review branch** now adds local JSON reopening: choose a previously exported private JSON, then select the original image. The case is restored **only when file SHA-256, size and decoded dimensions match**. Review identity/date are reset; any stored crop is a metadata-only record and the actual crop PNG must be recreated before searching. Never regard an imported record as authenticated or a photograph as genuine because it has a hash.
 
 New conservative source-history diagnostics distinguish **archive capture** from publisher/corroborated page dates, flag repeated URLs, and count distinct hostnames without representing them as independent witnesses. Those details are added to private JSON/Markdown exports. A restored case can be re-exported; import cannot publish, upload evidence or contact a remote API.
 
