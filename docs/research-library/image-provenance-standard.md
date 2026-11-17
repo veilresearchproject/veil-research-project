@@ -31,3 +31,11 @@ SIGNAL may calculate local fingerprints, generate crop files, prepare text searc
 ## Example report language
 
 > An image with similar/identical visual content was located on [source] by [documented date]. This is the earliest adequately dated appearance identified during the searches recorded here, **not necessarily the first publication or original photograph**. The location, photographer and circumstances of capture remain [known with sources / claimed but unverified / unknown].
+
+## Draft workflow update — case continuity and source independence (November 17, 2026)
+
+- Preserve the JSON export privately. For a resumed case, require the same original image checksum, byte size and decoded dimensions before restoring source notes. This is a local consistency check, **not** proof of authenticity.
+- Reset any imported human review and repeat the review after changes. Never import a publication approval from a self-declared field. Crop hashes and coordinates may be retained, but the actual derived crop file must be generated again if not separately preserved.
+- Record archive capture date, on-page publication date and independently corroborated date as distinct evidence classes. A site appearing in an archive says nothing conclusive about photograph capture time.
+- Flag repeat URLs and common hostnames. Several reposting websites are not independent evidence of the underlying scene, and a creator claim alone does not establish authorship.
+- Current prototype tests: 56 offline SIGNAL unit/static checks passed; real desktop and Samsung UI, image search engines and source-page authenticity still need direct verification.
