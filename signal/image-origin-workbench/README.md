@@ -51,3 +51,11 @@ The researcher must manually enter valid dates/URLs; validation checks format, n
 ## Integration gate
 
 Only after a human validates this workflow on desktop and Samsung mobile may the team plan an optional link inside SIGNAL's UI. Keep file handling on-device. A future authenticated agent may use permitted search APIs or operator-supervised browser actions, but must never claim it searched Google Lens if it only ran a text or general image search. Any online search requires explicit consent and source/date logs. Keep existing `signal/index.html` unchanged while testing.
+
+## v0.2 draft continuation (November 17, 2026)
+
+A **separate draft branch** adds local JSON reopening: choose a previously exported private JSON, then select the original image. The case is restored **only when file SHA-256, size and decoded dimensions match**. Review identity/date are reset; any stored crop is a metadata-only record and the actual crop PNG must be recreated before searching. Never regard an imported record as authenticated or a photograph as genuine because it has a hash.
+
+New conservative source-history diagnostics distinguish **archive capture** from publisher/corroborated page dates, flag repeated URLs, and count distinct hostnames without representing them as independent witnesses. Those details are added to private JSON/Markdown exports. A restored case can be re-exported; import cannot publish, upload evidence or contact a remote API.
+
+Run `node --test test-core.js test-resume.js test-static.js` in this folder and `node --check ui.js`. Do not merge or deploy before desktop browser import/reopen/crop checks, Android touch validation, and source/consent review. Browser automation remains blocked in this development environment.
