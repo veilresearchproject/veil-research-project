@@ -46,6 +46,11 @@ check('Quoted sensor name with comma',()=>{
 check('Excel BOM header accepted',()=>{
   equal(audit.analyze('\uFEFFtimestamp,temperature_c\r\n2026-10-22T00:00:00Z,20\r\n2026-10-22T00:01:00Z,20.2').validRows,2);
 });
+check('Physical source lines survive blank and multiline quoted rows',()=>{
+  const csv='timestamp,temperature_c,note\r\n2026-10-22T00:00:00Z,20,"first\r\nsecond"\r\n\r\n2026-10-22T00:01:00Z,22,end';
+  const result=audit.analyze(csv);
+  equal(result.events[0].line,5);
+});
 check('Malformed quoted fields rejected',()=>shouldFail(()=>audit.analyze('timestamp,temperature_c\n"2026-10-22T01:00:00Z,20')));
 check('Reject oversized input',()=>shouldFail(()=>audit.analyze('a'.repeat(1000001))));
 check('Reject invalid threshold',()=>shouldFail(()=>audit.analyze(audit.sampleCsv,{thresholdC:0})));

@@ -43,3 +43,25 @@ Explained; Probable explanation; Inconclusive; Unexplained after investigation. 
 
 ## Pilot success criterion
 Run a consented non-paid case from intake to private report, verify originals and hashes, retain an audit trail and document reviewer corrections. Do not claim operational readiness solely from posting this plan.
+
+## Operator pilot
+
+The [private pilot runbook](private-pilot.md) covers encrypted handoff, local intake, SIGNAL CSV audit, human review, private report delivery, and retention. The software supports no-fee cases only. The public catalog accepts manually edited entries for approved VEIL reports. A private report has no publication or catalog-export command.
+
+Use the pilot to record active minutes for intake, technical examination, independent review, corrections and delivery. Track file count and size, media type, turnaround, follow-up burden, storage needs and failed or withdrawn cases. Before proposing fixed scopes or prices, compare total effort across representative photo, audio, video and instrument-data cases. Define deliverables, supported file sizes, turnaround, revision limits and cancellation terms. An eventual order state must remain independent of the evidence finding and publication permission.
+
+A controlled synthetic CSV exercise can verify the mechanics but cannot validate physical sensors, reviewer independence, customer readiness or legal terms. The no-fee consented field pilot remains the next operational gate.
+
+
+## Pilot effort and catalog checks
+
+Record active work separately from turnaround. Use one stable entry reference per block of work so a retry does not count the same minutes twice.
+
+```text
+python tools/evidence-review/pilot.py --store PRIVATE_PATH --actor operator record-effort CASE_ID --entry shift-1-intake --stage intake --minutes 15
+python tools/evidence-review/pilot.py --store PRIVATE_PATH --actor operator effort-summary CASE_ID
+```
+
+The private summary reports active minutes by stage, file counts and bytes, and elapsed minutes from opening the case to the first logged delivery. It contains no evidence contents. Retain and remove these measurements with the case. Compare consented pilot runs before proposing pricing or staffing levels.
+
+Before proposing a catalog release, manually verify publication permission, redactions, the intended revision, and the readable PDF. Run `python tools/research-library/validate_catalog.py` from the repository root to check the public metadata and PDF paths. The validator checks the file header and catalog consistency. Publication approval and report QA remain human decisions.
