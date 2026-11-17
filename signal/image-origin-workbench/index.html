@@ -8,6 +8,7 @@
   <title>SIGNAL | Image-Origin Research Workbench</title>
   <link rel="stylesheet" href="workbench.css">
   <script defer src="core.js"></script>
+  <script defer src="case-resume.js"></script>
   <script defer src="ui.js"></script>
 </head>
 <body>
@@ -19,7 +20,10 @@
     <div id="feedback" role="status" aria-live="polite"></div>
 
     <section class="panel" aria-labelledby="original-title">
-      <h2 id="original-title">1. Register original image</h2>
+      <h2 id="original-title">1. Register or reopen an image case</h2>
+      <p class="muted">To resume, select your exported JSON first, then supply the exact original image. Nothing is trusted or restored until its SHA-256 and dimensions match.</p>
+      <label>Reopen private JSON draft (optional; max 512 KB) <input id="import-json" type="file" accept=".json,application/json"></label>
+      <p id="import-status" class="muted">No case pending import. Reopened cases require new human review.</p>
       <div class="fields"><label>Case ID <input id="case-id" value="VEIL-IMG-2026-001" autocomplete="off" pattern="VEIL-IMG-[0-9]{4}-[0-9]{3,6}"></label><label>Choose an image (PNG, JPG, WebP; up to 25 MB) <input id="original-file" type="file" accept="image/png,image/jpeg,image/webp"></label></div>
       <p id="image-info" class="muted">No original image selected. Nothing is uploaded.</p>
       <div id="preview-wrap" class="preview-wrap" hidden><canvas id="preview" aria-label="Image preview. Drag or touch to select a region for a second reverse-image search."></canvas><div id="crop-outline" hidden></div></div>
@@ -61,6 +65,7 @@
       <p id="assessment" class="muted">Load an image to begin a report.</p>
       <div class="fields"><label>Human reviewer name (optional; not authenticated) <input id="reviewer" maxlength="120" placeholder="Name used in report"></label><label>Review notes <input id="review-note" maxlength="900" placeholder="What remains uncertain?"></label></div>
       <div class="actions"><button type="button" id="review-record">Record manual review</button><button type="button" id="export-json">Export JSON evidence log</button><button type="button" id="export-md">Export Markdown draft report</button></div>
+      <p id="source-diagnostics" class="muted">Source chronology and repeated URL checks appear once an image is loaded.</p>
       <p class="muted">Exports are <strong>PRIVATE DRAFTS</strong>, never automatic publication. Names entered here are not verified identities. Preserve submitted originals, consent records, source pages and a separate custody log.</p>
     </section>
     <footer>VEIL Research Project · SIGNAL research utility · Observations are not explanations · No payment or AI cloud connection</footer>
