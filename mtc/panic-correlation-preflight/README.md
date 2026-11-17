@@ -20,3 +20,16 @@ assert report['pairs'][0]['classification'] == 'POSSIBLE_TEMPORAL_OVERLAP_REVIEW
 ```
 
 Before real integration, validate source hashes against preserved originals, authenticate the researcher, independently calibrate all clocks and document shared electrical or environmental factors. Human review and publication approval are required.
+
+## v0.2 optional file-integrity gate (November 17, 2026)
+
+`local_integrity.py` adds a **read-only, no-network** step for checking researcher-supplied original files against SHA-256 values in event metadata before correlation. Run in a private directory containing *test files only* until custody/consent arrangements are approved. Uses bounded streaming, regular-file checks, rejects symlinks and path traversal, exact declared-hash mapping, and refuses mismatched bytes. This improves evidence traceability but **cannot verify when or how recordings were created**. Windows/Python and real MTC hardware testing remain outstanding.
+
+```python
+from local_integrity import verify_and_correlate
+# rows = declared MTC/Panic Box event dictionaries from the v0.1 example;
+# originals = {row['source_file_sha256']: 'the-preserved-file.bin', ...}
+# result = verify_and_correlate(rows, './PRIVATE_SYNTHETIC_INPUTS', originals)
+```
+
+Run `python -m unittest -v test_correlation.py test_integrity.py` for synthetic-only regression tests. Neither this function nor its tests read live devices, modify originals, start a session, or establish paranormal evidence.
