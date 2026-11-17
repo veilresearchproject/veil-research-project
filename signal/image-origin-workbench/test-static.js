@@ -1,0 +1,11 @@
+'use strict';
+const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');
+const html=fs.readFileSync(__dirname+'/index.html','utf8'),ui=fs.readFileSync(__dirname+'/ui.js','utf8');
+test('01 import scripts appear after core before UI',()=>assert(html.indexOf('core.js') < html.indexOf('case-resume.js') && html.indexOf('case-resume.js') < html.indexOf('ui.js')));
+test('02 import file input exists',()=>assert.match(html,/id="import-json"/));
+test('03 original-file handshake is mandatory for imported case',()=>assert.match(ui,/resume\.matchedOriginal\(pendingImport\.original,next\)/));
+test('04 imported reports lose prior human review',()=>assert.match(ui,/invalidateReview\(\);state\.selection=null/));
+test('05 import never treats exported crop as saved image pixels',()=>assert.match(ui,/Crops are metadata only/));
+test('06 external searches remain manually opened by operator',()=>assert.match(html,/does not conduct searches for you or upload/));
+test('07 restricts page connect-src and form actions',()=>assert.match(html,/connect-src 'none'; object-src 'none'; form-action 'none'/));
+test('08 reports always include source history details',()=>assert.match(ui,/sourceDiagnostics:d/));
