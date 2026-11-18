@@ -4,9 +4,9 @@ Started November 18, 2026. Incomplete first historical backfill.
 
 Scope: VEIL posts, comments/replies, editorial inquiries, article pitches, manuscripts, decisions, publication and follow-up history. Rejected and unpublished work stays in the record when supported by evidence.
 
-## Initial inventory
+## Inventory
 
-13 records: 10 editorial histories and 3 Facebook posts. One article is verified published. No historical Andrew/VEIL-authored comment has yet been independently verified in this backfill; comment leads remain in [BACKFILL.md](BACKFILL.md).
+65 records: 10 editorial histories, 7 Facebook posts and 48 Facebook comments and replies. 41 comments and replies concern photo investigations or image provenance. See the [access check](ACCESS-2026-11-18.md) and [backfill queue](BACKFILL.md) for coverage.
 
 | ID | First event date (America/New_York) | Platform | Title | State |
 | --- | --- | --- | --- | --- |
@@ -22,7 +22,59 @@ Scope: VEIL posts, comments/replies, editorial inquiries, article pitches, manus
 | VEIL-RH-2026-A010 | 2026-11-17 | Paranormal Globe | Meet SIGNAL: Can an AI Assistant Make Paranormal Investigations More Accountable? | pitch_sent_outcome_unknown |
 | VEIL-RH-2026-F001 | Unknown | Facebook Page | Introducing VEIL Research Project | posted |
 | VEIL-RH-2026-F002 | Unknown | Facebook Group | Welcome to VEIL Research Community | posted |
-| VEIL-RH-2026-F003 | Unknown | Facebook Page | Academic collaboration announcement | posted |
+| VEIL-RH-2026-F003 | 2026-11-14 | Facebook Page | Academic collaboration announcement | posted |
+| VEIL-RH-2026-F004 | 2026-11-03 | Facebook Page | SIGNAL local conversation milestone | posted |
+| VEIL-RH-2026-F005 | 2026-11-06 | Facebook Page | Paranormal Globe Panic Box article announcement | posted |
+| VEIL-RH-2026-F006 | 2026-11-13 | Facebook Page | 72-Hour Reach spotlight on Peek A Boo Paranormal NJ | posted |
+| VEIL-RH-2026-F007 | 2026-11-14 | Facebook Page | Invitation to the VEIL research community | posted |
+| VEIL-RH-2026-F008 | 2026-11-10 | Facebook Group | Doorway and ground shapes in a shared photo | posted |
+| VEIL-RH-2026-F009 | 2026-11-13 | Facebook Group | Unusual shape in a doorway | posted |
+| VEIL-RH-2026-F010 | 2026-11-14 | Facebook Group | Sefton Church photograph follow-up | posted |
+| VEIL-RH-2026-F011 | 2026-11-15 | Facebook Group | Cooper family falling-body photograph | posted |
+| VEIL-RH-2026-F012 | 2026-11-15 | Facebook Group | Figure in a dim hallway | posted |
+| VEIL-RH-2026-F013 | 2026-11-15 | Facebook Group | Historical hooded-figure photograph | posted |
+| VEIL-RH-2026-F014 | 2026-11-16 | Facebook Group | Face-like shape above a window sill | posted |
+| VEIL-RH-2026-F015 | 2026-11-16 | Facebook Group | Transparent figure on stairs | posted |
+| VEIL-RH-2026-F016 | 2026-11-16 | Facebook Group | Window figure after a detector alarm | posted |
+| VEIL-RH-2026-F017 | 2026-11-16 | Facebook Group | Watcher of Corroboree Rock photo provenance | posted |
+| VEIL-RH-2026-F018 | 2026-11-16 | Facebook | Apparition-shaped discoloration near a staircase | posted |
+| VEIL-RH-2026-F019 | 2026-11-16 | Facebook Group | Night-vision figure review, Page comment | posted |
+| VEIL-RH-2026-F020 | 2026-11-16 | Facebook Group | Night-vision figure review, personal-profile cross-post | posted |
+| VEIL-RH-2026-F021 | 2026-11-16 | Facebook | John Wayne display viewed through glass | posted |
+| VEIL-RH-2026-F022 | 2026-11-16 | Facebook Group | Historical staircase webcam photograph | posted |
+| VEIL-RH-2026-F023 | 2026-11-16 | Facebook Group | Tryon Palace doorway footage | posted |
+| VEIL-RH-2026-F024 | 2026-11-17 | Facebook Group | The Brown Lady of Raynham Hall | posted |
+| VEIL-RH-2026-F025 | 2026-11-17 | Facebook Group | Farnsworth House attic orbs | posted |
+| VEIL-RH-2026-F026 | 2026-11-17 | Facebook Group | Staircase apparition image history | posted |
+| VEIL-RH-2026-F027 | 2026-11-17 | Facebook Group | Tryon Palace docent identification lead, separate thread | posted |
+| VEIL-RH-2026-F028 | 2026-11-17 | Facebook Group | Yellowstone vehicle-window photograph | posted |
+| VEIL-RH-2026-F029 | 2026-11-17 | Facebook Group | Motion camera figure in a yard | posted |
+| VEIL-RH-2026-F030 | 2026-11-17 | Facebook Group | Nighttime beach photograph | posted |
+| VEIL-RH-2026-F031 | 2026-11-17 | Facebook Group | Translucent doorbell-camera figure | posted |
+| VEIL-RH-2026-F032 | 2026-11-17 | Facebook Group | Sleep-paralysis figure and changing captions | posted |
+| VEIL-RH-2026-F033 | 2026-11-17 | Facebook Group | London Underground and Thames captions on the same image | posted |
+| VEIL-RH-2026-F034 | 2026-11-17 | Facebook Group | Swamp trail-camera figure | posted |
+| VEIL-RH-2026-F035 | 2026-11-17 | Facebook | Historical hiking photograph recaptioned as paranormal | posted |
+| VEIL-RH-2026-F036 | 2026-11-17 | Facebook Group | Wedding-venue selfie image history | posted |
+| VEIL-RH-2026-F037 | 2026-11-17 | Facebook Group | Upstairs security-camera image review | posted |
+| VEIL-RH-2026-F038 | 2026-11-17 | Facebook Group | Tryon Palace identification follow-up | posted |
+| VEIL-RH-2026-F039 | 2026-11-17 | Facebook Group | Tryon Palace identification follow-up, separate reply | posted |
+| VEIL-RH-2026-F040 | 2026-11-17 | Facebook Group | Dundas Peak cliffside figure | posted |
+| VEIL-RH-2026-F041 | 2026-11-17 | Facebook Group | Blurred shape behind a shoulder | posted |
+| VEIL-RH-2026-F042 | 2026-11-17 | Facebook Group | Request for original photo of a reported period figure | posted |
+| VEIL-RH-2026-F043 | 2026-11-17 | Facebook Group | Devil’s Den face-like pattern between rocks | posted |
+| VEIL-RH-2026-F044 | 2026-11-17 | Facebook Group | Figure resembling a woman in a long dress | posted |
+| VEIL-RH-2026-F045 | 2026-11-18 | Facebook Group | Devil’s Den photo and witness follow-up | posted |
+| VEIL-RH-2026-F046 | 2026-11-18 | Facebook Group | Cemetery orb photograph, request for original | posted |
+| VEIL-RH-2026-F047 | 2026-11-18 | Facebook Group | Mirror image with conflicting locations | posted |
+| VEIL-RH-2026-F048 | 2026-11-18 | Facebook Group | Photo artifact and reverse-image history review | posted |
+| VEIL-RH-2026-F049 | 2026-11-16 | Facebook Group | Call for structured, evidence-based paranormal research | posted |
+| VEIL-RH-2026-F050 | 2026-11-17 | Facebook Group | Evidence review after a field investigation | posted |
+| VEIL-RH-2026-F051 | 2026-11-17 | Facebook | Discussion of a visit with no reported activity | posted |
+| VEIL-RH-2026-F052 | 2026-11-17 | Facebook Group | Paranormal research collaboration outreach | posted |
+| VEIL-RH-2026-F053 | 2026-11-18 | Facebook Group | Using repeated events to look for patterns | posted |
+| VEIL-RH-2026-F054 | 2026-11-18 | Facebook Group | MTC and controlled recording discussion | posted |
+| VEIL-RH-2026-F055 | 2026-11-18 | Facebook Group | Welcoming a new investigation team | posted |
 
 ## Files
 

@@ -21,7 +21,7 @@
 <section class="rh-grid" aria-label="Archive totals">
 <div class="rh-count"><strong id="all-count">—</strong><span>Documented records</span></div>
 <div class="rh-count"><strong id="editorial-count">—</strong><span>Editorial histories</span></div>
-<div class="rh-count"><strong id="facebook-count">—</strong><span>Facebook posts</span></div>
+<div class="rh-count"><strong id="facebook-count">—</strong><span>Facebook posts and comments</span></div>
 <div class="rh-count"><strong id="published-count">—</strong><span>Verified published articles</span></div>
 </section>
 <h2>Explore the archive</h2>
@@ -29,14 +29,14 @@
 <select id="record-filter" aria-label="Filter by category"><option value="all">All records</option><option value="Editorial outreach">Editorial outreach</option><option value="Facebook activity">Facebook activity</option></select></div>
 <div id="record-list" aria-live="polite">Loading archive…</div>
 <h2>Verification and corrections</h2>
-<p>We preserve source-backed history, record uncertainty, and keep original private evidence outside the public site. We have <strong>not</strong> verified historical VEIL-authored Facebook comments in this first batch. Unverified comment leads are not included in the totals. Dates are shown only when established.</p>
+<p>We preserve source-backed history, record uncertainty, and keep original private evidence outside the public site. This archive includes public posts and comments verified through Facebook Activity Log. Posted photo reviews document what VEIL examined and reported. Their image provenance and proposed explanations may require further verification. Dates are shown where established.</p>
 <p>Research-history source documents and corrections are maintained in the <a href="https://github.com/veilresearchproject/veil-research-project/tree/main/research-library/history">VEIL GitHub archive</a>. The archive is not a complete historical export or an automatic real-time Facebook feed.</p>
 <p><a href="../">Return to Research Library</a></p>
 </main><script>
 (function(){
 "use strict";
 const list=document.getElementById("record-list"), search=document.getElementById("record-search"),filter=document.getElementById("record-filter");let records=[];
-const statusText={published:"Published — verified",pitch_sent_outcome_unknown:"Pitch sent — outcome unknown",posted:"Post observed — see verification limits"};
+const statusText={published:"Published — verified",pitch_sent_outcome_unknown:"Pitch sent — outcome unknown",posted:"Facebook activity observed"};
 function render(){
 const q=search.value.trim().toLowerCase(),cat=filter.value;
 const found=records.filter(r=>(cat==="all"||r.category===cat)&&[r.id,r.title,r.platform,r.summary].join(" ").toLowerCase().includes(q));

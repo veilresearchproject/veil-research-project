@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "updated_at": "2026-11-18",
   "timezone": "America/New_York",
-  "coverage": "initial_partial_backfill",
+  "coverage": "partial_backfill_including_facebook_activity_log",
   "records": [
     {
       "id": "VEIL-RH-2026-A001",
@@ -80,7 +80,7 @@
       "summary": "Original proposal, manuscript submission, replacement Word attachment, publisher confirmation and live publication verified.",
       "limitations": [
         "Publisher reported a title change; no byte-for-byte comparison between manuscript versions and published article was performed.",
-        "Publisher reported Facebook/X shares; their specific social permalinks were not verified.",
+        "The publisher’s own reported Facebook and X shares remain unverified. VEIL’s Page announcement is recorded as VEIL-RH-2026-F005.",
         "Publisher-created illustrations are not copied into this archive."
       ],
       "follow_up": [
@@ -132,6 +132,12 @@
           "filename": "VEIL_Paranormal_Globe_Guest_Article.docx",
           "source_message_id": "1a1091e3108b5b9c",
           "capture": "attachment existence verified; file bytes not archived or compared"
+        }
+      ],
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F005",
+          "relation": "facebook_announcement"
         }
       ]
     },
@@ -596,13 +602,13 @@
       "title": "Academic collaboration announcement",
       "created_at": "2026-11-18",
       "last_verified_at": "2026-11-18",
-      "event_date": null,
-      "date_precision": "unknown",
+      "event_date": "2026-11-14",
+      "date_precision": "day",
       "platform": "Facebook Page",
-      "actor": "Andrew Underwood / VEIL Research Project",
+      "actor": "VEIL Research Project",
       "status": "posted",
-      "verification": "verified_feed_text_permalink_unknown",
-      "source_url": "https://www.facebook.com/profile.php?id=61595358899314",
+      "verification": "verified_activity_log_and_live_source",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0xBWbm9MzhqoVWKLXYsT7U9z8TEBHnpiJ8eNA6XvvskLH7KuEf83c67m64DCd44TEl&id=61595358899314",
       "sources": [
         {
           "kind": "live_facebook_feed",
@@ -610,20 +616,2554 @@
           "observed_at": "2026-11-18",
           "displayed_time": "4 days ago",
           "audience": "Public"
+        },
+        {
+          "kind": "facebook_activity_log",
+          "view": "Your posts, photos and videos",
+          "identity": "page",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0xBWbm9MzhqoVWKLXYsT7U9z8TEBHnpiJ8eNA6XvvskLH7KuEf83c67m64DCd44TEl&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-14 1:03 AM",
+          "platform_actor": "VEIL Research Project",
+          "posting_operator": "Metricool"
+        },
+        {
+          "kind": "live_facebook_post",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0xBWbm9MzhqoVWKLXYsT7U9z8TEBHnpiJ8eNA6XvvskLH7KuEf83c67m64DCd44TEl&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public"
         }
       ],
       "original_text": "VEIL Research Project has begun exploring academic collaboration. We recently spoke with a faculty member about two areas where researchers and students could contribute: developing SIGNAL, our local AI research assistant, and helping us design controlled, repeatable experiments. We’re looking forward to seeing where these early conversations lead.",
       "text_capture": "rendered_text_transcription",
       "summary": "Page post about early academic discussions; does not establish a formal institutional partnership.",
       "limitations": [
-        "Feed content verified, but individual post permalink and absolute posting time not obtained.",
-        "Relative time is preserved as displayed, not converted to a precise date.",
-        "No screenshot or platform export archived."
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Transcription normalizes Facebook paragraph spacing."
       ],
-      "follow_up": [
-        "Find stable post permalink and absolute timestamp."
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "resolved_posting_date_and_permalink_via_activity_log_and_live_post"
+        }
       ],
-      "history": []
+      "displayed_time": "2026-11-14 1:03 AM",
+      "facebook_identity": "page",
+      "audience": "Public",
+      "facebook_object_id": "pfbid0xBWbm9MzhqoVWKLXYsT7U9z8TEBHnpiJ8eNA6XvvskLH7KuEf83c67m64DCd44TEl"
+    },
+    {
+      "id": "VEIL-RH-2026-F004",
+      "type": "facebook_post",
+      "title": "SIGNAL local conversation milestone",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-03",
+      "date_precision": "day",
+      "displayed_time": "2026-11-03 1:40 AM",
+      "platform": "Facebook Page",
+      "actor": "VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public",
+      "status": "posted",
+      "verification": "verified_activity_log_and_live_source",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid021Y1nY6Yc8dnkfw3GF2x1VjTNyHGFCnJTd5cpZX1hsAfzywLq5eubuYvx26nFjwqel&id=61595358899314",
+      "facebook_object_id": "pfbid021Y1nY6Yc8dnkfw3GF2x1VjTNyHGFCnJTd5cpZX1hsAfzywLq5eubuYvx26nFjwqel",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Your posts, photos and videos",
+          "identity": "page",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid021Y1nY6Yc8dnkfw3GF2x1VjTNyHGFCnJTd5cpZX1hsAfzywLq5eubuYvx26nFjwqel&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-03 1:40 AM",
+          "platform_actor": "VEIL Research Project",
+          "posting_operator": "Metricool"
+        },
+        {
+          "kind": "live_facebook_post",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid021Y1nY6Yc8dnkfw3GF2x1VjTNyHGFCnJTd5cpZX1hsAfzywLq5eubuYvx26nFjwqel&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reported an early local SIGNAL conversation with spoken output. The post describes the November 2 milestone and the Activity Log displays November 3 for the post.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_and_linked_source_read"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F005",
+      "type": "facebook_post",
+      "title": "Paranormal Globe Panic Box article announcement",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-06",
+      "date_precision": "day",
+      "displayed_time": "2026-11-06 1:31 PM",
+      "platform": "Facebook Page",
+      "actor": "VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public",
+      "status": "posted",
+      "verification": "verified_activity_log_and_live_source",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02Ydcr7vMUKEq3ZVAmdYY3rv5LvTtbxcPQPbizwirhAF9j6k8r1RucCNy8ZUeczJFUl&id=61595358899314",
+      "facebook_object_id": "pfbid02Ydcr7vMUKEq3ZVAmdYY3rv5LvTtbxcPQPbizwirhAF9j6k8r1RucCNy8ZUeczJFUl",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Your posts, photos and videos",
+          "identity": "page",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02Ydcr7vMUKEq3ZVAmdYY3rv5LvTtbxcPQPbizwirhAF9j6k8r1RucCNy8ZUeczJFUl&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-06 1:31 PM",
+          "platform_actor": "VEIL Research Project",
+          "posting_operator": "Metricool"
+        },
+        {
+          "kind": "live_facebook_post",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02Ydcr7vMUKEq3ZVAmdYY3rv5LvTtbxcPQPbizwirhAF9j6k8r1RucCNy8ZUeczJFUl&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Announced the guest article on the proposed Panic Box and linked the published article.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_and_linked_source_read"
+        }
+      ],
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-A001",
+          "relation": "announces_publication"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F006",
+      "type": "facebook_post",
+      "title": "72-Hour Reach spotlight on Peek A Boo Paranormal NJ",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-13",
+      "date_precision": "day",
+      "displayed_time": "2026-11-13 6:51 PM",
+      "platform": "Facebook Page",
+      "actor": "VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public",
+      "status": "posted",
+      "verification": "verified_activity_log_and_live_source",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02BBcA2Zoo6hWz3MBzFBoNE6LbLiwUQgU9eAfwhK3k9cgzSAnrxvDY4MrESYxzTN5Ll&id=61595358899314",
+      "facebook_object_id": "pfbid02BBcA2Zoo6hWz3MBzFBoNE6LbLiwUQgU9eAfwhK3k9cgzSAnrxvDY4MrESYxzTN5Ll",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Your posts, photos and videos",
+          "identity": "page",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02BBcA2Zoo6hWz3MBzFBoNE6LbLiwUQgU9eAfwhK3k9cgzSAnrxvDY4MrESYxzTN5Ll&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-13 6:51 PM",
+          "platform_actor": "VEIL Research Project",
+          "posting_operator": "Andrew Underwood"
+        },
+        {
+          "kind": "live_facebook_post",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02BBcA2Zoo6hWz3MBzFBoNE6LbLiwUQgU9eAfwhK3k9cgzSAnrxvDY4MrESYxzTN5Ll&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Published a collaborator spotlight as part of Get Haunted’s 72-Hour Reach Experiment.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_and_linked_source_read"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F007",
+      "type": "facebook_post",
+      "title": "Invitation to the VEIL research community",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-14",
+      "date_precision": "day",
+      "displayed_time": "2026-11-14 3:02 PM",
+      "platform": "Facebook Page",
+      "actor": "VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public",
+      "status": "posted",
+      "verification": "verified_activity_log_and_live_source",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02XzAFFe7siwCqk4F49feDtB9cPKL4cmrLY3xPWWofaHsdLZprNN9L4jPNGuTGSSoYl&id=61595358899314",
+      "facebook_object_id": "pfbid02XzAFFe7siwCqk4F49feDtB9cPKL4cmrLY3xPWWofaHsdLZprNN9L4jPNGuTGSSoYl",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Your posts, photos and videos",
+          "identity": "page",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02XzAFFe7siwCqk4F49feDtB9cPKL4cmrLY3xPWWofaHsdLZprNN9L4jPNGuTGSSoYl&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-14 3:02 PM",
+          "platform_actor": "VEIL Research Project",
+          "posting_operator": "Metricool"
+        },
+        {
+          "kind": "live_facebook_post",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02XzAFFe7siwCqk4F49feDtB9cPKL4cmrLY3xPWWofaHsdLZprNN9L4jPNGuTGSSoYl&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public"
+        }
+      ],
+      "original_text": "We're building a community around a simple idea: extraordinary observations deserve careful experiments. VEIL Research Project welcomes paranormal investigators, skeptics, engineers, data analysts, and anyone who values open questions and clear documentation. As prototypes and tests develop, we'll distinguish concepts from physical results, share limitations, and learn from negative findings. If that sounds like your kind of research, follow this Page and invite a curious friend. https://veilresearchproject.github.io/veil-research-project/ #VEILResearchProject #ParanormalResearch",
+      "text_capture": "rendered_text_transcription_whitespace_normalized",
+      "summary": "Invited investigators, skeptics, engineers and analysts to follow VEIL’s research, prototype development and documentation.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Transcription normalizes Facebook paragraph spacing."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_and_linked_source_read"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F008",
+      "type": "facebook_comment",
+      "title": "Doorway and ground shapes in a shared photo",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-10",
+      "date_precision": "day",
+      "displayed_time": "2026-11-10 6:39 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/714762568883519/posts/2966343827058704/?comment_id=2966466317046455",
+      "facebook_object_id": "2966466317046455",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/714762568883519/posts/2966343827058704/?comment_id=2966466317046455",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-10 6:39 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Asked for the original camera file, adjacent photographs, and whether the shapes were seen in person.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/714762568883519/posts/2966343827058704/"
+    },
+    {
+      "id": "VEIL-RH-2026-F009",
+      "type": "facebook_comment",
+      "title": "Unusual shape in a doorway",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-13",
+      "date_precision": "day",
+      "displayed_time": "2026-11-13 11:22 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/714762568883519/posts/2966330600393360/?comment_id=2970547363305017",
+      "facebook_object_id": "2970547363305017",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/714762568883519/posts/2966330600393360/?comment_id=2970547363305017",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-13 11:22 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Discussed lighting, reflection, motion blur and pareidolia. Requested the original image and capture conditions.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/714762568883519/posts/2966330600393360/"
+    },
+    {
+      "id": "VEIL-RH-2026-F010",
+      "type": "facebook_comment",
+      "title": "Sefton Church photograph follow-up",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-14",
+      "date_precision": "day",
+      "displayed_time": "2026-11-14 11:29 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/534464490265500/posts/3085414781837112/?comment_id=3088739604837963&reply_comment_id=3088740724837851",
+      "facebook_object_id": "3088740724837851",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/534464490265500/posts/3085414781837112/?comment_id=3088739604837963&reply_comment_id=3088740724837851",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-14 11:29 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Described visual features of the reported 1999 church photograph. The earlier reply in the thread still needs a verified permalink.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/534464490265500/posts/3085414781837112/",
+      "parent_comment_id": "3088739604837963"
+    },
+    {
+      "id": "VEIL-RH-2026-F011",
+      "type": "facebook_comment",
+      "title": "Cooper family falling-body photograph",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-15",
+      "date_precision": "day",
+      "displayed_time": "2026-11-15 1:36 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29499078006384350/?comment_id=29500294879595996",
+      "facebook_object_id": "29500294879595996",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29499078006384350/?comment_id=29500294879595996",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-15 1:36 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Discussed the photo’s reported provenance and a later account disputing the ghost narrative.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29499078006384350/"
+    },
+    {
+      "id": "VEIL-RH-2026-F012",
+      "type": "facebook_comment",
+      "title": "Figure in a dim hallway",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-15",
+      "date_precision": "day",
+      "displayed_time": "2026-11-15 9:37 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/714762568883519/posts/2973140189712401/?comment_id=2973155263044227",
+      "facebook_object_id": "2973155263044227",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/714762568883519/posts/2973140189712401/?comment_id=2973155263044227",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-15 9:37 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Considered low light, shadows, reflections and digital noise, and asked for the unedited photograph and capture context.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/714762568883519/posts/2973140189712401/"
+    },
+    {
+      "id": "VEIL-RH-2026-F013",
+      "type": "facebook_comment",
+      "title": "Historical hooded-figure photograph",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-15",
+      "date_precision": "day",
+      "displayed_time": "2026-11-15 10:36 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/714762568883519/posts/2970747966618290/?comment_id=2973207469705673",
+      "facebook_object_id": "2973207469705673",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/714762568883519/posts/2970747966618290/?comment_id=2973207469705673",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-15 10:36 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reviewed a hooded-figure photograph with a reported mid-century provenance.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/714762568883519/posts/2970747966618290/"
+    },
+    {
+      "id": "VEIL-RH-2026-F014",
+      "type": "facebook_comment",
+      "title": "Face-like shape above a window sill",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 12:41 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29503862049239279/?comment_id=29512993324992818",
+      "facebook_object_id": "29512993324992818",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29503862049239279/?comment_id=29512993324992818",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 12:41 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Noted the difficulty of judging scale from the angle and requested the original and nearby frames.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29503862049239279/"
+    },
+    {
+      "id": "VEIL-RH-2026-F015",
+      "type": "facebook_comment",
+      "title": "Transparent figure on stairs",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 2:42 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29505529012405916/?comment_id=29514064034885747",
+      "facebook_object_id": "29514064034885747",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29505529012405916/?comment_id=29514064034885747",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 2:42 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Discussed long exposure and double exposure as possibilities and sought the first publication and property history.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29505529012405916/"
+    },
+    {
+      "id": "VEIL-RH-2026-F016",
+      "type": "facebook_comment",
+      "title": "Window figure after a detector alarm",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 2:44 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29503792749246209/?comment_id=29514079344884216",
+      "facebook_object_id": "29514079344884216",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29503792749246209/?comment_id=29514079344884216",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 2:44 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Asked about elapsed time between the alarm and photo, the original and adjacent photos, and the detector record. Noted a band of light at the apparent figure.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29503792749246209/"
+    },
+    {
+      "id": "VEIL-RH-2026-F017",
+      "type": "facebook_comment",
+      "title": "Watcher of Corroboree Rock photo provenance",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 2:56 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/329051324243501/posts/2595505554264722/?comment_id=2595526517595959",
+      "facebook_object_id": "2595526517595959",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/329051324243501/posts/2595505554264722/?comment_id=2595526517595959",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 2:56 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Compared competing dates associated with the photograph and pointed to a book citing an earlier newspaper report.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/329051324243501/posts/2595505554264722/"
+    },
+    {
+      "id": "VEIL-RH-2026-F018",
+      "type": "facebook_comment",
+      "title": "Apparition-shaped discoloration near a staircase",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 1:47 PM",
+      "platform": "Facebook",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid021etpDdTJn82Lt2Xrxq1rMxKubwpXTTNDoKNZxmdnu2YLgRWKyyJjShqnRbiVxQn8l&id=100093985742661&comment_id=28680403961662730",
+      "facebook_object_id": "28680403961662730",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid021etpDdTJn82Lt2Xrxq1rMxKubwpXTTNDoKNZxmdnu2YLgRWKyyJjShqnRbiVxQn8l&id=100093985742661&comment_id=28680403961662730",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-16 1:47 PM",
+          "platform_actor": "Andrew Underwood"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Discussed wall staining, shadows and pareidolia and proposed checking the camera angle, lighting and wall surface.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid021etpDdTJn82Lt2Xrxq1rMxKubwpXTTNDoKNZxmdnu2YLgRWKyyJjShqnRbiVxQn8l&id=100093985742661"
+    },
+    {
+      "id": "VEIL-RH-2026-F019",
+      "type": "facebook_comment",
+      "title": "Night-vision figure review, Page comment",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 1:54 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29518949214397229/?comment_id=29520221667603317",
+      "facebook_object_id": "29520221667603317",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29518949214397229/?comment_id=29520221667603317",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 1:54 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Discussed infrared effects, motion blur and compression, and called for original recordings and a synchronized timeline.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29518949214397229/",
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F020",
+          "relation": "same_investigation_cross_post"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F020",
+      "type": "facebook_comment",
+      "title": "Night-vision figure review, personal-profile cross-post",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 2:19 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/738216872012654/posts/1139587101875627/?comment_id=1139653621868975",
+      "facebook_object_id": "1139653621868975",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/groups/738216872012654/posts/1139587101875627/?comment_id=1139653621868975",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 2:19 PM",
+          "platform_actor": "Andrew Underwood"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Posted the same investigation on another thread, asking for the original video and considering infrared effects and other camera artifacts.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/738216872012654/posts/1139587101875627/",
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F019",
+          "relation": "same_investigation_cross_post"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F021",
+      "type": "facebook_comment",
+      "title": "John Wayne display viewed through glass",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 4:02 PM",
+      "platform": "Facebook",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/rick.ballentine.39/posts/pfbid0sEHgz8Qj6UfqNdM1rm1AgYpJNtnBD8Y4CJ6cv8ckR3Te4kh6M1UkWLko1xKKuCXGl?comment_id=941279365587786",
+      "facebook_object_id": "941279365587786",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/rick.ballentine.39/posts/pfbid0sEHgz8Qj6UfqNdM1rm1AgYpJNtnBD8Y4CJ6cv8ckR3Te4kh6M1UkWLko1xKKuCXGl?comment_id=941279365587786",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-16 4:02 PM",
+          "platform_actor": "Andrew Underwood"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Proposed a cardboard cutout or photographic display seen through reflective glass as an explanation.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/rick.ballentine.39/posts/pfbid0sEHgz8Qj6UfqNdM1rm1AgYpJNtnBD8Y4CJ6cv8ckR3Te4kh6M1UkWLko1xKKuCXGl"
+    },
+    {
+      "id": "VEIL-RH-2026-F022",
+      "type": "facebook_comment",
+      "title": "Historical staircase webcam photograph",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 9:05 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/714762568883519/posts/2974365919589828/?comment_id=2974614126231674",
+      "facebook_object_id": "2974614126231674",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/714762568883519/posts/2974365919589828/?comment_id=2974614126231674",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 9:05 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reviewed a pale, translucent form on a staircase in an image attributed to a residential webcam.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/714762568883519/posts/2974365919589828/"
+    },
+    {
+      "id": "VEIL-RH-2026-F023",
+      "type": "facebook_comment",
+      "title": "Tryon Palace doorway footage",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 10:56 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/?comment_id=29525973647028119",
+      "facebook_object_id": "29525973647028119",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/?comment_id=29525973647028119",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 10:56 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Traced the claim to reported 2017 footage and suggested a costumed interpreter as a possibility.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/",
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F027",
+          "relation": "same_investigation"
+        },
+        {
+          "id": "VEIL-RH-2026-F038",
+          "relation": "same_investigation"
+        },
+        {
+          "id": "VEIL-RH-2026-F039",
+          "relation": "same_investigation"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F024",
+      "type": "facebook_comment",
+      "title": "The Brown Lady of Raynham Hall",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 11:07 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/819632766746869/posts/1538958878147584/?comment_id=1538988618144610",
+      "facebook_object_id": "1538988618144610",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/819632766746869/posts/1538958878147584/?comment_id=1538988618144610",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 11:07 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reviewed the historical attribution and reported Country Life publication of the well-known photograph.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/819632766746869/posts/1538958878147584/"
+    },
+    {
+      "id": "VEIL-RH-2026-F025",
+      "type": "facebook_comment",
+      "title": "Farnsworth House attic orbs",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 12:35 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29533451226280361/?comment_id=29534351772856973",
+      "facebook_object_id": "29534351772856973",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29533451226280361/?comment_id=29534351772856973",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 12:35 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reviewed the provenance and interpretation of luminous circles in an image attributed to the Farnsworth House attic.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29533451226280361/"
+    },
+    {
+      "id": "VEIL-RH-2026-F026",
+      "type": "facebook_comment",
+      "title": "Staircase apparition image history",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 12:45 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29533404902951660/?comment_id=29534481459510671",
+      "facebook_object_id": "29534481459510671",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29533404902951660/?comment_id=29534481459510671",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 12:45 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reviewed earlier circulation of a dark figure on stairs attributed to a motion-activated camera.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29533404902951660/"
+    },
+    {
+      "id": "VEIL-RH-2026-F027",
+      "type": "facebook_comment",
+      "title": "Tryon Palace docent identification lead, separate thread",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 12:47 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29530253386600145/?comment_id=29531608009798016&reply_comment_id=29534511229507694",
+      "facebook_object_id": "29534511229507694",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29530253386600145/?comment_id=29531608009798016&reply_comment_id=29534511229507694",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 12:47 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reported finding July 2017 coverage and examined a suggested docent identification. The identification remains a lead.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29530253386600145/",
+      "parent_comment_id": "29531608009798016",
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F023",
+          "relation": "same_investigation"
+        },
+        {
+          "id": "VEIL-RH-2026-F038",
+          "relation": "same_investigation"
+        },
+        {
+          "id": "VEIL-RH-2026-F039",
+          "relation": "same_investigation"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F028",
+      "type": "facebook_comment",
+      "title": "Yellowstone vehicle-window photograph",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 12:59 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29533385432953607/?comment_id=29534655126159971",
+      "facebook_object_id": "29534655126159971",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29533385432953607/?comment_id=29534655126159971",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 12:59 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Investigated the circulation of a photo said to show a face-like form in a vehicle window.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29533385432953607/"
+    },
+    {
+      "id": "VEIL-RH-2026-F029",
+      "type": "facebook_comment",
+      "title": "Motion camera figure in a yard",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 1:05 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29530413756584108/?comment_id=29534728902819260",
+      "facebook_object_id": "29534728902819260",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29530413756584108/?comment_id=29534728902819260",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 1:05 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reported earlier exact-image matches for a pale figure attributed to a motion camera.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29530413756584108/"
+    },
+    {
+      "id": "VEIL-RH-2026-F030",
+      "type": "facebook_comment",
+      "title": "Nighttime beach photograph",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 1:17 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29530189783273172/?comment_id=29534887296136754",
+      "facebook_object_id": "29534887296136754",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29530189783273172/?comment_id=29534887296136754",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 1:17 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reported checking earlier appearances of an image said to show a shadowy figure in shallow water.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29530189783273172/"
+    },
+    {
+      "id": "VEIL-RH-2026-F031",
+      "type": "facebook_comment",
+      "title": "Translucent doorbell-camera figure",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 1:23 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29436327165992768/?comment_id=29534962662795884",
+      "facebook_object_id": "29534962662795884",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29436327165992768/?comment_id=29534962662795884",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 1:23 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reported earlier image matches that preceded the timeframe in the repost’s caption.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29436327165992768/"
+    },
+    {
+      "id": "VEIL-RH-2026-F032",
+      "type": "facebook_comment",
+      "title": "Sleep-paralysis figure and changing captions",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 2:38 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/410873702752630/posts/2585027668670545/?comment_id=2586133795226599",
+      "facebook_object_id": "2586133795226599",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/groups/410873702752630/posts/2585027668670545/?comment_id=2586133795226599",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 2:38 PM",
+          "platform_actor": "Andrew Underwood"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reported reverse-image results dating to December 2019 and multiple captions. The original source and cause remained unverified.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/410873702752630/posts/2585027668670545/"
+    },
+    {
+      "id": "VEIL-RH-2026-F033",
+      "type": "facebook_comment",
+      "title": "London Underground and Thames captions on the same image",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 2:59 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29513670104925140/?comment_id=29536191642672986",
+      "facebook_object_id": "29536191642672986",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29513670104925140/?comment_id=29536191642672986",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 2:59 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reported a 2013 image match and conflicting descriptions of where the photograph was taken.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29513670104925140/"
+    },
+    {
+      "id": "VEIL-RH-2026-F034",
+      "type": "facebook_comment",
+      "title": "Swamp trail-camera figure",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 4:21 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/714762568883519/posts/2975575539468866/?comment_id=2976014369424983",
+      "facebook_object_id": "2976014369424983",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/714762568883519/posts/2975575539468866/?comment_id=2976014369424983",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 4:21 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Cited a reported 2021 Reddit appearance and considered fog, infrared illumination and pareidolia.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/714762568883519/posts/2975575539468866/"
+    },
+    {
+      "id": "VEIL-RH-2026-F035",
+      "type": "facebook_comment",
+      "title": "Historical hiking photograph recaptioned as paranormal",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 4:29 PM",
+      "platform": "Facebook",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02nJbQ6j893ffw9TDNf1KFQiQB5j54XcHDCGVvuG3AH8ZaS3wzoo5RGddHD4yJp9rbl&id=61588731044946&comment_id=1636989484572074",
+      "facebook_object_id": "1636989484572074",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02nJbQ6j893ffw9TDNf1KFQiQB5j54XcHDCGVvuG3AH8ZaS3wzoo5RGddHD4yJp9rbl&id=61588731044946&comment_id=1636989484572074",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-17 4:29 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Compared the photo’s reported historical context with later paranormal-themed reposts.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02nJbQ6j893ffw9TDNf1KFQiQB5j54XcHDCGVvuG3AH8ZaS3wzoo5RGddHD4yJp9rbl&id=61588731044946"
+    },
+    {
+      "id": "VEIL-RH-2026-F036",
+      "type": "facebook_comment",
+      "title": "Wedding-venue selfie image history",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 4:37 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29537194572572693/?comment_id=29537459795879504",
+      "facebook_object_id": "29537459795879504",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29537194572572693/?comment_id=29537459795879504",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 4:37 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reviewed the reported circulation of a photograph showing a figure behind three people in a selfie.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29537194572572693/"
+    },
+    {
+      "id": "VEIL-RH-2026-F037",
+      "type": "facebook_comment",
+      "title": "Upstairs security-camera image review",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 4:43 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/714762568883519/posts/2975559112803842/?comment_id=2976033746089712",
+      "facebook_object_id": "2976033746089712",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/714762568883519/posts/2975559112803842/?comment_id=2976033746089712",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 4:43 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reviewed the image history and claims surrounding a translucent shape in a home security-camera image.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/714762568883519/posts/2975559112803842/"
+    },
+    {
+      "id": "VEIL-RH-2026-F038",
+      "type": "facebook_comment",
+      "title": "Tryon Palace identification follow-up",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 5:08 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/?comment_id=29525973647028119&reply_comment_id=29537810029177814",
+      "facebook_object_id": "29537810029177814",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/?comment_id=29525973647028119&reply_comment_id=29537810029177814",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 5:08 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Asked for a source confirming the docent identification.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/",
+      "parent_comment_id": "29525973647028119",
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F023",
+          "relation": "same_investigation"
+        },
+        {
+          "id": "VEIL-RH-2026-F027",
+          "relation": "same_investigation"
+        },
+        {
+          "id": "VEIL-RH-2026-F039",
+          "relation": "same_investigation"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F039",
+      "type": "facebook_comment",
+      "title": "Tryon Palace identification follow-up, separate reply",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 5:16 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/?comment_id=29525973647028119&reply_comment_id=29537902745835209",
+      "facebook_object_id": "29537902745835209",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/?comment_id=29525973647028119&reply_comment_id=29537902745835209",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 5:16 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "The log shows a distinct reply ID with substantially overlapping wording. Both replies belong to the same investigation.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29477097038582447/",
+      "parent_comment_id": "29525973647028119",
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F023",
+          "relation": "same_investigation"
+        },
+        {
+          "id": "VEIL-RH-2026-F027",
+          "relation": "same_investigation"
+        },
+        {
+          "id": "VEIL-RH-2026-F038",
+          "relation": "same_investigation"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F040",
+      "type": "facebook_comment",
+      "title": "Dundas Peak cliffside figure",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 6:35 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/738216872012654/posts/1140904958410508/?comment_id=1141013505066320",
+      "facebook_object_id": "1141013505066320",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/738216872012654/posts/1140904958410508/?comment_id=1141013505066320",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 6:35 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Reported tracing the circulating cliffside image to June 2016 coverage.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/738216872012654/posts/1140904958410508/"
+    },
+    {
+      "id": "VEIL-RH-2026-F041",
+      "type": "facebook_comment",
+      "title": "Blurred shape behind a shoulder",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 6:41 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29537962349162582/?comment_id=29538810039077813",
+      "facebook_object_id": "29538810039077813",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/25743993295226192/posts/29537962349162582/?comment_id=29538810039077813",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 6:41 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Asked about camera type, background movement, reflective surfaces and access to the original image.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/25743993295226192/posts/29537962349162582/"
+    },
+    {
+      "id": "VEIL-RH-2026-F042",
+      "type": "facebook_comment",
+      "title": "Request for original photo of a reported period figure",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 10:52 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604416383147915&reply_comment_id=4604428626480024",
+      "facebook_object_id": "4604428626480024",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604416383147915&reply_comment_id=4604428626480024",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 10:52 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Asked for the original photograph and for the basis of the identification.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/",
+      "parent_comment_id": "4604416383147915"
+    },
+    {
+      "id": "VEIL-RH-2026-F043",
+      "type": "facebook_comment",
+      "title": "Devil’s Den face-like pattern between rocks",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 10:58 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604403499815870&reply_comment_id=4604432579812962",
+      "facebook_object_id": "4604432579812962",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604403499815870&reply_comment_id=4604432579812962",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 10:58 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Considered shadows, rock formations and pareidolia. Asked when the pattern was noticed and whether alternate angles existed.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/",
+      "parent_comment_id": "4604403499815870",
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F045",
+          "relation": "same_investigation_follow_up"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F044",
+      "type": "facebook_comment",
+      "title": "Figure resembling a woman in a long dress",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 11:35 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/762766000913843/posts/2574430029747422/?comment_id=2574435489746876",
+      "facebook_object_id": "2574435489746876",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/groups/762766000913843/posts/2574430029747422/?comment_id=2574435489746876",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 11:35 PM",
+          "platform_actor": "Andrew Underwood"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Asked about people at the scene, brightness adjustments, adjacent frames and access to the original image.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/762766000913843/posts/2574430029747422/"
+    },
+    {
+      "id": "VEIL-RH-2026-F045",
+      "type": "facebook_comment",
+      "title": "Devil’s Den photo and witness follow-up",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-18",
+      "date_precision": "day",
+      "displayed_time": "2026-11-18 12:47 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604403499815870&reply_comment_id=4604504969805723",
+      "facebook_object_id": "4604504969805723",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604403499815870&reply_comment_id=4604504969805723",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-18 12:47 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Followed up on what was noticed in person versus during photo review and asked separately about the witness’s experience.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/",
+      "parent_comment_id": "4604403499815870",
+      "related_records": [
+        {
+          "id": "VEIL-RH-2026-F043",
+          "relation": "same_investigation_follow_up"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F046",
+      "type": "facebook_comment",
+      "title": "Cemetery orb photograph, request for original",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-18",
+      "date_precision": "day",
+      "displayed_time": "2026-11-18 1:25 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604429049813315&reply_comment_id=4604531336469753",
+      "facebook_object_id": "4604531336469753",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604429049813315&reply_comment_id=4604531336469753",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-18 1:25 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Asked for the original photograph, flash information and whether anything was noticed at capture time.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/",
+      "parent_comment_id": "4604429049813315"
+    },
+    {
+      "id": "VEIL-RH-2026-F047",
+      "type": "facebook_comment",
+      "title": "Mirror image with conflicting locations",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-18",
+      "date_precision": "day",
+      "displayed_time": "2026-11-18 11:28 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log_and_live_source",
+      "source_url": "https://www.facebook.com/groups/1562557264422296/posts/2065068260837858/?comment_id=2065220430822641",
+      "facebook_object_id": "2065220430822641",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/groups/1562557264422296/posts/2065068260837858/?comment_id=2065220430822641",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-18 11:28 AM",
+          "platform_actor": "Andrew Underwood"
+        },
+        {
+          "kind": "live_facebook_comment",
+          "url": "https://www.facebook.com/groups/1562557264422296/posts/2065068260837858/?comment_id=2065220430822641",
+          "observed_at": "2026-11-18",
+          "audience": "Public group"
+        }
+      ],
+      "original_text": "We've been researching this photograph at VEIL Research Project, and we've uncovered something interesting. Using Google Lens, we located multiple appearances of this same image, including search results dating back to February 2019. What's particularly interesting is that the descriptions have changed over time. The photograph has been associated with a nursing home, an abandoned house, a former nunnery, and even a hotel. One possible natural explanation is deterioration of the reflective coating behind an older mirror, which can create permanent, face-like patterns. We're not dismissing anyone's experience, but we believe investigating the history of an image is just as important as examining what appears in it. Does anyone know who originally photographed this mirror or where it was located? VEIL Research Project https://veilresearchproject.github.io/veil-research-project/",
+      "text_capture": "rendered_text_transcription_whitespace_normalized",
+      "summary": "Reported reverse-image matches and conflicting locations. Suggested reflective backing deterioration and asked for the original photographer or location.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Transcription normalizes Facebook paragraph spacing.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_and_linked_source_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/1562557264422296/posts/2065068260837858/"
+    },
+    {
+      "id": "VEIL-RH-2026-F048",
+      "type": "facebook_comment",
+      "title": "Photo artifact and reverse-image history review",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-18",
+      "date_precision": "day",
+      "displayed_time": "2026-11-18 11:39 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log_and_live_source",
+      "source_url": "https://www.facebook.com/groups/1562557264422296/posts/2065071354170882/?comment_id=2065230557488295",
+      "facebook_object_id": "2065230557488295",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/groups/1562557264422296/posts/2065071354170882/?comment_id=2065230557488295",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-18 11:39 AM",
+          "platform_actor": "Andrew Underwood"
+        },
+        {
+          "kind": "live_facebook_comment",
+          "url": "https://www.facebook.com/groups/1562557264422296/posts/2065071354170882/?comment_id=2065230557488295",
+          "observed_at": "2026-11-18",
+          "audience": "Public group"
+        }
+      ],
+      "original_text": "Interesting photograph! We've been tracing its history at VEIL Research Project using reverse-image searches. Our search uncovered appearances associated with dates as far back as 2008, and we independently located a September 2014 paranormal article discussing this same photograph and its accompanying story. One possibility worth investigating is a photographic artifact caused by flash illumination, a nearby object, or camera movement. We're interested in identifying the original photographer and obtaining the original image rather than relying on the stories attached to later reposts. Does anyone know who originally captured this photograph? At VEIL, we believe every unexplained image deserves investigation before interpretation. https://veilresearchproject.github.io/veil-research-project/",
+      "text_capture": "rendered_text_transcription_whitespace_normalized",
+      "summary": "Reported search results associated with 2008 and a September 2014 article. Considered flash, nearby objects and camera movement. The original photographer remains unresolved.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established.",
+        "Transcription normalizes Facebook paragraph spacing.",
+        "Verification establishes the posting. Source-image provenance, reported search results and proposed explanations were not independently verified in this backfill."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_and_linked_source_read"
+        }
+      ],
+      "topic": "photo_investigation",
+      "parent_post_url": "https://www.facebook.com/groups/1562557264422296/posts/2065071354170882/"
+    },
+    {
+      "id": "VEIL-RH-2026-F049",
+      "type": "facebook_comment",
+      "title": "Call for structured, evidence-based paranormal research",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-16",
+      "date_precision": "day",
+      "displayed_time": "2026-11-16 12:59 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/710618468651019/posts/941193475593516/?comment_id=941234518922745",
+      "facebook_object_id": "941234518922745",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/groups/710618468651019/posts/941193475593516/?comment_id=941234518922745",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-16 12:59 PM",
+          "platform_actor": "Andrew Underwood"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Discussed strengthening documentation and research practices in the paranormal field.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "research_community",
+      "parent_post_url": "https://www.facebook.com/groups/710618468651019/posts/941193475593516/"
+    },
+    {
+      "id": "VEIL-RH-2026-F050",
+      "type": "facebook_comment",
+      "title": "Evidence review after a field investigation",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 2:41 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/534464490265500/posts/3092468677798389/?comment_id=3092526804459243",
+      "facebook_object_id": "3092526804459243",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/534464490265500/posts/3092468677798389/?comment_id=3092526804459243",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 2:41 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Discussed evidence collection and the follow-on review process.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "research_community",
+      "parent_post_url": "https://www.facebook.com/groups/534464490265500/posts/3092468677798389/"
+    },
+    {
+      "id": "VEIL-RH-2026-F051",
+      "type": "facebook_comment",
+      "title": "Discussion of a visit with no reported activity",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 6:37 PM",
+      "platform": "Facebook",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0yFKkRrYSAREa7WCfe4jv1Cah6R7XVeRyV5PqUTi4TQaxufSrbBRKdRx6LqKqLDP7l&id=61578797175853&comment_id=1161003539731020",
+      "facebook_object_id": "1161003539731020",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0yFKkRrYSAREa7WCfe4jv1Cah6R7XVeRyV5PqUTi4TQaxufSrbBRKdRx6LqKqLDP7l&id=61578797175853&comment_id=1161003539731020",
+          "observed_at": "2026-11-18",
+          "audience": "Public",
+          "displayed_time": "2026-11-17 6:37 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Acknowledged the team’s field photos and the value of reporting an uneventful observation.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "research_community",
+      "parent_post_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid0yFKkRrYSAREa7WCfe4jv1Cah6R7XVeRyV5PqUTi4TQaxufSrbBRKdRx6LqKqLDP7l&id=61578797175853"
+    },
+    {
+      "id": "VEIL-RH-2026-F052",
+      "type": "facebook_comment",
+      "title": "Paranormal research collaboration outreach",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "displayed_time": "2026-11-17 7:36 PM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/710618468651019/posts/941282058917991/?comment_id=942424972137033",
+      "facebook_object_id": "942424972137033",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/710618468651019/posts/941282058917991/?comment_id=942424972137033",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-17 7:36 PM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Introduced VEIL and invited a researcher to discuss possible collaboration.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "research_community",
+      "parent_post_url": "https://www.facebook.com/groups/710618468651019/posts/941282058917991/"
+    },
+    {
+      "id": "VEIL-RH-2026-F053",
+      "type": "facebook_comment",
+      "title": "Using repeated events to look for patterns",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-18",
+      "date_precision": "day",
+      "displayed_time": "2026-11-18 2:58 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "facebook_identity": "page",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/308709469737635/posts/2158456658096231/?comment_id=2158797628062134&reply_comment_id=2158824508059446",
+      "facebook_object_id": "2158824508059446",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "page",
+          "url": "https://www.facebook.com/groups/308709469737635/posts/2158456658096231/?comment_id=2158797628062134&reply_comment_id=2158824508059446",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-18 2:58 AM",
+          "platform_actor": "VEIL Research Project"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Asked whether a repeated experience had a discoverable cause.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "research_community",
+      "parent_post_url": "https://www.facebook.com/groups/308709469737635/posts/2158456658096231/",
+      "parent_comment_id": "2158797628062134"
+    },
+    {
+      "id": "VEIL-RH-2026-F054",
+      "type": "facebook_comment",
+      "title": "MTC and controlled recording discussion",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-18",
+      "date_precision": "day",
+      "displayed_time": "2026-11-18 11:29 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/762766000913843/posts/2574737013050057/?comment_id=2574912453032513",
+      "facebook_object_id": "2574912453032513",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/groups/762766000913843/posts/2574737013050057/?comment_id=2574912453032513",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-18 11:29 AM",
+          "platform_actor": "Andrew Underwood"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Described VEIL’s experimental Mobile Trans-Communication Device and the aim of studying recording questions under more controlled conditions.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "research_community",
+      "parent_post_url": "https://www.facebook.com/groups/762766000913843/posts/2574737013050057/"
+    },
+    {
+      "id": "VEIL-RH-2026-F055",
+      "type": "facebook_comment",
+      "title": "Welcoming a new investigation team",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-18",
+      "date_precision": "day",
+      "displayed_time": "2026-11-18 11:35 AM",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood",
+      "facebook_identity": "personal_profile",
+      "audience": "Public group",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "source_url": "https://www.facebook.com/groups/projectfear/posts/1531448725701047/?comment_id=1532029405642979",
+      "facebook_object_id": "1532029405642979",
+      "sources": [
+        {
+          "kind": "facebook_activity_log",
+          "view": "Comments",
+          "identity": "personal_profile",
+          "url": "https://www.facebook.com/groups/projectfear/posts/1531448725701047/?comment_id=1532029405642979",
+          "observed_at": "2026-11-18",
+          "audience": "Public group",
+          "displayed_time": "2026-11-18 11:35 AM",
+          "platform_actor": "Andrew Underwood"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "curated_summary_with_source_permalink",
+      "summary": "Introduced VEIL’s observation and documentation approach and invited the new team to share its interests.",
+      "limitations": [
+        "Facebook time is recorded as displayed. Its timezone offset was not independently established."
+      ],
+      "follow_up": [],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "activity_log_entry_read"
+        }
+      ],
+      "topic": "research_community",
+      "parent_post_url": "https://www.facebook.com/groups/projectfear/posts/1531448725701047/"
     }
   ]
 }
