@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VEIL research-history record",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "title",
+    "event_date",
+    "date_precision",
+    "status",
+    "verification",
+    "sources",
+    "original_text",
+    "limitations",
+    "history"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^VEIL-RH-[0-9]{4}-[AF][0-9]{3,}$"
+    },
+    "type": {
+      "enum": [
+        "facebook_post",
+        "facebook_comment",
+        "article_submission"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "event_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "date_precision": {
+      "enum": [
+        "unknown",
+        "day",
+        "minute",
+        "second"
+      ]
+    },
+    "status": {
+      "type": "string"
+    },
+    "verification": {
+      "type": "string"
+    },
+    "source_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "original_text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true
+}

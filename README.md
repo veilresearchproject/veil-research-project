@@ -19,3 +19,7 @@ The nine original user-supplied PNG files from TEMPERATURE CURTAIN.zip are now b
 
 ### Research portfolio integrity review · October 10, 2026
 The website now distinguishes three preliminary study/instrument priorities, two supporting engineering platforms, and two deferred exploratory hypotheses. The four-gate review addresses prior work, physical basis, measurable controls, and decision criteria. None of the proposed devices is described as independently validated or proof of paranormal activity. Deferred pages remain accessible for transparent review.
+
+## Research-history archive
+
+[Posts, comments, and article-submission history](research-library/history/README.md) — source-linked records, verification limits, access checks, and a repeatable capture workflow. Initial backfill: November 18, 2026; incomplete historical coverage.

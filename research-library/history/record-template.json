@@ -1,0 +1,24 @@
+{
+  "id": "VEIL-RH-2026-F004",
+  "type": "facebook_comment",
+  "title": "",
+  "created_at": null,
+  "last_verified_at": null,
+  "event_date": null,
+  "date_precision": "unknown",
+  "platform": "Facebook",
+  "actor": null,
+  "status": "posting_unverified",
+  "verification": "unverified",
+  "source_url": null,
+  "parent_record_id": null,
+  "sources": [],
+  "original_text": null,
+  "text_capture": "not_archived",
+  "summary": null,
+  "limitations": [
+    "Posting, author and text not verified."
+  ],
+  "follow_up": [],
+  "history": []
+}

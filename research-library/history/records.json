@@ -1,0 +1,629 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-18",
+  "timezone": "America/New_York",
+  "coverage": "initial_partial_backfill",
+  "records": [
+    {
+      "id": "VEIL-RH-2026-A001",
+      "type": "article_submission",
+      "title": "Before, During and After: Why VEIL Is Designing a Different Way to Record Reported Paranormal Events",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-10-03",
+      "date_precision": "day",
+      "platform": "Paranormal Globe",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "published",
+      "verification": "verified_publication",
+      "source_url": "https://paranormalglobe.com/veil-panic-box-paranormal-investigation/",
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a102ae779371b24",
+          "thread_id": "1a102ae779371b24",
+          "subject": "Guest article proposal: VEIL’s approach to recording reported paranormal events",
+          "verification": "read_MIME",
+          "public_copy": false
+        },
+        {
+          "kind": "private_email",
+          "message_id": "1a10862fac5a553f",
+          "thread_id": "1a102ae779371b24",
+          "subject": "RE: Guest article proposal: VEIL’s approach to recording reported paranormal events",
+          "verification": "read_MIME",
+          "public_copy": false
+        },
+        {
+          "kind": "private_email",
+          "message_id": "1a108e9036f39896",
+          "thread_id": "1a102ae779371b24",
+          "subject": "Re: Guest article proposal: VEIL’s approach to recording reported paranormal events",
+          "verification": "read_MIME",
+          "public_copy": false
+        },
+        {
+          "kind": "private_email",
+          "message_id": "1a1091e3108b5b9c",
+          "thread_id": "1a102ae779371b24",
+          "subject": "Re: Guest article proposal: VEIL’s approach to recording reported paranormal events",
+          "verification": "read_MIME",
+          "public_copy": false
+        },
+        {
+          "kind": "private_email",
+          "message_id": "1a1a8355ed32d3d4",
+          "thread_id": "1a102ae779371b24",
+          "subject": "RE: Guest article proposal: VEIL’s approach to recording reported paranormal events",
+          "verification": "read_MIME",
+          "public_copy": false
+        },
+        {
+          "kind": "private_email",
+          "message_id": "1a1a888f4a332c0a",
+          "thread_id": "1a102ae779371b24",
+          "subject": "RE: Guest article proposal: VEIL’s approach to recording reported paranormal events",
+          "verification": "read_MIME",
+          "public_copy": false
+        },
+        {
+          "kind": "public_article",
+          "url": "https://paranormalglobe.com/veil-panic-box-paranormal-investigation/",
+          "observed_at": "2026-11-18",
+          "verification": "web_page_read",
+          "observed_byline": "Andrew Underwood",
+          "observed_date": "Nov 04 2026"
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Original proposal, manuscript submission, replacement Word attachment, publisher confirmation and live publication verified.",
+      "limitations": [
+        "Publisher reported a title change; no byte-for-byte comparison between manuscript versions and published article was performed.",
+        "Publisher reported Facebook/X shares; their specific social permalinks were not verified.",
+        "Publisher-created illustrations are not copied into this archive."
+      ],
+      "follow_up": [
+        "Preserve original submitted files privately with SHA-256 hashes and check social-share permalinks."
+      ],
+      "history": [
+        {
+          "at": "2026-10-03T16:52:30.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a102ae779371b24"
+        },
+        {
+          "at": "2026-10-04T19:27:43.000Z",
+          "event": "received_message",
+          "source_message_id": "1a10862fac5a553f"
+        },
+        {
+          "at": "2026-10-04T21:54:10.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a108e9036f39896"
+        },
+        {
+          "at": "2026-10-04T22:52:15.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a1091e3108b5b9c"
+        },
+        {
+          "at": "2026-11-04T20:17:03.000Z",
+          "event": "received_message",
+          "source_message_id": "1a1a8355ed32d3d4"
+        },
+        {
+          "at": "2026-11-04T21:48:28.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a1a888f4a332c0a"
+        }
+      ],
+      "published_title": "Inside the VEIL Panic Box: A New Approach to Recording Paranormal Experiences",
+      "publication_date": "2026-11-04",
+      "manuscript_versions": [
+        {
+          "submitted_at": "2026-10-04T21:54:10Z",
+          "filename": "VEIL_Paranormal_Globe_Guest_Article.md",
+          "source_message_id": "1a108e9036f39896",
+          "capture": "attachment text inspected; original retained in Gmail; not copied to public repository"
+        },
+        {
+          "submitted_at": "2026-10-04T22:52:15Z",
+          "filename": "VEIL_Paranormal_Globe_Guest_Article.docx",
+          "source_message_id": "1a1091e3108b5b9c",
+          "capture": "attachment existence verified; file bytes not archived or compared"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A002",
+      "type": "article_submission",
+      "title": "Guest article inquiry: controlled testing and the VEIL Research Project",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-10-04",
+      "date_precision": "day",
+      "platform": "Paranormal Magazine",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a1097661c8b9962",
+          "thread_id": "1a1097661c8b9962",
+          "subject": "Guest article inquiry: controlled testing and the VEIL Research Project",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-10-05T00:28:35.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a1097661c8b9962"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A003",
+      "type": "article_submission",
+      "title": "Editorial inquiry: VEIL’s experimental approach to paranormal investigations",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-10-05",
+      "date_precision": "day",
+      "platform": "The Paranormal Scholar",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a10be6f7316ec50",
+          "thread_id": "1a10be6f7316ec50",
+          "subject": "Editorial inquiry: VEIL’s experimental approach to paranormal investigations",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-10-05T11:50:48.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a10be6f7316ec50"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A004",
+      "type": "article_submission",
+      "title": "Article / Research Pitch — VEIL Research Project — Andrew Underwood",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-10-06",
+      "date_precision": "day",
+      "platform": "ParaHouse",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a11116478a0044f",
+          "thread_id": "1a11116478a0044f",
+          "subject": "Article / Research Pitch — VEIL Research Project — Andrew Underwood",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-10-06T12:00:35.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a11116478a0044f"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A005",
+      "type": "article_submission",
+      "title": "A Negative Result Is a Finding",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-10-19",
+      "date_precision": "day",
+      "platform": "Paranormal Underground",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a153c7cd633a17a",
+          "thread_id": "1a153c7cd633a17a",
+          "subject": "Article pitch for Paranormal Underground — A Negative Result Is a Finding (VEIL)",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-10-19T10:49:25.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a153c7cd633a17a"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A006",
+      "type": "article_submission",
+      "title": "Who Checks the Evidence? Why Independent Review Matters in Paranormal Research",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-06",
+      "date_precision": "day",
+      "platform": "ParaHouse",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a1b0ed3de2dd319",
+          "thread_id": "1a1b0ed3de2dd319",
+          "subject": "Original guest article pitch — Who Checks Paranormal Evidence? | VEIL Research Project",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-11-06T12:55:00.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a1b0ed3de2dd319"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A007",
+      "type": "article_submission",
+      "title": "The Problem With EVP Evidence: What Can an Unattended Recording Actually Tell Us?",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-06",
+      "date_precision": "day",
+      "platform": "Paranormal Underground",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a1b0ed47a927c1d",
+          "thread_id": "1a1b0ed47a927c1d",
+          "subject": "Article pitch for Paranormal Underground — The Problem With EVP Evidence",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-11-06T12:55:02.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a1b0ed47a927c1d"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A008",
+      "type": "article_submission",
+      "title": "Testing Claims Before Testing Beliefs",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-06",
+      "date_precision": "day",
+      "platform": "ASSAP / Seriously Strange",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a1b0efa34c5e4c1",
+          "thread_id": "1a1b0efa34c5e4c1",
+          "subject": "Article proposal for Seriously Strange — Testing Claims Before Testing Beliefs",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-11-06T12:57:37.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a1b0efa34c5e4c1"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A009",
+      "type": "article_submission",
+      "title": "When an Unexplained Recording Is Not Yet Evidence of a Ghost",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-06",
+      "date_precision": "day",
+      "platform": "Ghostvillage",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a1b0f38f088bbb8",
+          "thread_id": "1a1b0f38f088bbb8",
+          "subject": "Original feature pitch — When an Unexplained Recording Is Not Yet Evidence of a Ghost",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-11-06T13:01:54.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a1b0f38f088bbb8"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-A010",
+      "type": "article_submission",
+      "title": "Meet SIGNAL: Can an AI Assistant Make Paranormal Investigations More Accountable?",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": "2026-11-17",
+      "date_precision": "day",
+      "platform": "Paranormal Globe",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "source_url": null,
+      "sources": [
+        {
+          "kind": "private_email",
+          "message_id": "1a1ea92e0b8a3b1b",
+          "thread_id": "1a1ea92e0b8a3b1b",
+          "subject": "New original VEIL article idea — Meet SIGNAL and evidence-first AI",
+          "verification": "read_MIME",
+          "public_copy": false
+        }
+      ],
+      "original_text": null,
+      "text_capture": "private_source_retained_in_Gmail",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "limitations": [
+        "No acceptance, rejection or publication decision found in the retrieved thread. Absence of a reply is not a rejection.",
+        "Full private correspondence and unpublished manuscript text are excluded from this public repository.",
+        "Search coverage is a first backfill, not a complete mailbox export."
+      ],
+      "follow_up": [
+        "Check related replies and delivery failures before changing outcome; retrieve manuscript versions privately."
+      ],
+      "history": [
+        {
+          "at": "2026-11-17T17:34:16.000Z",
+          "event": "sent_message",
+          "source_message_id": "1a1ea92e0b8a3b1b"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F001",
+      "type": "facebook_post",
+      "title": "Introducing VEIL Research Project",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": null,
+      "date_precision": "unknown",
+      "platform": "Facebook Page",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "posted",
+      "verification": "verified_live_text_date_unknown",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02orak6VPLBfLnXhWSyE6YLR1cp4Agq5TZLFMTUSzjjMyBn3NNuNwFeuebR4uiUGnBl&id=61595358899314",
+      "sources": [
+        {
+          "kind": "live_facebook_post",
+          "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02orak6VPLBfLnXhWSyE6YLR1cp4Agq5TZLFMTUSzjjMyBn3NNuNwFeuebR4uiUGnBl&id=61595358899314",
+          "observed_at": "2026-11-18",
+          "audience": "Public"
+        }
+      ],
+      "original_text": "🔬 INTRODUCING VEIL RESEARCH PROJECT\nExploring the unexplained through science, technology, and evidence.\n\nToday marks an exciting milestone: the establishment of VEIL Research Project's official Facebook presence.\n\nI'm Andrew Underwood, Founder & Lead Researcher of VEIL Research Project, an emerging independent research initiative dedicated to investigating reported anomalous environmental phenomena through scientifically controlled experimentation.\n\nOUR VISION\nTo develop a scientifically credible research program combining advanced instrumentation, synchronized environmental sensors, artificial intelligence, and carefully designed experimental protocols.\n\nOur proposed research includes:\n🔹 Environmental monitoring and unexplained phenomena\n🔹 Electromagnetic field research\n🔹 Advanced thermal and optical detection systems\n🔹 Experimental communication and recording technologies\n🔹 AI-assisted scientific observation and analysis\n🔹 Investigation of unconventional but testable\n\nWe are currently developing our research methodologies, experimental concepts, and technical plans while pursuing opportunities for scientific collaboration and development.\n\nJoin us here:\nhttps://www.facebook.com/groups/1637421824686165\n\nOUR GUIDING PRINCIPLE\n\"We do not set out to prove the paranormal exists. We set out to discover what the evidence reveals.\"\n\nThe journey begins with questions. Where the evidence takes us remains to be discovered.\n\nAndrew Underwood\nFounder & Lead Researcher\nVEIL Research Project\n\n#VEILResearchProject #ScientificResearch #ExperimentalScience #AnomalousPhenomena #ResearchInnovation",
+      "text_capture": "rendered_text_transcription",
+      "summary": "Official introductory Page post and Group invitation.",
+      "limitations": [
+        "Exact posting date not resolved from Facebook's obscured timestamp.",
+        "Whitespace reconstructed from rendered text; the apparently incomplete phrase 'Investigation of unconventional but testable' is preserved.",
+        "No screenshot or original platform export archived. Scientific claims are not validated merely by archiving a post."
+      ],
+      "follow_up": [
+        "Resolve timestamp through post details or export; retain screenshot and platform export."
+      ],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "live_post_read; No comments yet displayed"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F002",
+      "type": "facebook_post",
+      "title": "Welcome to VEIL Research Community",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": null,
+      "date_precision": "unknown",
+      "platform": "Facebook Group",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "posted",
+      "verification": "verified_live_text_date_unknown",
+      "source_url": "https://www.facebook.com/groups/1637421824686165/permalink/1637459084682439",
+      "sources": [
+        {
+          "kind": "live_facebook_post",
+          "url": "https://www.facebook.com/groups/1637421824686165/permalink/1637459084682439",
+          "observed_at": "2026-11-18",
+          "audience": "Public group"
+        }
+      ],
+      "original_text": "🔬 WELCOME TO VEIL RESEARCH COMMUNITY\nExploring the unexplained through science, technology, and evidence.\n\nWelcome to the official discussion community of VEIL Research Project, founded by Andrew Underwood, Founder & Research Director.\n\nVEIL is an emerging independent research initiative dedicated to investigating reported anomalous phenomena through controlled experimentation, advanced instrumentation, synchronized sensors, and AI-assisted analysis.\n\nWHAT WE EXPLORE\n🔹 Unexplained and reported paranormal events\n🔹 Experimental research and scientific investigation\n🔹 Electromagnetic and environmental phenomena\n🔹 Innovative instruments and detection technologies\n🔹 Unconventional theories and testable hypotheses\n🔹 Artificial intelligence in scientific research\n\nOUR PHILOSOPHY\nWe welcome unusual experiences, challenging questions, and unconventional ideas. However, we distinguish observations from interpretations and hypotheses from established findings.\nWe encourage scientific scrutiny, alternative explanations, and respectful debate.\n\nOUR COMMUNITY STANDARDS\nThis group is publicly viewable, but posting and commenting require approved participation.\nAll posts are reviewed. Clickbait, promotional quizzes, fabricated announcements, scams, prize or money giveaways, and deliberate deception are strictly prohibited. Confirmed violations result in immediate permanent bans.\n\nOUR MISSION\n\"We do not set out to prove the paranormal exists. We set out to discover what the evidence reveals.\"\nWe invite scientists, researchers, engineers, investigators, inventors, and curious minds to join us in asking better questions and developing better ways to investigate them.\n\nWelcome to VEIL Research Community.\n\n— Andrew Underwood\nFounder & Research Director\nVEIL Research Project",
+      "text_capture": "rendered_text_transcription",
+      "summary": "Featured Group welcome, mission, and participation standards.",
+      "limitations": [
+        "Exact posting date unresolved; whitespace reconstructed from rendered text.",
+        "No screenshot or original platform export archived."
+      ],
+      "follow_up": [
+        "Resolve exact timestamp and preserve platform export."
+      ],
+      "history": [
+        {
+          "at": "2026-11-18",
+          "event": "live_post_read; No comments yet displayed"
+        }
+      ]
+    },
+    {
+      "id": "VEIL-RH-2026-F003",
+      "type": "facebook_post",
+      "title": "Academic collaboration announcement",
+      "created_at": "2026-11-18",
+      "last_verified_at": "2026-11-18",
+      "event_date": null,
+      "date_precision": "unknown",
+      "platform": "Facebook Page",
+      "actor": "Andrew Underwood / VEIL Research Project",
+      "status": "posted",
+      "verification": "verified_feed_text_permalink_unknown",
+      "source_url": "https://www.facebook.com/profile.php?id=61595358899314",
+      "sources": [
+        {
+          "kind": "live_facebook_feed",
+          "url": "https://www.facebook.com/profile.php?id=61595358899314",
+          "observed_at": "2026-11-18",
+          "displayed_time": "4 days ago",
+          "audience": "Public"
+        }
+      ],
+      "original_text": "VEIL Research Project has begun exploring academic collaboration. We recently spoke with a faculty member about two areas where researchers and students could contribute: developing SIGNAL, our local AI research assistant, and helping us design controlled, repeatable experiments. We’re looking forward to seeing where these early conversations lead.",
+      "text_capture": "rendered_text_transcription",
+      "summary": "Page post about early academic discussions; does not establish a formal institutional partnership.",
+      "limitations": [
+        "Feed content verified, but individual post permalink and absolute posting time not obtained.",
+        "Relative time is preserved as displayed, not converted to a precise date.",
+        "No screenshot or platform export archived."
+      ],
+      "follow_up": [
+        "Find stable post permalink and absolute timestamp."
+      ],
+      "history": []
+    }
+  ]
+}
