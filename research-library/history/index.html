@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="VEIL Research Project public research-history index of verified and partially verified outreach and Facebook records.">
+<title>Research History | VEIL Research Library</title><link rel="stylesheet" href="../../styles.css">
+<style>
+.rh-wrap{max-width:1080px;margin:auto;padding:2rem 1rem 5rem;color:#e8f1f5}.rh-wrap a{color:#82dce7}
+.rh-wrap h1{font-size:clamp(2rem,5.5vw,3.5rem);margin:.7rem 0}.rh-wrap p{line-height:1.65}
+.rh-note{background:#122a31;border-left:4px solid #64c9d4;padding:1rem 1.3rem;margin:1.5rem 0}
+.rh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin:1.4rem 0}
+.rh-count,.rh-item{background:#101f27;border:1px solid #356171;border-radius:12px;padding:1rem}
+.rh-count strong{font-size:1.7rem;display:block}.rh-count span,.rh-meta{color:#bdd0d7}
+.rh-tools{display:flex;gap:.7rem;flex-wrap:wrap;margin:1.5rem 0}
+.rh-tools input,.rh-tools select{background:#101f27;color:#fff;border:1px solid #6c9ba8;padding:.75rem;border-radius:8px}
+.rh-tools input{flex:1;min-width:220px}.rh-item{margin:0 0 1rem}.rh-item h2{font-size:1.22rem;margin:.3rem 0}
+.rh-meta{font-size:.9rem}.rh-item a{display:inline-block;margin-top:.3rem}
+</style></head><body><main class="rh-wrap">
+<nav aria-label="Breadcrumb"><a href="../../">VEIL Home</a> / <a href="../">Research Library</a> / Research History</nav>
+<h1>VEIL Research History</h1>
+<p>Our developing record of public Facebook activity and editorial outreach. It documents what was observed or sent, and what remains unverified. This is a history of VEIL communication, not a catalog of scientifically established paranormal findings.</p>
+<div class="rh-note"><strong>Partial archive, begun November 18, 2026.</strong> The records below are a reviewed public summary of a larger source-indexed repository. Some dates and Facebook links are missing. A pitch sent is not a confirmed article submission, acceptance, or rejection. Private correspondence and unpublished manuscripts are not displayed.</div>
+<section class="rh-grid" aria-label="Archive totals">
+<div class="rh-count"><strong id="all-count">—</strong><span>Documented records</span></div>
+<div class="rh-count"><strong id="editorial-count">—</strong><span>Editorial histories</span></div>
+<div class="rh-count"><strong id="facebook-count">—</strong><span>Facebook posts</span></div>
+<div class="rh-count"><strong id="published-count">—</strong><span>Verified published articles</span></div>
+</section>
+<h2>Explore the archive</h2>
+<div class="rh-tools"><input id="record-search" type="search" placeholder="Search title, platform, record number…" aria-label="Search research history">
+<select id="record-filter" aria-label="Filter by category"><option value="all">All records</option><option value="Editorial outreach">Editorial outreach</option><option value="Facebook activity">Facebook activity</option></select></div>
+<div id="record-list" aria-live="polite">Loading archive…</div>
+<h2>Verification and corrections</h2>
+<p>We preserve source-backed history, record uncertainty, and keep original private evidence outside the public site. We have <strong>not</strong> verified historical VEIL-authored Facebook comments in this first batch. Unverified comment leads are not included in the totals. Dates are shown only when established.</p>
+<p>Research-history source documents and corrections are maintained in the <a href="https://github.com/veilresearchproject/veil-research-project/tree/main/research-library/history">VEIL GitHub archive</a>. The archive is not a complete historical export or an automatic real-time Facebook feed.</p>
+<p><a href="../">Return to Research Library</a></p>
+</main><script>
+(function(){
+"use strict";
+const list=document.getElementById("record-list"), search=document.getElementById("record-search"),filter=document.getElementById("record-filter");let records=[];
+const statusText={published:"Published — verified",pitch_sent_outcome_unknown:"Pitch sent — outcome unknown",posted:"Post observed — see verification limits"};
+function render(){
+const q=search.value.trim().toLowerCase(),cat=filter.value;
+const found=records.filter(r=>(cat==="all"||r.category===cat)&&[r.id,r.title,r.platform,r.summary].join(" ").toLowerCase().includes(q));
+list.replaceChildren();
+if(!found.length){list.textContent="No records match this search.";return;}
+for(const r of found){
+const article=document.createElement("article");article.className="rh-item";
+const h=document.createElement("h2");h.textContent=r.title;const meta=document.createElement("p");meta.className="rh-meta";
+meta.textContent=[r.id,r.platform,r.event_date||"Date unverified",statusText[r.status]||r.status].join(" · ");
+const desc=document.createElement("p");desc.textContent=r.summary||"Further details are preserved in the source index.";
+article.append(h,meta,desc);
+if(r.source_url){const a=document.createElement("a");a.href=r.source_url;a.rel="noopener noreferrer";a.target="_blank";a.textContent="View original public source";article.append(a);}
+list.append(article);
+}
+}
+search.addEventListener("input",render);filter.addEventListener("change",render);
+fetch("public-records.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Unavailable");return r.json()}).then(d=>{
+if(!Array.isArray(d.records))throw Error("Invalid archive");
+records=d.records.filter(r=>typeof r.id==="string"&&typeof r.title==="string"&&typeof r.platform==="string");
+document.getElementById("all-count").textContent=records.length;
+document.getElementById("editorial-count").textContent=records.filter(r=>r.category==="Editorial outreach").length;
+document.getElementById("facebook-count").textContent=records.filter(r=>r.category==="Facebook activity").length;
+document.getElementById("published-count").textContent=records.filter(r=>r.status==="published").length;
+render();
+}).catch(()=>{list.textContent="The archive index is temporarily unavailable.";});
+})();
+</script></body></html>
