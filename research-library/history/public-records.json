@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-18",
+  "coverage": "Partial historical backfill; the date of some Facebook posts is unknown.",
+  "records": [
+    {
+      "id": "VEIL-RH-2026-A001",
+      "title": "Before, During and After: Why VEIL Is Designing a Different Way to Record Reported Paranormal Events",
+      "category": "Editorial outreach",
+      "platform": "Paranormal Globe",
+      "event_date": "2026-10-03",
+      "status": "published",
+      "verification": "verified_publication",
+      "summary": "Original proposal, manuscript submission, replacement Word attachment, publisher confirmation and live publication verified.",
+      "source_url": "https://paranormalglobe.com/veil-panic-box-paranormal-investigation/"
+    },
+    {
+      "id": "VEIL-RH-2026-A002",
+      "title": "Guest article inquiry: controlled testing and the VEIL Research Project",
+      "category": "Editorial outreach",
+      "platform": "Paranormal Magazine",
+      "event_date": "2026-10-04",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-A003",
+      "title": "Editorial inquiry: VEIL’s experimental approach to paranormal investigations",
+      "category": "Editorial outreach",
+      "platform": "The Paranormal Scholar",
+      "event_date": "2026-10-05",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-A004",
+      "title": "Article / Research Pitch — VEIL Research Project — Andrew Underwood",
+      "category": "Editorial outreach",
+      "platform": "ParaHouse",
+      "event_date": "2026-10-06",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-A005",
+      "title": "A Negative Result Is a Finding",
+      "category": "Editorial outreach",
+      "platform": "Paranormal Underground",
+      "event_date": "2026-10-19",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-A006",
+      "title": "Who Checks the Evidence? Why Independent Review Matters in Paranormal Research",
+      "category": "Editorial outreach",
+      "platform": "ParaHouse",
+      "event_date": "2026-11-06",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-A007",
+      "title": "The Problem With EVP Evidence: What Can an Unattended Recording Actually Tell Us?",
+      "category": "Editorial outreach",
+      "platform": "Paranormal Underground",
+      "event_date": "2026-11-06",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-A008",
+      "title": "Testing Claims Before Testing Beliefs",
+      "category": "Editorial outreach",
+      "platform": "ASSAP / Seriously Strange",
+      "event_date": "2026-11-06",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-A009",
+      "title": "When an Unexplained Recording Is Not Yet Evidence of a Ghost",
+      "category": "Editorial outreach",
+      "platform": "Ghostvillage",
+      "event_date": "2026-11-06",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-A010",
+      "title": "Meet SIGNAL: Can an AI Assistant Make Paranormal Investigations More Accountable?",
+      "category": "Editorial outreach",
+      "platform": "Paranormal Globe",
+      "event_date": "2026-11-17",
+      "status": "pitch_sent_outcome_unknown",
+      "verification": "verified_sent",
+      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "source_url": null
+    },
+    {
+      "id": "VEIL-RH-2026-F001",
+      "title": "Introducing VEIL Research Project",
+      "category": "Facebook activity",
+      "platform": "Facebook Page",
+      "event_date": null,
+      "status": "posted",
+      "verification": "verified_live_text_date_unknown",
+      "summary": "Official introductory Page post and Group invitation.",
+      "source_url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02orak6VPLBfLnXhWSyE6YLR1cp4Agq5TZLFMTUSzjjMyBn3NNuNwFeuebR4uiUGnBl&id=61595358899314"
+    },
+    {
+      "id": "VEIL-RH-2026-F002",
+      "title": "Welcome to VEIL Research Community",
+      "category": "Facebook activity",
+      "platform": "Facebook Group",
+      "event_date": null,
+      "status": "posted",
+      "verification": "verified_live_text_date_unknown",
+      "summary": "Featured Group welcome, mission, and participation standards.",
+      "source_url": "https://www.facebook.com/groups/1637421824686165/permalink/1637459084682439"
+    },
+    {
+      "id": "VEIL-RH-2026-F003",
+      "title": "Academic collaboration announcement",
+      "category": "Facebook activity",
+      "platform": "Facebook Page",
+      "event_date": null,
+      "status": "posted",
+      "verification": "verified_feed_text_permalink_unknown",
+      "summary": "Page post about early academic discussions; does not establish a formal institutional partnership.",
+      "source_url": "https://www.facebook.com/profile.php?id=61595358899314"
+    }
+  ]
+}
