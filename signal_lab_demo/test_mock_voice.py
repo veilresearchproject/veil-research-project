@@ -21,7 +21,7 @@ class MockVoiceTests(unittest.TestCase):
         for context in ({**CONTEXT,'real_sensor_data':True},{**CONTEXT,'source':'LIVE'},{**CONTEXT,'unreviewed_case_count':True}):
             with self.subTest(context=context),self.assertRaises(ValueError):mock_voice_turn('summary',lambda:context,lambda _:None)
     def test_rejects_invalid_transcript(self):
-        for value in ('', 'a'*241, None, '\\x00hi'):
+        for value in ('', 'a'*241, None, chr(0)+'hi'):
             with self.subTest(value=value),self.assertRaises(ValueError):mock_voice_turn(value,lambda:CONTEXT,lambda _:None)
     def test_requires_callbacks(self):
         with self.assertRaises(TypeError):mock_voice_turn('status',None,lambda _:None)
