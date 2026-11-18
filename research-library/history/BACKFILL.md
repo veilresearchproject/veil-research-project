@@ -29,3 +29,20 @@ Do not invent comment wording from topic titles. Replace leads with sourced reco
 Nine histories verify pitches/inquiries sent with no decision found in retrieved threads. They are not nine full manuscripts, nine rejections or nine confirmed ongoing reviews.
 
 The Paranormal Globe manuscript was submitted October 4 and published November 4. The new SIGNAL proposal was a November 17 pitch, not a verified full-manuscript submission. Private draft packages have not been copied into the public repository.
+
+## November 13–18 Facebook photo-review reconciliation queue (added November 18)
+
+The following are **conversation leads, not verified published VEIL comments**. A chat screenshot or assistant-drafted reply proves only that a review/draft took place, not that Andrew/VEIL clicked Post. For each lead locate the parent post and author's final visible response through Facebook Activity Log/Page activity and comment permalink. Attach the review screenshot with a private evidence copy and log the precise post date, identity, exact final wording, link, follow-ups, alternative explanations, and explicit confidence.
+
+| Conversation date | Review / topic lead | Reconciliation status |
+| --- | --- | --- |
+| Nov 18 | Eyeglass / reflection photo, image history and reverse-source checks | Source post, final reply and posting status not yet verified |
+| Nov 18 | Paul Rowland / Plas Teg illumination photograph discussion | Source post, final reply and posting status not yet verified |
+| Nov 18 | Multiple photo-review and research discussion screenshots | Separate each unique parent post; verify duplicates and replies |
+| Nov 17 | Stone Tape discussion | Source and final response unverified; also listed above |
+| Nov 17 | Silver-backed mirrors discussion | Source and final response unverified; also listed above |
+| Nov 17 | Ryan experience follow-up | Source and final response unverified; also listed above |
+| Nov 17 | Photographic artifact assessments and image review | Source post, final reply and posting status not yet verified |
+| Nov 16–17 | VEIL replies to paranormal community posts and photos | Enumerate one parent post at a time; draft-only until independently verified |
+
+**Coverage rule:** reconcile Facebook *comments and replies on other Pages/Groups* in addition to original VEIL Page/Group posts; personal-profile comments require the selected personal identity's activity access. Log published cross-posts separately but link them as the same investigation. Do not count assistant drafts, screenshots of third-party posts, or inaccessible private-group posts as published VEIL comments. Record unverified leads in this queue and never silently discard them. Track counts as (1) verified posted, (2) draft/analysis only, (3) needs verification, (4) not posted, avoiding any false promise of exhaustive access.
