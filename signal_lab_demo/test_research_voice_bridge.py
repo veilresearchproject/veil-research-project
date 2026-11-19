@@ -68,6 +68,43 @@ class ResearchVoiceBridgeTests(unittest.TestCase):
             research_voice_turn("", "/synthetic", lambda _: None)
         builder.assert_not_called()
 
+    @patch("research_voice_bridge.mock_voice_turn")
+    def test_bad_metadata_does_not_emit(self, mock_turn):
+        def unsafe(text, context, speak):
+            speak("unsafe provisional output")
+            return {"spoken_text": "unsafe provisional output", "synthetic_only": True,
+                    "model_connected": True, "physical_control_allowed": False}
+        mock_turn.side_effect = unsafe
+        external = []
+        with self.assertRaisesRegex(ValueError, "Unsafe"):
+            research_voice_turn("status", "/synthetic", external.append)
+        self.assertEqual(external, [])
+
+    @patch("research_voice_bridge.mock_voice_turn")
+    def test_mismatch_does_not_emit(self, mock_turn):
+        def mismatch(text, context, speak):
+            speak("first")
+            return {"spoken_text": "second", "synthetic_only": True,
+                    "model_connected": False, "physical_control_allowed": False}
+        mock_turn.side_effect = mismatch
+        external = []
+        with self.assertRaisesRegex(ValueError, "mismatch"):
+            research_voice_turn("status", "/synthetic", external.append)
+        self.assertEqual(external, [])
+
+    @patch("research_voice_bridge.mock_voice_turn")
+    def test_duplicate_provisional_speech_does_not_emit(self, mock_turn):
+        def duplicate(text, context, speak):
+            speak("duplicate")
+            speak("duplicate")
+            return {"spoken_text": "duplicate", "synthetic_only": True,
+                    "model_connected": False, "physical_control_allowed": False}
+        mock_turn.side_effect = duplicate
+        external = []
+        with self.assertRaisesRegex(ValueError, "mismatch"):
+            research_voice_turn("status", "/synthetic", external.append)
+        self.assertEqual(external, [])
+
     def test_missing_sink_and_path_rejected(self):
         with self.assertRaises(TypeError):
             research_voice_turn("status", "/synthetic", None)
