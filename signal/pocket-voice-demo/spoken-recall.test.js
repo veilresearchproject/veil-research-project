@@ -1,0 +1,14 @@
+'use strict';
+const assert=require('node:assert/strict');
+const test=require('node:test');
+const {spokenRecall}=require('./spoken-recall.js');
+const note=(text)=>({source:'session',verified:false,text});
+test('empty recall clearly states absence',()=>assert.match(spokenRecall([]),/No temporary notes/));
+test('notes remain attributed',()=>assert.match(spokenRecall([note('Check mic')]),/unverified temporary notes, not established facts/));
+test('order preserved',()=>assert.ok(spokenRecall([note('First'),note('Second')]).indexOf('First')<spokenRecall([note('First'),note('Second')]).indexOf('Second')));
+test('verified source rejected',()=>assert.throws(()=>spokenRecall([{source:'verified_project',verified:true,text:'Fact'}])));
+test('user-note source rejected',()=>assert.throws(()=>spokenRecall([{source:'user_note',verified:false,text:'Claim'}])));
+test('empty text rejected',()=>assert.throws(()=>spokenRecall([note(' ')])));
+test('oversize text rejected',()=>assert.throws(()=>spokenRecall([note('x'.repeat(501))])));
+test('invalid list rejected',()=>assert.throws(()=>spokenRecall(null)));
+test('memory list not mutated',()=>{const list=[note('Original')];spokenRecall(list);assert.equal(list[0].text,'Original')});
