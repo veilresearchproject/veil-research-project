@@ -21,7 +21,7 @@ def mock_voice_turn(transcript, context_provider, speak):
     question = ' '.join(transcript.split())
     if _FORBIDDEN.search(question) and _DEVICE.search(question):
         response = "I can explain the demonstration, but I cannot control equipment. Human approval is required."
-    elif re.search(r"\b(what|how many|summary|status|report|describe|tell)\b", question, re.I):
+    elif re.search(r"\b(what|how many|summary|summarize|status|report|describe|tell)\b", question, re.I):
         context = context_provider()
         if not isinstance(context, dict) or context.get('source') != 'VERIFIED_LOCAL_SYNTHETIC_BUNDLE' or context.get('real_sensor_data') is not False or context.get('physical_control_allowed') is not False:
             raise ValueError("Untrusted or non-synthetic context")
