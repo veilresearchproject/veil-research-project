@@ -6,7 +6,7 @@ Scope: VEIL posts, comments/replies, editorial inquiries, article pitches, manus
 
 ## Inventory
 
-65 records: 10 editorial histories, 7 Facebook posts and 48 Facebook comments and replies. 41 comments and replies concern photo investigations or image provenance. See the [access check](ACCESS-2026-11-18.md) and [backfill queue](BACKFILL.md) for coverage.
+72 records: 10 editorial histories, 8 Facebook posts and 54 Facebook comments and replies. 43 comments and replies concern photo investigations or image provenance. See the [November 19 Page Activity Log check](ACCESS-2026-11-19.md) and [backfill queue](BACKFILL.md) for coverage.
 
 | ID | First event date (America/New_York) | Platform | Title | State |
 | --- | --- | --- | --- | --- |
@@ -75,13 +75,21 @@ Scope: VEIL posts, comments/replies, editorial inquiries, article pitches, manus
 | VEIL-RH-2026-F053 | 2026-11-18 | Facebook Group | Using repeated events to look for patterns | posted |
 | VEIL-RH-2026-F054 | 2026-11-18 | Facebook Group | MTC and controlled recording discussion | posted |
 | VEIL-RH-2026-F055 | 2026-11-18 | Facebook Group | Welcoming a new investigation team | posted |
+| VEIL-RH-2026-F056 | 2026-11-18 | Facebook Group | VEIL Research Community new-member welcome | posted |
+| VEIL-RH-2026-F057 | 2026-11-18 | Facebook Group | VEIL community welcome-thread follow-up | posted |
+| VEIL-RH-2026-F058 | 2026-11-18 | Facebook Group | Invitation to share a firsthand account in the Gettysburg discussion | posted |
+| VEIL-RH-2026-F059 | 2026-11-18 | Facebook Group | Ship photograph with conflicting captions | posted |
+| VEIL-RH-2026-F060 | 2026-11-18 | Facebook | Independent verification and repeatable paranormal evidence | posted |
+| VEIL-RH-2026-F061 | 2026-11-18 | Facebook Group | Mist photograph, source history and flash illumination | posted |
+| VEIL-RH-2026-F062 | 2026-11-18 | Facebook Group | Timed transformer anecdote and repeated observations | posted |
 
 ## Files
 
 - [records.json](records.json): canonical records, sources, text, verification limits and history.
 - [records.csv](records.csv): compact spreadsheet index.
 - [RECORDS.md](RECORDS.md): readable record details and captured public post text.
-- [ACCESS-2026-11-18.md](ACCESS-2026-11-18.md): Facebook access and identity limitations.
+- [ACCESS-2026-11-18.md](ACCESS-2026-11-18.md): initial Facebook access and identity checks.
+- [ACCESS-2026-11-19.md](ACCESS-2026-11-19.md): November 18 VEIL Page activity reconciliation.
 - [BACKFILL.md](BACKFILL.md): missing history and unverified comment leads.
 - [WORKFLOW.md](WORKFLOW.md): repeatable capture, corrections and publication boundaries.
 - [record-template.json](record-template.json) and [record-schema.json](record-schema.json): capture format.

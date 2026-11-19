@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-18",
+  "updated_at": "2026-11-19",
   "coverage": "Partial historical backfill including public posts and comments observed in Facebook Activity Log.",
   "records": [
     {
@@ -717,6 +717,83 @@
       "verification": "verified_activity_log",
       "summary": "Introduced VEIL’s observation and documentation approach and invited the new team to share its interests.",
       "source_url": "https://www.facebook.com/groups/projectfear/posts/1531448725701047/?comment_id=1532029405642979"
+    },
+    {
+      "id": "VEIL-RH-2026-F056",
+      "title": "VEIL Research Community new-member welcome",
+      "category": "Facebook activity",
+      "platform": "Facebook Group",
+      "event_date": "2026-11-18",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "summary": "Published a welcome for new members of the VEIL Research Community.",
+      "source_url": "https://www.facebook.com/groups/1637421824686165/permalink/1673800484381632/"
+    },
+    {
+      "id": "VEIL-RH-2026-F057",
+      "title": "VEIL community welcome-thread follow-up",
+      "category": "Facebook activity",
+      "platform": "Facebook Group",
+      "event_date": "2026-11-18",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "summary": "Replied to a participant in the welcome thread to compliment their logo.",
+      "source_url": "https://www.facebook.com/groups/1637421824686165/posts/1673800484381632/?comment_id=1673807581047589&reply_comment_id=1674038207691193"
+    },
+    {
+      "id": "VEIL-RH-2026-F058",
+      "title": "Invitation to share a firsthand account in the Gettysburg discussion",
+      "category": "Facebook activity",
+      "platform": "Facebook Group",
+      "event_date": "2026-11-18",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "summary": "Invited a participant to share a firsthand account at their own comfort level and offered to listen and consider possible explanations.",
+      "source_url": "https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604154483174105&reply_comment_id=4605005976422289"
+    },
+    {
+      "id": "VEIL-RH-2026-F059",
+      "title": "Ship photograph with conflicting captions",
+      "category": "Facebook activity",
+      "platform": "Facebook Group",
+      "event_date": "2026-11-18",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "summary": "Reported apparent reverse-image matches dating back to January 2017, including posts using a Flying Dutchman caption. The comment left the original photographer and circumstances unresolved.",
+      "source_url": "https://www.facebook.com/groups/714762568883519/posts/2976659169360503/?comment_id=2977121245980962"
+    },
+    {
+      "id": "VEIL-RH-2026-F060",
+      "title": "Independent verification and repeatable paranormal evidence",
+      "category": "Facebook activity",
+      "platform": "Facebook",
+      "event_date": "2026-11-18",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "summary": "Outlined what would make an anomalous observation persuasive: independent instruments, documented conditions, evaluation of ordinary explanations and repeatability under similar conditions.",
+      "source_url": "https://www.facebook.com/GhostSistersofmarionohio/posts/pfbid02XLhePMtH8e8arxGULU4Xv19C7UkD8fL7PAiki6nWZk51Qecz3iycHE8zEbHjVadml?comment_id=1304346278506692"
+    },
+    {
+      "id": "VEIL-RH-2026-F061",
+      "title": "Mist photograph, source history and flash illumination",
+      "category": "Facebook activity",
+      "platform": "Facebook Group",
+      "event_date": "2026-11-18",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "summary": "Reported prior circulation of the image with varying captions, considered flash-lit airborne material and pareidolia, and asked about photos taken immediately before or afterward.",
+      "source_url": "https://www.facebook.com/groups/25743993295226192/posts/29546485851643565/?comment_id=29553115040980646"
+    },
+    {
+      "id": "VEIL-RH-2026-F062",
+      "title": "Timed transformer anecdote and repeated observations",
+      "category": "Facebook activity",
+      "platform": "Facebook Group",
+      "event_date": "2026-11-18",
+      "status": "posted",
+      "verification": "verified_activity_log",
+      "summary": "Shared a past investigation in which a dog’s repeated reaction reportedly stopped when a timed transformer was switched off. Used the account to illustrate the value of checking when an event recurs.",
+      "source_url": "https://www.facebook.com/groups/308709469737635/posts/2158456658096231/?comment_id=2158797628062134&reply_comment_id=2159473864661177"
     }
   ]
 }

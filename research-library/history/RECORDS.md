@@ -1,6 +1,6 @@
 # Research-history details
 
-Captured November 18, 2026. Unknown means unverified, not that an event never occurred.
+Last updated November 19, 2026. Unknown means unverified, not that an event never occurred.
 
 ## VEIL-RH-2026-A001 — Before, During and After: Why VEIL Is Designing a Different Way to Record Reported Paranormal Events
 
@@ -1176,3 +1176,112 @@ Introduced VEIL’s observation and documentation approach and invited the new t
 ### Limits
 
 - Facebook time is recorded as displayed. Its timezone offset was not independently established.
+
+## VEIL-RH-2026-F056 — VEIL Research Community new-member welcome
+
+- Platform: Facebook Group
+- Actor: VEIL Research Project
+- Date as displayed: 2026-11-18 4:33 AM
+- Status: posted
+- Verification: verified_activity_log
+- Source: [Open source](https://www.facebook.com/groups/1637421824686165/permalink/1673800484381632/)
+
+Published a welcome for new members of the VEIL Research Community.
+
+### Limits
+
+- Facebook time is recorded as displayed. Its timezone offset was not independently established.
+
+## VEIL-RH-2026-F057 — VEIL community welcome-thread follow-up
+
+- Platform: Facebook Group
+- Actor: Andrew Underwood / VEIL Research Project
+- Date as displayed: 2026-11-18 10:53 AM
+- Status: posted
+- Verification: verified_activity_log
+- Source: [Open source](https://www.facebook.com/groups/1637421824686165/posts/1673800484381632/?comment_id=1673807581047589&reply_comment_id=1674038207691193)
+
+Replied to a participant in the welcome thread to compliment their logo.
+
+### Limits
+
+- Facebook time is recorded as displayed. Its timezone offset was not independently established.
+
+## VEIL-RH-2026-F058 — Invitation to share a firsthand account in the Gettysburg discussion
+
+- Platform: Facebook Group
+- Actor: Andrew Underwood / VEIL Research Project
+- Date as displayed: 2026-11-18 11:54 AM
+- Status: posted
+- Verification: verified_activity_log
+- Source: [Open source](https://www.facebook.com/groups/2923683831221187/posts/4604122453177308/?comment_id=4604154483174105&reply_comment_id=4605005976422289)
+
+Invited a participant to share a firsthand account at their own comfort level and offered to listen and consider possible explanations.
+
+### Limits
+
+- Facebook time is recorded as displayed. Its timezone offset was not independently established.
+
+## VEIL-RH-2026-F059 — Ship photograph with conflicting captions
+
+- Platform: Facebook Group
+- Actor: Andrew Underwood / VEIL Research Project
+- Date as displayed: 2026-11-18 4:12 PM
+- Status: posted
+- Verification: verified_activity_log
+- Source: [Open source](https://www.facebook.com/groups/714762568883519/posts/2976659169360503/?comment_id=2977121245980962)
+
+Reported apparent reverse-image matches dating back to January 2017, including posts using a Flying Dutchman caption. The comment left the original photographer and circumstances unresolved.
+
+### Limits
+
+- Facebook time is recorded as displayed. Its timezone offset was not independently established.
+- The Activity Log verifies posting. Image provenance, reported searches and proposed explanations were outside this check.
+
+## VEIL-RH-2026-F060 — Independent verification and repeatable paranormal evidence
+
+- Platform: Facebook
+- Actor: Andrew Underwood / VEIL Research Project
+- Date as displayed: 2026-11-18 4:33 PM
+- Status: posted
+- Verification: verified_activity_log
+- Source: [Open source](https://www.facebook.com/GhostSistersofmarionohio/posts/pfbid02XLhePMtH8e8arxGULU4Xv19C7UkD8fL7PAiki6nWZk51Qecz3iycHE8zEbHjVadml?comment_id=1304346278506692)
+
+Outlined what would make an anomalous observation persuasive: independent instruments, documented conditions, evaluation of ordinary explanations and repeatability under similar conditions.
+
+### Limits
+
+- Facebook time is recorded as displayed. Its timezone offset was not independently established.
+
+## VEIL-RH-2026-F061 — Mist photograph, source history and flash illumination
+
+- Platform: Facebook Group
+- Actor: Andrew Underwood / VEIL Research Project
+- Date as displayed: 2026-11-18 5:55 PM
+- Status: posted
+- Verification: verified_activity_log
+- Source: [Open source](https://www.facebook.com/groups/25743993295226192/posts/29546485851643565/?comment_id=29553115040980646)
+
+Reported prior circulation of the image with varying captions, considered flash-lit airborne material and pareidolia, and asked about photos taken immediately before or afterward.
+
+### Limits
+
+- Facebook time is recorded as displayed. Its timezone offset was not independently established.
+- The Activity Log verifies posting. Image provenance, reported searches and proposed explanations were outside this check.
+
+## VEIL-RH-2026-F062 — Timed transformer anecdote and repeated observations
+
+- Platform: Facebook Group
+- Actor: Andrew Underwood / VEIL Research Project
+- Date as displayed: 2026-11-18 6:59 PM
+- Status: posted
+- Verification: verified_activity_log
+- Source: [Open source](https://www.facebook.com/groups/308709469737635/posts/2158456658096231/?comment_id=2158797628062134&reply_comment_id=2159473864661177)
+
+Shared a past investigation in which a dog’s repeated reaction reportedly stopped when a timed transformer was switched off. Used the account to illustrate the value of checking when an event recurs.
+
+### Limits
+
+- Facebook time is recorded as displayed. Its timezone offset was not independently established.
+- The Comments view displayed 6:59 PM and the Group posts and comments view displayed 7:00 PM for the same reply ID.
+- The cited investigation is an account reported in the reply.
