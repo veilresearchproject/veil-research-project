@@ -25,6 +25,17 @@ class MockVoiceTests(unittest.TestCase):
             with self.subTest(value=value),self.assertRaises(ValueError):mock_voice_turn(value,lambda:CONTEXT,lambda _:None)
     def test_requires_callbacks(self):
         with self.assertRaises(TypeError):mock_voice_turn('status',None,lambda _:None)
+    def test_summarize_routes_to_verified_context(self):
+        spoken=[]
+        result=mock_voice_turn('Signal, please summarize the lab',lambda:CONTEXT,spoken.append)
+        self.assertEqual(spoken,[result['spoken_text']])
+        self.assertIn('3 unreviewed threshold windows',spoken[0])
+        self.assertNotIn('My circuits are curious',spoken[0])
+    def test_summarize_rejects_untrusted_context(self):
+        spoken=[]
+        with self.assertRaises(ValueError):
+            mock_voice_turn('Summarize the lab',lambda:{**CONTEXT,'real_sensor_data':True},spoken.append)
+        self.assertEqual(spoken,[])
     def test_no_network_or_microphone(self):
         import inspect,mock_voice
         source=inspect.getsource(mock_voice)
