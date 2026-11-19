@@ -23,7 +23,17 @@ def research_voice_turn(transcript, bundle_directory, speak):
     def verified_context():
         return build_brain_context(bundle_directory)
 
-    result = mock_voice_turn(transcript, verified_context, speak)
-    if result.get("synthetic_only") is not True or result.get("physical_control_allowed") is not False:
+    # The downstream mock module may emit before returning its metadata.
+    # Collect provisional speech privately so a failed safety check cannot
+    # reach an external speech sink.
+    provisional = []
+    result = mock_voice_turn(transcript, verified_context, provisional.append)
+    if not isinstance(result, dict) or result.get("synthetic_only") is not True or result.get("model_connected") is not False or result.get("physical_control_allowed") is not False:
         raise ValueError("Unsafe mock voice response")
+    spoken = result.get("spoken_text")
+    if not isinstance(spoken, str) or not spoken or len(spoken) > 512:
+        raise ValueError("Invalid mock speech text")
+    if provisional != [spoken]:
+        raise ValueError("Mock speech output mismatch")
+    speak(spoken)
     return result
