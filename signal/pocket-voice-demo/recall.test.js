@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict');
+const test=require('node:test');
+const {summarizeSessionNotes}=require('./recall.js');
+const note=(text)=>({text,source:'session',verified:false});
+test('empty memory has explicit result',()=>assert.equal(summarizeSessionNotes([]),'No temporary notes to recall.'));
+test('quotes note with unverified label',()=>assert.match(summarizeSessionNotes([note('Check the cable')]),/UNVERIFIED TEMPORARY NOTE: Check the cable/));
+test('does not infer facts from note',()=>assert.doesNotMatch(summarizeSessionNotes([note('ghost detected')]),/VERIFIED PROJECT FACT/));
+test('retains order',()=>assert.ok(summarizeSessionNotes([note('first'),note('second')]).indexOf('first')<summarizeSessionNotes([note('first'),note('second')]).indexOf('second')));
+test('rejects forged verified entry',()=>assert.throws(()=>summarizeSessionNotes([{...note('x'),verified:true}])));
+test('rejects non-session source',()=>assert.throws(()=>summarizeSessionNotes([{...note('x'),source:'verified_project'}])));
+test('rejects malformed text',()=>assert.throws(()=>summarizeSessionNotes([note('')])));
+test('rejects excess entries',()=>assert.throws(()=>summarizeSessionNotes(Array.from({length:65},()=>note('x')))));
