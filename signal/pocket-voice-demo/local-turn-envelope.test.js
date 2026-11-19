@@ -1,0 +1,22 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const {makeTurn}=require('./local-turn-envelope');
+const policy=require('./local-bridge-policy');
+const yes={enabled:true,userConsented:true,authenticated:true};
+const request=(text)=>({action:'chat',text});
+test('creates bounded text-only Ollama envelope',()=>{
+ const x=makeTurn(request(' hello '),yes,'llama3.2:3b',policy);
+ assert.equal(x.allowed,true);assert.equal(x.body.stream,false);
+ assert.deepEqual(Object.keys(x.body).sort(),['messages','model','options','stream']);
+ assert.deepEqual(x.body.messages.map(m=>m.role),['system','user']);
+ assert.equal(x.body.messages[1].content,'hello');
+ assert.equal(JSON.stringify(x.body).includes('tool_calls'),false);
+});
+test('refuses consent missing',()=>assert.equal(makeTurn(request('hi'),{...yes,userConsented:false},'llama3.2:3b',policy).allowed,false));
+test('refuses authentication missing',()=>assert.equal(makeTurn(request('hi'),{...yes,authenticated:false},'llama3.2:3b',policy).allowed,false));
+test('refuses instrument command',()=>assert.equal(makeTurn(request('reset MTC'),yes,'llama3.2:3b',policy).allowed,false));
+test('refuses device metadata',()=>assert.equal(makeTurn({...request('hi'),device:'mtc'},yes,'llama3.2:3b',policy).allowed,false));
+test('refuses model with whitespace',()=>assert.equal(makeTurn(request('hi'),yes,'bad model',policy).allowed,false));
+test('refuses empty model',()=>assert.equal(makeTurn(request('hi'),yes,'',policy).allowed,false));
+test('refuses oversized user text',()=>assert.equal(makeTurn(request('a'.repeat(501)),yes,'llama3.2:3b',policy).allowed,false));
+test('never includes arbitrary session memory',()=>{const x=makeTurn(request('hello'),yes,'llama3.2:3b',policy);assert.equal(JSON.stringify(x).includes('sessionMemory'),false);});

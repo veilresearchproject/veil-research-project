@@ -1,0 +1,13 @@
+'use strict';
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {validateLocalChatResponse:check}=require('./local-bridge-response');
+const response=(content='Hello')=>({done:true,message:{role:'assistant',content}});
+test('valid response is labeled unverified',()=>{const r=check(response());assert.equal(r.accepted,true);assert.match(r.text,/UNVERIFIED/);assert.match(r.text,/Hello$/)});
+test('reject missing or malformed response',()=>{for(const v of [null,[],{},'hello'])assert.equal(check(v).accepted,false)});
+test('reject incomplete and error response',()=>{assert.equal(check({...response(),done:false}).accepted,false);assert.equal(check({...response(),error:'fail'}).accepted,false)});
+test('reject non assistant role',()=>assert.equal(check({...response(),message:{role:'system',content:'hello'}}).accepted,false));
+test('reject tool calls',()=>{assert.equal(check({...response(),message:{...response().message,tool_calls:[]}}).accepted,false);assert.equal(check({...response(),tool_calls:[]}).accepted,false)});
+test('reject empty or nonstring content',()=>{for(const v of ['', '   ',null,42])assert.equal(check(response(v)).accepted,false)});
+test('reject oversize and control characters',()=>{assert.equal(check(response('x'.repeat(4001))).accepted,false);assert.equal(check(response('a\u0000b')).accepted,false)});
+test('does not execute or fetch anything',()=>assert.equal(typeof check,'function'));

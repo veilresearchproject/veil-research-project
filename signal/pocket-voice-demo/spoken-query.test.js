@@ -1,0 +1,11 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const {prepareSpokenAnswer} = require('./spoken-query.js');
+test('preserves unverified attribution verbatim',()=>assert.equal(prepareSpokenAnswer('UNVERIFIED TEMPORARY NOTE: check mic'),'SIGNAL offline demonstration. UNVERIFIED TEMPORARY NOTE: check mic'));
+test('preserves no-notes result',()=>assert.match(prepareSpokenAnswer('No temporary notes.'),/No temporary notes/));
+test('does not invent verification',()=>assert.doesNotMatch(prepareSpokenAnswer('User says lights flashed'),/verified/i));
+test('rejects non-text',()=>assert.throws(()=>prepareSpokenAnswer(null),TypeError));
+test('rejects empty',()=>assert.throws(()=>prepareSpokenAnswer('   '),RangeError));
+test('rejects oversized',()=>assert.throws(()=>prepareSpokenAnswer('a'.repeat(12001)),RangeError));
+test('retains punctuation',()=>assert.match(prepareSpokenAnswer('Was it recorded?'),/recorded\?$/));
