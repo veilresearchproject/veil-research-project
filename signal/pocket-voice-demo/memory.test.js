@@ -1,0 +1,16 @@
+'use strict';
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const {makeMemory}=require('./memory');
+test('new memory empty',()=>assert.deepEqual(makeMemory().list(),[]));
+test('verified fact labeled',()=>{const m=makeMemory();m.add({id:'a',text:'VEIL research',source:'verified_project',verified:true});assert.match(m.context()[0].attribution,/VERIFIED/)});
+test('notes cannot self-certify',()=>assert.throws(()=>makeMemory().add({id:'a',text:'claim',source:'user_note',verified:true})));
+test('session never presented as verified',()=>{const m=makeMemory();m.add({id:'a',text:'maybe',source:'session'});assert.match(m.context()[0].attribution,/TEMPORARY/)});
+test('no blank text',()=>assert.throws(()=>makeMemory().add({id:'a',text:' ',source:'session'})));
+test('reject malformed IDs',()=>assert.throws(()=>makeMemory().add({id:'../bad',text:'x',source:'session'})));
+test('reject unknown source',()=>assert.throws(()=>makeMemory().add({id:'a',text:'x',source:'device'})));
+test('bounded memory',()=>{const m=makeMemory();for(let i=0;i<64;i++)m.add({id:'m'+i,text:'x',source:'session'});assert.throws(()=>m.add({id:'overflow',text:'x',source:'session'}),RangeError)});
+test('replacement works at capacity',()=>{const m=makeMemory();for(let i=0;i<64;i++)m.add({id:'m'+i,text:'x',source:'session'});m.add({id:'m0',text:'updated',source:'session'});assert.equal(m.get('m0').text,'updated')});
+test('clear erases context',()=>{const m=makeMemory();m.add({id:'a',text:'x',source:'session'});m.clear();assert.deepEqual(m.context(),[])});
+test('remove specific item',()=>{const m=makeMemory();m.add({id:'a',text:'x',source:'session'});assert.equal(m.remove('a'),true);assert.equal(m.get('a'),null)});
+test('returned list does not mutate store',()=>{const m=makeMemory();m.add({id:'a',text:'x',source:'session'});m.list().pop();assert.equal(m.list().length,1)});

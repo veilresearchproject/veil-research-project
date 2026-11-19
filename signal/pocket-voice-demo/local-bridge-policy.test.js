@@ -1,0 +1,15 @@
+'use strict';
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {evaluateBridgeRequest:check}=require('./local-bridge-policy');
+const approved={enabled:true,userConsented:true,authenticated:true};
+test('default denied',()=>assert.equal(check({action:'chat',text:'hello'},{}).reason,'consent-required'));
+test('authentication required',()=>assert.equal(check({action:'chat',text:'hello'},{enabled:true,userConsented:true}).reason,'authentication-required'));
+test('simple chat eligible',()=>assert.deepEqual(check({action:'chat',text:' hello '},approved),{allowed:true,reason:'eligible-for-local-chat',text:'hello'}));
+test('reject instrument action',()=>assert.equal(check({action:'reset',text:'hello'},approved).allowed,false));
+test('reject command disguised as chat',()=>assert.equal(check({action:'chat',text:'reset panic box'},approved).allowed,false));
+test('reject arbitrary endpoint',()=>assert.equal(check({action:'chat',text:'hello',url:'http://evil'},approved).allowed,false));
+test('reject extra fields',()=>assert.equal(check({action:'chat',text:'hello',role:'system'},approved).allowed,false));
+test('reject empty and oversized',()=>{assert.equal(check({action:'chat',text:' '},approved).allowed,false);assert.equal(check({action:'chat',text:'x'.repeat(501)},approved).allowed,false)});
+test('reject invalid objects',()=>assert.equal(check(null,approved).allowed,false));
+test('does not require network',()=>assert.equal(typeof check,'function'));
