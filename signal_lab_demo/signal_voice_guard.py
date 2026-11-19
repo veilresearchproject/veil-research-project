@@ -55,9 +55,21 @@ class GuardedSignalSession:
                     "physical_control_allowed": False, "model_connected": False}
         # Verified synthetic research context is opened only inside the existing
         # bridge and existing integrity verifier. Any error fails without a reply.
-        output = self._voice.turn(normalize_transcript(transcript), speech_sink)
+        # Buffer all mock output until the bridge has returned and its receipt
+        # has passed validation. No untrusted output reaches the real sink first.
+        buffered = []
+        output = self._voice.turn(normalize_transcript(transcript), buffered.append)
+        if not isinstance(output, dict) or not isinstance(output.get("receipt"), dict):
+            raise ValueError("Malformed voice result")
         if output["receipt"].get("synthetic_only") is not True or output["receipt"].get("model_connected") is not False or output["receipt"].get("physical_control_allowed") is not False:
             raise ValueError("Unexpected unsafe voice result")
+        if not isinstance(output.get("spoken_text"), str) or len(output["spoken_text"]) > 512 or not output["spoken_text"]:
+            raise ValueError("Invalid spoken result")
+        if buffered != [output["spoken_text"]]:
+            raise ValueError("Mock speech contract violation")
+        # Only validated text is emitted, exactly once; unsuccessful output
+        # never advances session counters.
+        speech_sink(buffered[0])
         self._turns += 1
         self._totals["synthetic_query"] += 1
         return {"spoken_text": output["spoken_text"], "classification": "synthetic_query",
