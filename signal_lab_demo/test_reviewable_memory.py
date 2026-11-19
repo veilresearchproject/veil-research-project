@@ -33,7 +33,7 @@ class MemoryTests(unittest.TestCase):
     def test_reject_unknown_source(self):
         with self.assertRaises(ValueError): self.mem.add('x', 'web')
     def test_reject_control(self):
-        with self.assertRaises(ValueError): self.mem.add('bad\\x00text')
+        with self.assertRaises(ValueError): self.mem.add('bad'+chr(0)+'text')
     def test_no_review_missing(self):
         with self.assertRaises(ValueError): self.mem.review(100, 'No such note')
     def test_no_reinstate_retracted(self):
