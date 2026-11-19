@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob: data:; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'none'; object-src 'none'; form-action 'none'; base-uri 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>SIGNAL | Image-Origin Research Workbench</title>
+  <link rel="stylesheet" href="workbench.css">
+  <script defer src="core.js"></script>
+  <script defer src="case-resume.js"></script>
+  <script defer src="ui.js"></script>
+</head>
+<body>
+  <header class="topbar"><a href="../">← SIGNAL</a><span>SIGNAL / Image-Origin Research Workbench</span><span class="tag">PROTOTYPE · LOCAL-FIRST</span></header>
+  <main class="container">
+    <h1>Investigate the image before telling its story.</h1>
+    <p class="lead">Prepare a whole-image and region-based reverse search, record online matches, compare claims and create an attributed VEIL draft. The workbench does not conduct searches for you or upload the file to any service.</p>
+    <aside class="privacy"><strong>Privacy & limitations.</strong> Your chosen image stays inside this browser page unless <em>you</em> upload it to an external search engine. Google Lens, Bing and TinEye are separate services with their own policies. Obtain permission before searching images containing private people or confidential evidence. No case information is saved automatically.</aside>
+    <div id="feedback" role="status" aria-live="polite"></div>
+
+    <section class="panel" aria-labelledby="original-title">
+      <h2 id="original-title">1. Register or reopen an image case</h2>
+      <p class="muted">To resume, select your exported JSON first, then supply the exact original image. Nothing is trusted or restored until its SHA-256 and dimensions match.</p>
+      <label>Reopen private JSON draft (optional; max 512 KB) <input id="import-json" type="file" accept=".json,application/json"></label>
+      <p id="import-status" class="muted">No case pending import. Reopened cases require new human review.</p>
+      <div class="fields"><label>Case ID <input id="case-id" value="VEIL-IMG-2026-001" autocomplete="off" pattern="VEIL-IMG-[0-9]{4}-[0-9]{3,6}"></label><label>Choose an image (PNG, JPG, WebP; up to 25 MB) <input id="original-file" type="file" accept="image/png,image/jpeg,image/webp"></label></div>
+      <p id="image-info" class="muted">No original image selected. Nothing is uploaded.</p>
+      <div id="preview-wrap" class="preview-wrap" hidden><canvas id="preview" aria-label="Image preview. Drag or touch to select a region for a second reverse-image search."></canvas><div id="crop-outline" hidden></div></div>
+      <div class="actions"><label>Region label <input id="crop-label" value="distinctive-detail" maxlength="60"></label><button type="button" id="make-crop" disabled>Save selected crop</button></div>
+      <p class="muted">Drag over the image to select a distinctive object or small section. Crop coordinates are recorded against the original pixels. Save the crop as a PNG, then manually upload that version to a visual search site.</p>
+      <ul id="crop-list" class="slim"></ul>
+    </section>
+
+    <section class="panel" aria-labelledby="search-title">
+      <h2 id="search-title">2. Conduct human-controlled reverse searches</h2>
+      <p>Search the <strong>whole image first</strong>, then your selected crop. Google Lens may focus on only a portion of an image, so record the region searched and repeat with different sections if needed.</p>
+      <div class="actions searchlinks"><a href="https://lens.google.com/" target="_blank" rel="noopener noreferrer">Open Google Lens</a><a href="https://tineye.com/" target="_blank" rel="noopener noreferrer">Open TinEye</a><a href="https://www.bing.com/visualsearch" target="_blank" rel="noopener noreferrer">Open Bing Visual Search</a></div>
+      <label>Claim/caption to search as text <input id="query" type="text" maxlength="200" placeholder="e.g., ghost standing in a hospital window"></label>
+      <div id="query-links" class="actions"></div>
+      <fieldset><legend>Record the searches you actually performed</legend><div id="checks" class="check-grid"></div></fieldset>
+      <p class="muted">Do not mark a search complete merely because you opened its page. Record a result only after checking it. If a service is blocked, mark “Unavailable” and explain the limitation in your report.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="sources-title">
+      <h2 id="sources-title">3. Record sourced matches (not assumptions)</h2>
+      <form id="source-form" autocomplete="off">
+        <div class="fields"><label>Source URL (HTTPS) <input name="url" required type="url" placeholder="https://..." maxlength="2048"></label><label>Found through <input name="searchProvider" placeholder="Google Lens / archive / etc." maxlength="80"></label>
+          <label>Source category <select name="sourceType"><option value="webpage">Website</option><option value="social">Social post</option><option value="news">News</option><option value="archive">Web archive</option><option value="photographer">Photographer/creator claim</option><option value="other">Other</option></select></label>
+          <label>Image relationship <select name="matchType"><option value="exact">Same full image</option><option value="partial">Matching region</option><option value="altered">Cropped/edited variant</option><option value="context_only">Context only, not visual match</option><option value="not_a_match">Not a match</option></select></label>
+          <label>Documented page date (optional) <input name="publishedDate" type="date"></label>
+          <label>Basis for claimed date <select name="dateBasis"><option value="unknown">Unknown</option><option value="publisher_timestamp">Published timestamp shown</option><option value="archive_capture">Archive capture date (not publication)</option><option value="researcher_verified">Researcher corroborated date</option></select></label>
+          <label>Image region matched <input name="region" placeholder="whole / figure at left / crop label" maxlength="80"></label>
+          <label>Claimed photographer/creator <input name="creatorClaim" placeholder="Unverified name, if claimed" maxlength="160"></label>
+        </div>
+        <label>Caption used on that page <input name="caption" maxlength="500" placeholder="Copy the claim, not your conclusion"></label>
+        <label>Researcher's notes <textarea name="note" rows="3" maxlength="1200" placeholder="What is observable? What was actually checked? Any manipulation/repost?" ></textarea></label>
+        <button type="submit">Add attributed source</button>
+      </form>
+      <div id="source-list" aria-live="polite" class="sources"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="report-title">
+      <h2 id="report-title">4. Audit and export private report</h2>
+      <p id="assessment" class="muted">Load an image to begin a report.</p>
+      <div class="fields"><label>Human reviewer name (optional; not authenticated) <input id="reviewer" maxlength="120" placeholder="Name used in report"></label><label>Review notes <input id="review-note" maxlength="900" placeholder="What remains uncertain?"></label></div>
+      <div class="actions"><button type="button" id="review-record">Record manual review</button><button type="button" id="export-json">Export JSON evidence log</button><button type="button" id="export-md">Export Markdown draft report</button></div>
+      <p id="source-diagnostics" class="muted">Source chronology and repeated URL checks appear once an image is loaded.</p>
+      <p class="muted">Exports are <strong>PRIVATE DRAFTS</strong>, never automatic publication. Names entered here are not verified identities. Preserve submitted originals, consent records, source pages and a separate custody log.</p>
+    </section>
+    <footer>VEIL Research Project · SIGNAL research utility · Observations are not explanations · No payment or AI cloud connection</footer>
+  </main>
+</body>
+</html>

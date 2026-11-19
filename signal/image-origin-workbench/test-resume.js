@@ -1,0 +1,24 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {test}=require('node:test');
+const c=require('./core.js');
+const r=require('./case-resume.js');
+const h='e'.repeat(64), original={name:'submitted.png',size:1000,width:900,height:700,sha256:h};
+const src=(id='SRC-001',overrides={})=>({id,url:'https://example.org/post?x=1',sourceType:'webpage',matchType:'exact',publishedDate:'2019-06-17',dateBasis:'publisher_timestamp',observedAt:'2026-11-17T12:00:00.000Z',caption:'Shadow figure',note:'',...overrides});
+function draft(sources=[src()]){return c.buildReport({caseId:'VEIL-IMG-2026-007',original,variants:[],sources,checks:{lens_whole:'checked_matches'},review:{name:'Alex',reviewedAt:'2026-11-17T12:01:00.000Z'}});}
+test('01 valid v0.1 private JSON accepted for resuming',()=>{const d=r.parseDraft(JSON.stringify(draft()));assert.equal(d.caseId,'VEIL-IMG-2026-007');});
+test('02 imported review is cleared even if present',()=>{const d=r.parseDraft(JSON.stringify(draft()));assert.equal(d.status,'DRAFT_UNVERIFIED');assert.equal(d.humanReview.name,'');});
+test('03 original publication flag true rejected',()=>{const d=draft();d.publicationApproved=true;assert.throws(()=>r.parseDraft(JSON.stringify(d)),/publication/);});
+test('04 forged identity claim rejected',()=>{const d=draft();d.humanReview.verifiedIdentity=true;assert.throws(()=>r.parseDraft(JSON.stringify(d)),/identity/);});
+test('05 unknown schema rejected',()=>{const d=draft();d.schema='FAKE';assert.throws(()=>r.parseDraft(JSON.stringify(d)),/Unsupported/);});
+test('06 oversized JSON rejected',()=>assert.throws(()=>r.parseDraft(' '.repeat(r.MAX_JSON+1)),/524288/));
+test('07 malformed JSON rejected',()=>assert.throws(()=>r.parseDraft('{not_json'),/valid/));
+test('08 duplicate sources rejected during revalidation',()=>{const d=draft();d.sources=[src(),src()];assert.throws(()=>r.parseDraft(JSON.stringify(d)),/Duplicate/);});
+test('09 local/private URL rejected on resume',()=>{const d=draft();d.sources=[src('SRC-001',{url:'https://127.0.0.1/a'})];assert.throws(()=>r.parseDraft(JSON.stringify(d)),/Local/);});
+test('10 exact original checksum and dimensions required',()=>{assert.equal(r.matchedOriginal(original,{...original,name:'renamed.png'}),true);assert.equal(r.matchedOriginal(original,{...original,sha256:'a'.repeat(64)}),false);assert.equal(r.matchedOriginal(original,{...original,width:901}),false);});
+test('11 dates distinguish archive and published sources',()=>{const d=draft([src('SRC-001',{publishedDate:'2019-01-01'}),src('SRC-002',{url:'https://archive.org/snap',publishedDate:'2012-01-01',dateBasis:'archive_capture'})]);const x=r.diagnostics(d);assert.equal(x.earliestArchiveCapture.date,'2012-01-01');assert.equal(x.earliestPublisherOrCorroboratedDate.date,'2019-01-01');});
+test('12 repeated source URLs detected without calling them independent',()=>{const d=draft([src('SRC-001'),src('SRC-002',{url:'https://example.org/post?x=1#fragment'})]);const x=r.diagnostics(d);assert.equal(x.repeatedSourceUrls,1);assert.equal(x.hostGroups[0].count,2);});
+test('13 not-a-match does not become earliest archive evidence',()=>{const d=draft([src('SRC-001',{dateBasis:'archive_capture',publishedDate:'2010-01-01',matchType:'not_a_match'})]);assert.equal(r.diagnostics(d).earliestArchiveCapture,null);});
+test('14 rejects more than 200 attributed source records',()=>{const d=draft();d.sources=Array.from({length:201},(_,i)=>src('SRC-'+String(i+1).padStart(3,'0'),{url:`https://example.org/${i}`}));assert.throws(()=>r.parseDraft(JSON.stringify(d)),/bounds/);});
+test('15 pending import does not read or need external URLs',()=>{const d=r.parseDraft(JSON.stringify(draft()));assert.equal(d.publicationApproved,false);assert.equal(d.externalSearch.includes('investigator'),true);});
+test('16 import keeps missing/unavailable search checks visible',()=>{const d=r.parseDraft(JSON.stringify(draft()));assert.equal(d.checks.lens_crop,'not_checked');assert.equal(d.assessment.missingChecks.length,5);});
