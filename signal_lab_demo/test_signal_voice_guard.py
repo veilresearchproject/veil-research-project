@@ -21,7 +21,7 @@ class GuardTests(unittest.TestCase):
             with self.assertRaises(ValueError): classify_request(phrase)
     @patch('signal_voice_guard.OfflineResearchVoiceSession')
     def test_query_routes_bridge(self, cls):
-        cls.return_value.turn.return_value = GOOD
+        cls.return_value.turn.side_effect = lambda text, sink: (sink(GOOD['spoken_text']) or GOOD)
         s=GuardedSignalSession('/fake'); spoken=[]
         result=s.turn('What is the lab status?', spoken.append)
         self.assertEqual(result['classification'],'synthetic_query')
@@ -43,7 +43,7 @@ class GuardTests(unittest.TestCase):
         self.assertEqual(spoken,[])
     @patch('signal_voice_guard.OfflineResearchVoiceSession')
     def test_unsafe_bridge_receipt(self,cls):
-        cls.return_value.turn.return_value={'spoken_text':'bad','receipt':{**GOOD['receipt'],'model_connected':True}}
+        cls.return_value.turn.side_effect=lambda text,sink: (sink('bad') or {'spoken_text':'bad','receipt':{**GOOD['receipt'],'model_connected':True}})
         s=GuardedSignalSession('/fake')
         with self.assertRaises(ValueError):s.turn('What is the lab status?',lambda _:None)
     @patch('signal_voice_guard.OfflineResearchVoiceSession')
@@ -66,5 +66,35 @@ class GuardTests(unittest.TestCase):
     def test_rehearsal_bounds(self):
         for val in [[],['a']*13,'wrong']:
             with self.assertRaises(ValueError):acceptance_rehearsal('/fake',val)
+
+    @patch('signal_voice_guard.OfflineResearchVoiceSession')
+    def test_13_unsafe_result_never_reaches_speaker(self, cls):
+        cls.return_value.turn.side_effect = lambda text, sink: (sink('unapproved') or {'spoken_text':'unapproved','receipt':{**GOOD['receipt'],'physical_control_allowed':True}})
+        spoken=[]
+        with self.assertRaises(ValueError): GuardedSignalSession('/fake').turn('What is the lab status?',spoken.append)
+        self.assertEqual(spoken, [])
+    @patch('signal_voice_guard.OfflineResearchVoiceSession')
+    def test_14_mismatched_output_refused(self,cls):
+        cls.return_value.turn.side_effect=lambda text,sink: (sink('different') or GOOD)
+        spoken=[]
+        with self.assertRaisesRegex(ValueError,'contract'):GuardedSignalSession('/fake').turn('What is the lab status?',spoken.append)
+        self.assertEqual(spoken,[])
+    @patch('signal_voice_guard.OfflineResearchVoiceSession')
+    def test_15_double_speech_refused(self,cls):
+        def double(text,sink):
+            sink(GOOD['spoken_text']);sink(GOOD['spoken_text']);return GOOD
+        cls.return_value.turn.side_effect=double
+        spoken=[]
+        with self.assertRaisesRegex(ValueError,'contract'):GuardedSignalSession('/fake').turn('What is the lab status?',spoken.append)
+        self.assertEqual(spoken,[])
+    @patch('signal_voice_guard.OfflineResearchVoiceSession')
+    def test_16_valid_output_emitted_once(self,cls):
+        cls.return_value.turn.side_effect=lambda text,sink: (sink(GOOD['spoken_text']) or GOOD)
+        spoken=[]
+        s=GuardedSignalSession('/fake')
+        result=s.turn('What is the lab status?',spoken.append)
+        self.assertEqual(spoken,[GOOD['spoken_text']])
+        self.assertEqual(result['spoken_text'],GOOD['spoken_text'])
+        self.assertEqual(s.metrics()['turns'],1)
 
 if __name__=='__main__': unittest.main()
