@@ -1,0 +1,18 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { validateStudyDraft } from './protocol-preflight.mjs';
+import { readFileSync } from 'node:fs';
+const valid = JSON.parse(readFileSync(new URL('./synthetic-mtc-draft.json', import.meta.url), 'utf8'));
+const clone = () => structuredClone(valid);
+test('accepts complete draft, never certifies evidence', () => { const r=validateStudyDraft(clone()); assert.equal(r.ready,true); assert.match(r.status,/DRAFT ONLY/); });
+test('rejects missing null hypothesis', () => { const x=clone(); delete x.null_hypothesis; assert.equal(validateStudyDraft(x).ready,false); });
+test('requires independent device IDs', () => { const x=clone(); x.sources[1].device_id=x.sources[0].device_id; assert.ok(validateStudyDraft(x).issues.some(i=>i.field==='sources[1].device_id')); });
+test('requires two sources', () => { const x=clone(); x.sources.pop(); assert.ok(validateStudyDraft(x).issues.some(i=>i.field==='sources')); });
+test('does not allow retroactive preregistration', () => { const x=clone(); x.preregistered_at_utc='2026-11-21T22:00:00Z'; assert.equal(validateStudyDraft(x).ready,false); });
+test('rejects rolled calendar dates', () => { const x=clone(); x.planned_start_utc='2026-02-31T22:00:00Z'; assert.equal(validateStudyDraft(x).ready,false); });
+test('requires UTC clock times', () => { const x=clone(); x.planned_start_utc='2026-11-20T17:00:00-05:00'; assert.equal(validateStudyDraft(x).ready,false); });
+test('requires consent plan', () => { const x=clone(); x.consent_plan=''; assert.equal(validateStudyDraft(x).ready,false); });
+test('rejects malformed device', () => { const x=clone(); x.sources[0]='mic'; assert.equal(validateStudyDraft(x).ready,false); });
+test('rejects array as root', () => assert.equal(validateStudyDraft([]).ready,false));
+test('requires independent human review', () => { const x=clone(); x.human_review_plan=null; assert.equal(validateStudyDraft(x).ready,false); });
+test('requires device clock reference', () => { const x=clone(); x.sources[1].clock_reference=''; assert.equal(validateStudyDraft(x).ready,false); });

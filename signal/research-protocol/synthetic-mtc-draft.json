@@ -1,0 +1,27 @@
+{
+  "protocol_id": "MTC-UNATTENDED-001",
+  "hypothesis": "Speech-like detections differ between predefined test and control windows.",
+  "null_hypothesis": "Detection rate does not differ between windows.",
+  "primary_outcome": "Blind-reviewed candidate counts per hour.",
+  "control_condition": "Matched unattended quiet windows without questions.",
+  "analysis_plan": "Count predefined events using same rules in both windows.",
+  "blinding_plan": "Reviewers receive randomized, anonymized audio clips without condition labels.",
+  "consent_plan": "Only consenting operators participate; no recordings of private bystanders.",
+  "uncertainty_plan": "Report device noise, clock error and false positives separately.",
+  "human_review_plan": "Two people independently assess any candidate; disagreement retained.",
+  "clock_sync_plan": "Compare independent audio and camera clocks before and after each run.",
+  "preregistered_at_utc": "2026-11-13T22:00:00Z",
+  "planned_start_utc": "2026-11-20T22:00:00Z",
+  "sources": [
+    {
+      "device_id": "mic-1",
+      "modality": "audio",
+      "clock_reference": "PC NTP clock"
+    },
+    {
+      "device_id": "camera-1",
+      "modality": "video",
+      "clock_reference": "camera time synchronized before run"
+    }
+  ]
+}
