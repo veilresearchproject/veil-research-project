@@ -19,7 +19,7 @@ Scope: VEIL posts, comments/replies, editorial inquiries, article pitches, manus
 | VEIL-RH-2026-A007 | 2026-11-06 | Paranormal Underground | The Problem With EVP Evidence: What Can an Unattended Recording Actually Tell Us? | pitch_sent_outcome_unknown |
 | VEIL-RH-2026-A008 | 2026-11-06 | ASSAP / Seriously Strange | Testing Claims Before Testing Beliefs | pitch_sent_outcome_unknown |
 | VEIL-RH-2026-A009 | 2026-11-06 | Ghostvillage | When an Unexplained Recording Is Not Yet Evidence of a Ghost | pitch_sent_outcome_unknown |
-| VEIL-RH-2026-A010 | 2026-11-17 | Paranormal Globe | Meet SIGNAL: Can an AI Assistant Make Paranormal Investigations More Accountable? | pitch_sent_outcome_unknown |
+| VEIL-RH-2026-A010 | 2026-11-17 | Paranormal Globe | Meet SIGNAL: Can an AI Assistant Make Paranormal Investigations More Accountable? | accepted_awaiting_publication |
 | VEIL-RH-2026-F001 | Unknown | Facebook Page | Introducing VEIL Research Project | posted |
 | VEIL-RH-2026-F002 | Unknown | Facebook Group | Welcome to VEIL Research Community | posted |
 | VEIL-RH-2026-F003 | 2026-11-14 | Facebook Page | Academic collaboration announcement | posted |
