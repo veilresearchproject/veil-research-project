@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-19",
+  "updated_at": "2026-11-20",
   "coverage": "Partial historical backfill including public posts and comments observed in Facebook Activity Log.",
   "records": [
     {
@@ -108,9 +108,9 @@
       "category": "Editorial outreach",
       "platform": "Paranormal Globe",
       "event_date": "2026-11-17",
-      "status": "pitch_sent_outcome_unknown",
-      "verification": "verified_sent",
-      "summary": "Editorial inquiry or pitch verified in Sent mail; this does not establish delivery, acceptance, or publication.",
+      "status": "accepted_awaiting_publication",
+      "verification": "verified_editor_acceptance_email",
+      "summary": "Full SIGNAL manuscript sent November 19. Editor Paul Nichol confirmed willingness to feature it and on November 20 said accompanying images were suitable and publication was planned within the next couple of days. No live publication URL verified.",
       "source_url": null
     },
     {
