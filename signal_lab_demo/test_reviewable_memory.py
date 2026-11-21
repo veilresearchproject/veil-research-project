@@ -41,4 +41,27 @@ class MemoryTests(unittest.TestCase):
         self.mem.review(i,'wrong',retract=True)
         with self.assertRaises(ValueError): self.mem.review(i,'restore')
 
+    def test_newest_100_are_visible_in_chronological_order(self):
+        for i in range(115):
+            self.mem.add(f'Note {i}')
+        rows = self.mem.list_notes()
+        self.assertEqual(len(rows), 100)
+        self.assertEqual(rows[0]['text'], 'Note 15')
+        self.assertEqual(rows[-1]['text'], 'Note 114')
+    def test_retracted_notes_do_not_consume_active_window(self):
+        ids = [self.mem.add(f'Note {i}') for i in range(105)]
+        for note_id in ids[-8:]:
+            self.mem.review(note_id, 'Withdrawn', retract=True)
+        rows = self.mem.list_notes()
+        self.assertEqual(len(rows), 97)
+        self.assertEqual(rows[-1]['text'], 'Note 96')
+        self.assertTrue(all(row['status'] != 'retracted' for row in rows))
+    def test_recall_uses_newest_saved_notes(self):
+        from memory_recall import recall_memory
+        for i in range(108):
+            self.mem.add(f'Note {i}')
+        result = recall_memory('What notes do you remember?', self.mem, limit=3)
+        self.assertEqual([row['text'] for row in result['notes']], ['Note 105', 'Note 106', 'Note 107'])
+        self.assertNotIn('Note 107', result['spoken_text'])
+
 if __name__ == '__main__': unittest.main()

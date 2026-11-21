@@ -33,8 +33,9 @@ class ReviewableMemory:
         sql = 'SELECT id,text,source,created_utc,status FROM notes'
         if not include_retracted:
             sql += " WHERE status != 'retracted'"
-        sql += ' ORDER BY id LIMIT 100'
-        return [dict(zip(('id','text','source','created_utc','status'), row)) for row in self.db.execute(sql)]
+        sql += ' ORDER BY id DESC LIMIT 100'
+        newest_first = [dict(zip(('id','text','source','created_utc','status'), row)) for row in self.db.execute(sql)]
+        return list(reversed(newest_first))
 
     def review(self, note_id, reason, retract=False):
         reason = _text(reason)
