@@ -1,0 +1,77 @@
+{
+  "schema_version": "GEO-001-0.1",
+  "status": "blank_intake_template_not_an_observed_case",
+  "case_id": null,
+  "investigation_date": null,
+  "event": {
+    "start_local": null,
+    "end_local": null,
+    "timezone": null,
+    "report_source": null,
+    "event_type": null,
+    "source_evidence_ids": [],
+    "source_device_ids": [],
+    "sensor_links": [],
+    "negative_observation_windows": [],
+    "witnesses_independent": null,
+    "site_reputation_known_before_event": null
+  },
+  "location_restricted": {
+    "latitude_wgs84": null,
+    "longitude_wgs84": null,
+    "horizontal_accuracy_m": null,
+    "coordinate_source": null,
+    "event_point_or_site_centroid": null,
+    "coordinate_privacy_permission": null
+  },
+  "location_public": {
+    "generalized_place": null,
+    "country": null
+  },
+  "proposed_alignment": {
+    "status": "not_assessed",
+    "alignment_name": null,
+    "map_title_or_author": null,
+    "map_url_or_archive_reference": null,
+    "map_version_or_publication_date": null,
+    "map_captured_at": null,
+    "source_geometry": null,
+    "digitization_method": null,
+    "geometry_uncertainty_m": null,
+    "minimum_distance_m": null,
+    "distance_method": null,
+    "exploratory_buffer_m": null,
+    "buffer_preregistered": false
+  },
+  "independent_factors": {
+    "geology_data_source": null,
+    "geology_summary": null,
+    "fault_proximity_m": null,
+    "geomagnetic_map_source": null,
+    "onsite_magnetic_reading_and_units": null,
+    "onsite_emf_reading_and_units": null,
+    "ambient_temperature_and_units": null,
+    "relative_humidity_percent": null,
+    "lighting": null,
+    "weather": null,
+    "utility_interference": null,
+    "building_age_or_use": null,
+    "site_history": null,
+    "reporting_exposure": null
+  },
+  "comparison": {
+    "comparison_site_id": null,
+    "sampling_method": null,
+    "control_or_non_event": null
+  },
+  "assessment": {
+    "descriptive_result": "not_assessed",
+    "ordinary_explanations": [],
+    "uncertainties": [],
+    "limitations": [],
+    "analyst": null,
+    "reviewed_at": null,
+    "source_chain_of_custody_reference": null
+  },
+  "privacy_warning": "Do not commit populated private coordinates or identifying witness information to a public repository."
+}
