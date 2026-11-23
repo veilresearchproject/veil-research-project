@@ -1,6 +1,6 @@
 # Research-history details
 
-Last updated November 20, 2026. Unknown means unverified, not that an event never occurred.
+Last updated November 23, 2026. Unknown means unverified, not that an event never occurred.
 
 ## VEIL-RH-2026-A001 — Before, During and After: Why VEIL Is Designing a Different Way to Record Reported Paranormal Events
 
@@ -186,8 +186,8 @@ Editorial inquiry or pitch verified in Sent mail; this does not establish delive
 
 - Platform: Paranormal Globe
 - First event date: 2026-11-17
-- Status: accepted_awaiting_publication
-- Verification: verified_editor_acceptance_email
+- Status: published
+- Verification: verified_publication
 - Source: Private message identifiers in records.json
 
 Full SIGNAL manuscript sent November 19. Editor Paul Nichol confirmed willingness to feature it and on November 20 said accompanying images were suitable and publication was planned within the next couple of days. No live publication URL verified.
@@ -204,6 +204,9 @@ Full SIGNAL manuscript sent November 19. Editor Paul Nichol confirmed willingnes
 
 
 November 20 update: editor confirmed images and intended publication within days; live publication unverified. Private correspondence remains in Gmail; republication rights not established.
+
+
+Publication confirmed November 22 by editor Paul Nichol; [live article](https://paranormalglobe.com/signal-ai-paranormal-investigations/) independently verified November 23. Full-text VEIL republication remains pending permission/exclusivity clarification. Publisher-created feature image rights not presumed.
 
 ## VEIL-RH-2026-F001 — Introducing VEIL Research Project
 
