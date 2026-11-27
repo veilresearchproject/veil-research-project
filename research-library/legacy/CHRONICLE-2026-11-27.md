@@ -13,3 +13,8 @@ A direct comparison against `main` showed the guarded-memory branch diverged: 32
 
 ## Portable preservation gap
 No independently verified encrypted offline backup, complete original chat export or restoration rehearsal is documented. Private succession instructions should include source manifests and hashes, repository exports, protected private source archives and tested offline recovery, with consent and authorized custodians. No private exports, access credentials or encryption keys belong in this public repository.
+
+## 2026-11-27 — completed exact-source local regression check
+Six Python source/test files were individually retrieved through the GitHub connector and validated against their Git blob SHA values. The committed 22 existing memory tests and five new guarded-memory integration regression tests ran locally with **27/27 passing** using standard-library `unittest`. See `signal_lab_demo/PHASE1-TEST-BASELINE-2026-11-27.md` and draft PR #134 for file hashes, command, limits and source locations. This establishes a narrow *software regression baseline*, not validated secure authentication, voice, phone, Ollama, or physical instrument integration. Local `git clone` still fails due to execution-environment DNS access, so full repository regression and CI remain unverified.
+
+VEL-001 archive search found a `VEL-001 v0.1` README in the private file library, but no independently verified ESP32 C++ host-test v0.2 controller archive. A separate file named `VEIL_Virtual_Lab_v0.2_AI_Ready_Offline.html` cannot be assumed equivalent. Controller source/host tests, ESP32 target build, circuit simulation and physical validation await independent checks. The source archive should not be uploaded to public GitHub without permission and sanitization.
